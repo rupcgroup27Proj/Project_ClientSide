@@ -5,7 +5,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 
 //Student screens
 import Home from '../../Screens/StudentScreens/Home/Home'
-import SocialCloud from '../../Screens/StudentScreens/SocialCloud/SocialFeed'
+import SocialCloud from '../../Screens/StudentScreens/SocialCloud/SocialCloud'
 import Recommandations from '../../Screens/StudentScreens/Recommendations/Recommendations'
 import MyMap from '../../Screens/StudentScreens/MyMap/MyMap'
 import DailySchedule from '../../Screens/StudentScreens/DailySchedule/DailySchedule'

@@ -10,14 +10,7 @@ import { useEffect, useState } from 'react';
 
 //Navs
 import AdminNav from './Components/Navs/AdminNav';
-import StudentNav from './Components/Navs/StudentDrawer'
-
-
-
-
-
-
-
+import StudentDrawer from './Components/Navs/StudentDrawer'
 
 
 
@@ -39,19 +32,14 @@ export default function App() {
     GetLoggedUser();
   }, [])
 
+
+
   return (
     <SafeAreaProvider>
       <NavigationContainer>
 
-        {user.Type == 'Admin' && <AdminNav/>
-         
-          //   <Drawer.Screen name="mmmmmm" component={TabNav} />
-
-        }
-
-        {user.Type == 'Student' && <StudentNav/>}
-        
- 
+        {user.Type == 'Admin' && <AdminNav/>}
+        {user.Type == 'Student' && <StudentDrawer/>}
 
       </NavigationContainer>
     </SafeAreaProvider>
