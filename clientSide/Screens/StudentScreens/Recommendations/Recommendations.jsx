@@ -6,7 +6,7 @@ import axios from 'axios'
 
 //Wikipedia Get:
 const endpoint = 'https://en.wikipedia.org/w/api.php?'; //Wikipedia's API
-const RecommendationsAPI = `https://localhost:7283/api/SmartRecommandations/studentId/${1}`
+const RecommendationsAPI = `http://10.0.2.2:5283/api/SmartRecommandations/studentId/1` //what's the problem with local host? and why should i create a http request instead of https? 
 const params = {
   //Level 1 params
   action: 'query',     //Which action to perform. 'query' - fetch data from the api.
@@ -25,26 +25,18 @@ const params = {
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 
-//const tags = ["Israel", "Palestine", "USA", "Russia", "Canada"]
-
-
-
 const Recommendations = () => {
 
   const [recArray, setRecArray] = useState([]);
-
-
-  //const tags = 
-
 
   //for each tag, i wait for the axios request to be completed and that return the data of the page. i wait until all tags has finished, inserting them into
   //"array". if theres an error or something - i return null. than i filter the nulls and changing the state using SetRecArray.
   const GetRecommendations = async () => {
     const tags = await axios.get(RecommendationsAPI)//change to studentid from asyncStorage
-    array = await Promise.all(tags.map(async tag => {
+    console.log(tags.data);
+    let array = await Promise.all(tags.data.map(async tag => {
       try {
-        params.gsrsearch = tag;
-        const page = await axios.get(endpoint, { params: params });
+        const page = await axios.get(endpoint, { params: { ...params, gsrsearch: tag } });
         return gatherPages(page.data.query.pages)
       }
       catch { return null }
@@ -68,7 +60,7 @@ const Recommendations = () => {
     GetRecommendations();
   }, [])
 
-  
+
   return (
     <ScrollView>
       {recArray.map((rcmnd, index) =>
