@@ -2,6 +2,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
+
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 
 //Main screens for the tab navigator.

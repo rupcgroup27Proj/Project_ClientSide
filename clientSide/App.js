@@ -8,10 +8,16 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 
+//Context
+import UserProvider from './Components/Contexts/UserContext'
+
 //Navs
 import AdminNav from './Components/Navs/AdminNav';
 import StudentDrawer from './Components/Navs/StudentDrawer'
+import GuideDrawer from './Components/Navs/GuideDrawer';
+import TeacherDrawer from './Components/Navs/TeacherDrawer';
 
+import TEST from './test'
 
 
 export default function App() {
@@ -25,7 +31,7 @@ export default function App() {
   async function GetLoggedUser() {
     // const loggedUser = await AsyncStorage.getItem('User');
     // setUser(JSON.parse(loggedUser))
-    setUser({ Type: 'Student', UserId: 123123 })
+    setUser({ Type: 'Teacher', UserId: 123123 })
   }
 
   useEffect(() => {
@@ -38,8 +44,13 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer>
 
-        {user.Type == 'Admin' && <AdminNav/>}
-        {user.Type == 'Student' && <StudentDrawer/>}
+        {/* <UserProvider> */}
+          {user.Type == 'Admin' && <AdminNav/>}
+          {user.Type == 'Student' && <StudentDrawer/>}
+          {user.Type == 'Teacher' && <TeacherDrawer/>}
+          {user.Type == 'Guide' && <GuideDrawer/>}
+     
+        {/* </UserProvider> */}
 
       </NavigationContainer>
     </SafeAreaProvider>

@@ -33,7 +33,6 @@ const Recommendations = () => {
   //"array". if theres an error or something - i return null. than i filter the nulls and changing the state using SetRecArray.
   const GetRecommendations = async () => {
     const tags = await axios.get(RecommendationsAPI)//change to studentid from asyncStorage
-    console.log(tags.data);
     let array = await Promise.all(tags.data.map(async tag => {
       try {
         const page = await axios.get(endpoint, { params: { ...params, gsrsearch: tag } });

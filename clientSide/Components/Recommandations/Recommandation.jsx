@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Image, Linking } from 'react-native';
 import { Card, Text } from 'react-native-paper';
-
 import { Video, AVPlaybackStatus } from 'expo-av';
 
 import { styles } from './Styles';

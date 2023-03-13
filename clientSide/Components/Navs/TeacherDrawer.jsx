@@ -3,20 +3,17 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-//Student screens
-import Home from '../../Screens/StudentScreens/Home/Home'
+//Teacher screens
+import Home from '../../Screens/TeacherScreens/Home/Home'
 import SocialCloud from '../../Screens/SharedScreens/SocialCloud/SocialCloud'
-import Recommandations from '../../Screens/StudentScreens/Recommendations/Recommendations'
-import MyMap from '../../Screens/StudentScreens/MyMap/MyMap'
 import DailySchedule from '../../Screens/SharedScreens/DailySchedule/DailySchedule'
-import Notifications from '../../Screens/StudentScreens/Notifications/Notifications'
-import Tasks from '../../Screens/StudentScreens/Tasks/Tasks'
-import PersonalDiary from '../../Screens/StudentScreens/PersonalDiary/PersonalDiary'
+import Notifications from '../../Screens/TeacherScreens/Notifications/Notifications'
+import Tasks from '../../Screens/TeacherScreens/Tasks/Tasks'
 import Profile from '../../Screens/SharedScreens/Profile/Profile'
 import GuideFeedback from '../../Screens/SharedScreens/GuideFeedback/GuideFeedback'
+import Questionnaire from '../../Screens/TeacherScreens/Questionnaires/Questionnaire'
 
-
-const StudentDrawer = () => {
+const TeacherDrawer = () => {
 
   const Drawer = createDrawerNavigator();
 
@@ -25,17 +22,15 @@ const StudentDrawer = () => {
 
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="Social Cloud" component={SocialCloud} />
-      <Drawer.Screen name="Recommandations" component={Recommandations} />
-      <Drawer.Screen name="My Map" component={MyMap} />
       <Drawer.Screen name="Daily Schedule" component={DailySchedule} />
       <Drawer.Screen name="Notifications" component={Notifications} />
       <Drawer.Screen name="Tasks" component={Tasks} />
-      <Drawer.Screen name="Personal Diary" component={PersonalDiary} />
       <Drawer.Screen name="Profile" component={Profile} />
       <Drawer.Screen name="Guide Feedback" component={GuideFeedback} />
-      
+      <Drawer.Screen name="Questionnaires" component={Questionnaire} />
+         
     </Drawer.Navigator>
   )
 }
 
-export default StudentDrawer
+export default TeacherDrawer

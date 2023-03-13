@@ -1,9 +1,8 @@
 
 import React, { useState } from 'react';
 import { Button, Divider, IconButton, RadioButton, Text, TextInput, useTheme } from 'react-native-paper';
-import { ScrollView, View, TouchableOpacity } from 'react-native';
+import { ScrollView, View, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
-import { useForm, Controller } from "./";
 
 //temporary user for tests
 const currentUser = {
@@ -32,9 +31,6 @@ const SurveyCreator = () => {
     const [title, setTitle] = useState('');
     const [tags, setTags] = useState([]);
     const [questions, setQuestions] = useState([]);
-
-    const { control, handleSubmit, formState: { errors } } = useForm({});
-
     const theme = useTheme();
 
 
@@ -91,9 +87,44 @@ const SurveyCreator = () => {
     };
 
     const postQuestionnaire = () => {
-        axios.post(postQuestionnaireAPI, { title: title, tags: tags, questions: questions })
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err))
+        if (validateQuestionnaire()) {
+            axios.post(postQuestionnaireAPI, { title: title, tags: tags, questions: questions })
+                .then((res) => console.log(res))
+                .catch((err) => console.log(err))
+            setQuestions([]);
+            setTags([]);
+            setTitle([]);
+        }
+        else {
+            Alert.alert('Alert', 'All fields are required!', [
+                { text: 'OK' },
+            ]);
+        }
+
+
+    }
+
+    const validateQuestionnaire = () => {
+        if (title == '') return false;
+        if (questions.length == 0) return false;
+
+        const someOpenQuestionInvalid = questions.some(question => {
+            return question.type == 'open' && question.text == ''
+        })
+
+        if (someOpenQuestionInvalid) return false
+
+        const someClosedQuestionInvalid = questions.some(question => {
+            const isTextEmpty = question.text == '';
+            const isLowNumOfOptions = question.options.length < 2
+            const isSomeOptionEmpty = question.options.some(option => option == '')
+            return question.type == 'closed' &&
+                (isTextEmpty || isLowNumOfOptions || isSomeOptionEmpty)
+        })
+
+        if (someClosedQuestionInvalid) return false
+
+        return true
     }
 
 
@@ -113,7 +144,7 @@ const SurveyCreator = () => {
                     />
                     <Button title="Submit"
                         mode='contained'
-                        onPress={() => handleSubmit(postQuestionnaire())}>
+                        onPress={() => postQuestionnaire()}>
                         Post
                     </Button>
 
