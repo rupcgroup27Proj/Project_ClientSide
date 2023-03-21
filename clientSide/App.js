@@ -11,7 +11,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 
 const Stack = createNativeStackNavigator();
-
+//hi
 export default function App() {
   return (
     // <SafeAreaProvider>
