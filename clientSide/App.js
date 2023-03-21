@@ -45,14 +45,14 @@ export default function App() {
       <NavigationContainer>
 
 
-        <LoginScreen></LoginScreen>
+        {/* <LoginScreen></LoginScreen> */}
 
-        {/*     
+           
         {user.Type == 'Admin' && <AdminNav />}
         {user.Type == 'Student' && <StudentDrawer />}
         {user.Type == 'Teacher' && <TeacherDrawer />}
         {user.Type == 'Guide' && <GuideDrawer />} 
-        */}
+        
 
 
 
