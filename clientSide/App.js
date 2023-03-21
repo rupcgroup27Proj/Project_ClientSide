@@ -46,7 +46,11 @@ export default function App() {
 
 
         <LoginScreen></LoginScreen>
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> Shaharrr
         {/*     
         {user.Type == 'Admin' && <AdminNav />}
         {user.Type == 'Student' && <StudentDrawer />}
