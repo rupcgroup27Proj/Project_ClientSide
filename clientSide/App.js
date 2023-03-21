@@ -17,8 +17,8 @@ import StudentDrawer from './Components/Navs/StudentDrawer'
 import GuideDrawer from './Components/Navs/GuideDrawer';
 import TeacherDrawer from './Components/Navs/TeacherDrawer';
 
-import TEST from './test'
-
+//LoginScreen
+import LoginScreen from './Screens/SharedScreens/Login/LoginScreen';
 
 export default function App() {
 
@@ -31,7 +31,7 @@ export default function App() {
   async function GetLoggedUser() {
     // const loggedUser = await AsyncStorage.getItem('User');
     // setUser(JSON.parse(loggedUser))
-    setUser({ Type: 'Teacher', UserId: 123123 })
+    setUser({ Type: 'Student', UserId: 123123 })
   }
 
   useEffect(() => {
@@ -44,13 +44,17 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer>
 
-        {/* <UserProvider> */}
-          {user.Type == 'Admin' && <AdminNav/>}
-          {user.Type == 'Student' && <StudentDrawer/>}
-          {user.Type == 'Teacher' && <TeacherDrawer/>}
-          {user.Type == 'Guide' && <GuideDrawer/>}
-     
-        {/* </UserProvider> */}
+
+        <LoginScreen></LoginScreen>
+        
+        {/*     
+        {user.Type == 'Admin' && <AdminNav />}
+        {user.Type == 'Student' && <StudentDrawer />}
+        {user.Type == 'Teacher' && <TeacherDrawer />}
+        {user.Type == 'Guide' && <GuideDrawer />} 
+        */}
+
+
 
       </NavigationContainer>
     </SafeAreaProvider>

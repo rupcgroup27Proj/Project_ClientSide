@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Divider, IconButton, RadioButton, Text, TextInput, useTheme } from 'react-native-paper';
 import { ScrollView, View, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
@@ -22,16 +22,28 @@ const currentUser = {
     EndDate: '02/02/2024'
 }
 
-const postQuestionnaireAPI = `http://10.0.2.2:5283/api/Questionnaires/groupId/${currentUser.GroupId}`
+//const postQuestionnaireAPI = `http://10.0.2.2:5283/api/Questionnaires/groupId/${currentUser.GroupId}`
+const tagsAPI = 'http://10.0.2.2:5283/api/Tags/builtInTags'
 
-const allTags = [{ id: 1, name: 'tag1' }, { id: 2, name: 'tag2' }, { id: 3, name: 'tag3' },];
 
-//Need to make sure that there are no questions with 0 answers
-const SurveyCreator = () => {
-    const [title, setTitle] = useState('');
+const Questionnaire = () => {
+    const [title, setTitle] = useState('q');
     const [tags, setTags] = useState([]);
-    const [questions, setQuestions] = useState([]);
+    const [selectedTags, setSelectedTags] = useState([])
+    const [questions, setQuestions] = useState([{"type":"closed","text":"q1","options":[{"value":"qeee"},{"value":"qee"},{"value":"qe"},{"value":"q"}],"correctOption":"qee"},{"type":"open","text":"q2","options":[],"correctOption":null}]);//[]
     const theme = useTheme();
+ 
+    const getTags = async () => {
+        await axios.get(tagsAPI)
+            .then((res) => { setTags(res.data) })
+            .catch((err) => console.log(err))
+
+    }
+
+    useEffect(() => {
+        getTags();
+    }, [])
+
 
 
     const addQuestion = (type) => {
@@ -62,13 +74,13 @@ const SurveyCreator = () => {
 
     const addOption = (questionIndex) => {
         const updatedQuestions = [...questions];
-        updatedQuestions[questionIndex].options.push("");
+        updatedQuestions[questionIndex].options.push({value: ""});
         setQuestions(updatedQuestions);
     }
 
     const updateOption = (questionIndex, optionIndex, newText) => {
         const updatedQuestions = [...questions];
-        updatedQuestions[questionIndex].options[optionIndex] = newText;
+        updatedQuestions[questionIndex].options[optionIndex].value = newText;
         setQuestions(updatedQuestions);
     };
 
@@ -86,9 +98,41 @@ const SurveyCreator = () => {
         setQuestions(updatedQuestions);
     };
 
+    const validateQuestionnaire = () => {
+        if (title == '') return false;
+        if (questions.length == 0) return false;
+
+        const someOpenQuestionInvalid = questions.some(question => {
+            return question.type == 'open' && question.text == ''
+        })
+
+        if (someOpenQuestionInvalid) return false
+
+        const someClosedQuestionInvalid = questions.some(question => {
+            const isTextEmpty = question.text == '';
+            const isLowNumOfOptions = question.options.length < 2
+            const isSomeOptionEmpty = question.options.some(option => option == '')
+            const noOptionHasBeenChosen = (question.correctOption == '')
+            return question.type == 'closed' &&
+                (isTextEmpty || isLowNumOfOptions || isSomeOptionEmpty || noOptionHasBeenChosen)
+        })
+
+        if (someClosedQuestionInvalid) return false
+
+        return true
+    }
+
     const postQuestionnaire = () => {
         if (validateQuestionnaire()) {
-            axios.post(postQuestionnaireAPI, { title: title, tags: tags, questions: questions })
+            const jsonQuestionnaire = {
+                questionnaire: {
+                    title: title,
+                    tags: selectedTags,
+                    questions: questions
+                }
+            }
+
+            axios.post(`http://10.0.2.2:5283/api/Questionnaires/groupId/${currentUser.GroupId}/json/${JSON.stringify(jsonQuestionnaire)}`)
                 .then((res) => console.log(res))
                 .catch((err) => console.log(err))
             setQuestions([]);
@@ -104,28 +148,6 @@ const SurveyCreator = () => {
 
     }
 
-    const validateQuestionnaire = () => {
-        if (title == '') return false;
-        if (questions.length == 0) return false;
-
-        const someOpenQuestionInvalid = questions.some(question => {
-            return question.type == 'open' && question.text == ''
-        })
-
-        if (someOpenQuestionInvalid) return false
-
-        const someClosedQuestionInvalid = questions.some(question => {
-            const isTextEmpty = question.text == '';
-            const isLowNumOfOptions = question.options.length < 2
-            const isSomeOptionEmpty = question.options.some(option => option == '')
-            return question.type == 'closed' &&
-                (isTextEmpty || isLowNumOfOptions || isSomeOptionEmpty)
-        })
-
-        if (someClosedQuestionInvalid) return false
-
-        return true
-    }
 
 
 
@@ -149,27 +171,29 @@ const SurveyCreator = () => {
                     </Button>
 
                 </View>
+
                 <Divider bold={true} />
 
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                    {allTags.map((tag) => (
+
+                    {tags.map((tag) => (
                         <TouchableOpacity
-                            key={tag.id}
+                            key={tag.tagId}
                             onPress={() =>
                                 //Dual functinality. On clicking a tag, IF the id already exists in the "tags" useState, THAN filter out
                                 //all tags that DO NOT match this id - it returns an array with all the selected tags but WITHOUT the
                                 //tag that has been clicked. ELSE, store the tag for future use.
-                                setTags(tags.includes(tag.id) ? tags.filter((id) => id !== tag.id) : [...tags, tag.id])
+                                setSelectedTags(selectedTags.includes(tag) ? selectedTags.filter((t) => t.tagId !== tag.tagId) : [...selectedTags, tag])
                             }
                             style={{
-                                backgroundColor: tags.includes(tag.id) ? theme.colors.tertiary : '#F2F2F2',//Conditional styling
+                                backgroundColor: selectedTags.includes(tag) ? theme.colors.tertiary : '#F2F2F2',//Conditional styling
                                 borderRadius: 16,
                                 paddingHorizontal: 16,
                                 paddingVertical: 8,
                                 margin: 4,
                             }}
                         >
-                            <Text>{tag.name}</Text>
+                            <Text>{tag.tagName}</Text>
                         </TouchableOpacity>
                     ))}
                 </View>
@@ -208,13 +232,13 @@ const SurveyCreator = () => {
                                     <View key={optionIndex} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
                                         <TextInput
                                             placeholder={`Option ${optionIndex + 1}`}
-                                            value={option}
+                                            value={option.value} 
                                             onChangeText={(newText) => updateOption(questionIndex, optionIndex, newText)}
                                             style={{ flex: 1, marginRight: 8 }}
                                         />
                                         <RadioButton
-                                            onPress={() => updateCorrectOption(questionIndex, optionIndex)}
-                                            status={questions[questionIndex].correctOption === optionIndex ? 'checked' : 'unchecked'}
+                                            onPress={() => updateCorrectOption(questionIndex, option)}
+                                            status={questions[questionIndex].correctOption === option && option !== "" ? 'checked' : 'unchecked'}
                                         />
                                         <IconButton
                                             onPress={() => deleteOption(questionIndex, optionIndex)}
@@ -246,4 +270,4 @@ const SurveyCreator = () => {
     );
 };
 
-export default SurveyCreator;
+export default Questionnaire;

@@ -14,7 +14,8 @@ import Tasks from '../../Screens/StudentScreens/Tasks/Tasks'
 import PersonalDiary from '../../Screens/StudentScreens/PersonalDiary/PersonalDiary'
 import Profile from '../../Screens/SharedScreens/Profile/Profile'
 import GuideFeedback from '../../Screens/SharedScreens/GuideFeedback/GuideFeedback'
-
+import Questionnaires from '../../Screens/StudentScreens/Questionnaires/AllQuestionnaires'
+import Questionnaire from '../../Screens/StudentScreens/Questionnaires/Questionnaire'
 
 const StudentDrawer = () => {
 
@@ -33,7 +34,8 @@ const StudentDrawer = () => {
       <Drawer.Screen name="Personal Diary" component={PersonalDiary} />
       <Drawer.Screen name="Profile" component={Profile} />
       <Drawer.Screen name="Guide Feedback" component={GuideFeedback} />
-      
+      <Drawer.Screen name="Questionnaires" component={Questionnaires} />
+      <Drawer.Screen name="Questionnaire" component={Questionnaire} />
     </Drawer.Navigator>
   )
 }
