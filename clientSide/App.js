@@ -1,61 +1,34 @@
-
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
-import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useEffect, useState } from 'react';
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState } from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 //Context
-import UserProvider from './Components/Contexts/UserContext'
+import UserProvider from "./Components/Contexts/UserContext";
+import NewPost from "./Screens/StudentScreens/SocialCloud/NewPost";
+import SocialFeed from "./Screens/StudentScreens/SocialCloud/SocialFeed";
+import Favorites from "./Screens/StudentScreens/SocialCloud/Favorites";
+import Comments from "./Screens/StudentScreens/SocialCloud/Comments";
 
-//Navs
-import AdminNav from './Components/Navs/AdminNav';
-import StudentDrawer from './Components/Navs/StudentDrawer'
-import GuideDrawer from './Components/Navs/GuideDrawer';
-import TeacherDrawer from './Components/Navs/TeacherDrawer';
-
-//LoginScreen
-import LoginScreen from './Screens/SharedScreens/Login/LoginScreen';
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-
-  const [user, setUser] = useState({})
-
   const Tab = createMaterialBottomTabNavigator();
   const Drawer = createDrawerNavigator();
-
-
-  async function GetLoggedUser() {
-    // const loggedUser = await AsyncStorage.getItem('User');
-    // setUser(JSON.parse(loggedUser))
-    setUser({ Type: 'Student', UserId: 123123 })
-  }
-
-  useEffect(() => {
-    GetLoggedUser();
-  }, [])
-
-
 
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-
-
-        {/* <LoginScreen></LoginScreen> */}
-
-           
-        {user.Type == 'Admin' && <AdminNav />}
-        {user.Type == 'Student' && <StudentDrawer />}
-        {user.Type == 'Teacher' && <TeacherDrawer />}
-        {user.Type == 'Guide' && <GuideDrawer />} 
-        
-
-
-
+        <Stack.Navigator initialRouteName="SocialFeed">
+          <Stack.Screen name="SocialFeed" component={SocialFeed} />
+          <Stack.Screen name="NewPost" component={NewPost} />
+          <Stack.Screen name="Comments" component={Comments} />
+          <Stack.Screen name="Favorites" component={Favorites} />
+        </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
   );
@@ -64,8 +37,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
