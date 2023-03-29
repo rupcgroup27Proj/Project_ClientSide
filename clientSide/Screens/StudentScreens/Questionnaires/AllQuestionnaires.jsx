@@ -1,31 +1,45 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { List } from 'react-native-paper';
-//import { createStackNavigator } from '@react-navigation/stack';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { View, TouchableOpacity } from 'react-native';
+import { Divider, List } from 'react-native-paper';
+import { useUser } from '../../../Components/Contexts/UserContext';
 
-//const Stack = createStackNavigator();
 
 const AllQuestionnaires = ({ navigation }) => {
-  const [questionnaireTitles, setQuestionnaireTitles] = useState([
-    { id: 1, title: 'Questionnaire 1' },
-    { id: 2, title: 'Questionnaire 2' },
-    { id: 3, title: 'Questionnaire 3' },
-    { id: 4, title: 'Questionnaire 4' },
-  ]);
+  const { currentUser } = useUser();
+  const [questionnaires, setQuestionnaires] = useState([{ title: 1 }]);
+
+  useEffect(() => {
+    const getAllQuestionnaires = async () => {
+      try {
+        const response = await axios.get(`http://10.0.2.2:5283/api/Questionnaires/groupId/${currentUser.groupId}`);
+        setQuestionnaires(response.data);
+      } catch (error) { console.log(error) }
+    }
+    getAllQuestionnaires()
+    console.log(currentUser)
+  }, [])
 
 
-  const handlePress = (id) => {
-    navigation.navigate('Questionnaire', { id });
+  const handlePress = (questionnaire) => {
+    navigation.navigate('Questionnaire', { questionnaire });
   };
 
   return (
     <View >
       <List.Section>
-        <List.Subheader>Questionnaires</List.Subheader>
-        {questionnaireTitles.map((questionnaire) => (
-          <TouchableOpacity key={questionnaire.id} onPress={() => handlePress(questionnaire.id)}>
-            <List.Item title={questionnaire.title} />
+        <List.Subheader>All questionnaires</List.Subheader>
+        {questionnaires.map((questionnaire) => (
+          <TouchableOpacity key={questionnaire.Id} onPress={() => handlePress(questionnaire)}>
+            <List.Item
+              key={questionnaire.Id}
+              title={questionnaire.Title}
+              titleNumberOfLines={2}
+              description={questionnaire.Description}
+              left={(item) => <List.Icon {...item} icon="file-question-outline" />} />
+            <Divider></Divider>
           </TouchableOpacity>
+
         ))}
       </List.Section>
     </View>

@@ -11,7 +11,8 @@ import Notifications from '../../Screens/TeacherScreens/Notifications/Notificati
 import Tasks from '../../Screens/TeacherScreens/Tasks/Tasks'
 import Profile from '../../Screens/SharedScreens/Profile/Profile'
 import GuideFeedback from '../../Screens/SharedScreens/GuideFeedback/GuideFeedback'
-
+import AddUsers from '../../Screens/SharedScreens/Users/AddUsers/AddUsers'
+import AllUsers from '../../Screens/SharedScreens/Users/AllUsers/AllUsers'
 
 const TeacherDrawer = () => {
 
@@ -27,8 +28,10 @@ const TeacherDrawer = () => {
       <Drawer.Screen name="Tasks" component={Tasks} />
       <Drawer.Screen name="Profile" component={Profile} />
       <Drawer.Screen name="Guide Feedback" component={GuideFeedback} />
-      
-         
+      <Drawer.Screen name="Add new user" component={AddUsers} />
+      <Drawer.Screen name="All users" component={AllUsers} />
+
+
     </Drawer.Navigator>
   )
 }

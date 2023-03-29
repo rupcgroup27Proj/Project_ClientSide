@@ -5,8 +5,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 //Admin Screens
 import AddDelegations from '../../Screens/AdminScreens/Delegations/AddDelegations/AddDelegations'
 import AllDelegetions from '../../Screens/AdminScreens/Delegations/AllDelegations/AllDelegetions'
-import AddUsers from '../../Screens/AdminScreens/Users/AddUsers/AddUsers'
-import AllUsers from '../../Screens/AdminScreens/Users/AllUsers/AllUsers'
+import AddUsers from '../../Screens/SharedScreens/Users/AddUsers/AddUsers'
+import AllUsers from '../../Screens/SharedScreens/Users/AllUsers/AllUsers'
 
 
 const AdminNav = () => {
