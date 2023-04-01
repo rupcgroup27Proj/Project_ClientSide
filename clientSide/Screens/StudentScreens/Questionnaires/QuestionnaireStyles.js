@@ -11,6 +11,8 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
+        borderBottomColor: '#0096FF',
+        borderBottomWidth: 1,
     },
     description: {
         fontSize: 16,
@@ -31,6 +33,7 @@ export const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10,
     },
+
     radioLabel: {
         fontSize: 16,
     },
