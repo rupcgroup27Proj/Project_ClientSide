@@ -19,6 +19,22 @@ const theme = {
   }
 };
 
+//social
+import NewPost from "./Screens/StudentScreens/SocialCloud/NewPost";
+import SocialFeed from "./Screens/StudentScreens/SocialCloud/SocialFeed";
+import Favorites from "./Screens/StudentScreens/SocialCloud/Favorites";
+import Comments from "./Screens/StudentScreens/SocialCloud/Comments";
+
+//delei
+import AddSchool from "./Screens/AdminScreens/Delegations/AddDelegations/AddSchool";
+import AddTeacher from "./Screens/AdminScreens/Delegations/AddDelegations/AddTeacher";
+import AddGuide from "./Screens/AdminScreens/Delegations/AddDelegations/AddGuide";
+import AllDelegetions from "./Screens/AdminScreens/Delegations/AllDelegations/AllDelegetions";
+import DetailsDelegation from "./Screens/AdminScreens/Delegations/AllDelegations/DetailsDelegation";
+
+
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
@@ -36,4 +52,3 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
-

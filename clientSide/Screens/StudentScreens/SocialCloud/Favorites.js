@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, View, TouchableOpacity, Image, Text } from "react-native";
+import { ScrollView, View, TouchableOpacity, Image } from "react-native";
 import axios from "axios";
 import { styles } from "./Styles";
 import FavoriteIcon from "./FavoriteIcon";
-import { Card, Appbar } from "react-native-paper";
+import { Card } from "react-native-paper";
 
 //temporary user for tests
 const currentUser = {
@@ -61,18 +61,13 @@ export default function Favorites() {
 
   return (
     <ScrollView style={{ marginTop: 25 }}>
-      <Appbar.Header style={styles.header}>
-        <FavoriteIcon filled={true}></FavoriteIcon>
-        <Appbar.Content title=" Favorites" style={styles.title} />
-      </Appbar.Header>
       {favorite.map((fav) => (
         <Card style={styles.card}>
           <View key={fav.postId} style={styles.username}>
-            <Text>{fav.studentId}</Text>
             <Image source={{ uri: fav.fileUrl }} style={styles.image}></Image>
           </View>
           <TouchableOpacity
-            style={{ left: 360, bottom: 20 }}
+            style={{ left: 360, bottom: 300 }}
             onPress={() => RemoveFav(fav.postId)}
           >
             <FavoriteIcon filled={true} />

@@ -27,8 +27,6 @@ const currentUser = {
   EndDate: "02/02/2024",
 };
 
-const ApiUrl_Tags = `http://10.0.2.2:5283/api/Tags/groupId/${currentUser.GroupId}`;
-
 export default function NewPost({ navigation }) {
   const [image, setImage] = useState(null);
   const [allTags, setAllTags] = useState([]);
@@ -43,7 +41,7 @@ export default function NewPost({ navigation }) {
   //get all tags
   const getAllTags = async () => {
     await axios
-      .get(ApiUrl_Tags)
+      .get(`http://10.0.2.2:5283/api/Tags/groupId/${currentUser.GroupId}`)
       .then((res) => {
         setAllTags(res.data);
       })
@@ -105,6 +103,8 @@ export default function NewPost({ navigation }) {
       teacherId: 1,
       guideId: 1,
       fileUrl: imageLink,
+      firstName: currentUser.FirstName,
+      LastName: currentUser.LastName,
       type: mediaType,
     };
 
@@ -119,7 +119,7 @@ export default function NewPost({ navigation }) {
     } else if (currentUser.Type == "Guide") {
       newImage.studentId = 1;
       newImage.teacherId = 1;
-      newImage.guideId = 1;
+      newImage.guideId = currentUser.UserId;
     }
 
     const tagsJson = {
@@ -163,7 +163,7 @@ export default function NewPost({ navigation }) {
         }
       );
 
-    allSelectedTags([]);
+    setAllSelectedTags([]);
     setImage(null);
   };
 

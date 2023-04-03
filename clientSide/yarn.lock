@@ -3772,11 +3772,6 @@
   dependencies:
     "fontfaceobserver" "^2.1.0"
 
-"expo-google-fonts@^0.0.0":
-  "integrity" "sha512-SpY1N5ZHGbNXuvN8s3E2HxjlcxR5NHWn72Uy8wl0uZJ0ueWd+JfTUXwZzfuF638WeTdgJKztRy2MWfuMORQ1yQ=="
-  "resolved" "https://registry.npmjs.org/expo-google-fonts/-/expo-google-fonts-0.0.0.tgz"
-  "version" "0.0.0"
-
 "expo-image-loader@~4.0.0":
   "integrity" "sha512-hVMhXagsO1cSng5s70IEjuJAuHy2hX/inu5MM3T0ecJMf7L/7detKf22molQBRymerbk6Tzu+20h11eU0n/3jQ=="
   "resolved" "https://registry.npmjs.org/expo-image-loader/-/expo-image-loader-4.0.0.tgz"
@@ -6329,13 +6324,6 @@
     "invariant" "^2.2.4"
     "lodash" "^4.17.21"
     "prop-types" "^15.7.2"
-
-"react-native-google-fonts@^0.0.0":
-  "integrity" "sha512-ZNVxDiGe5dO8GLTX7hMAUy3iTyivsRswPLMQQwR0hcUI9lVNSB5fBCpw+n4/GQu3U6cg7LL0yEmqqNo6epyWBA=="
-  "resolved" "https://registry.npmjs.org/react-native-google-fonts/-/react-native-google-fonts-0.0.0.tgz"
-  "version" "0.0.0"
-  dependencies:
-    "expo-google-fonts" "^0.0.0"
 
 "react-native-gradle-plugin@^0.70.3":
   "integrity" "sha512-oOanj84fJEXUg9FoEAQomA8ISG+DVIrTZ3qF7m69VQUJyOGYyDZmPqKcjvRku4KXlEH6hWO9i4ACLzNBh8gC0A=="
