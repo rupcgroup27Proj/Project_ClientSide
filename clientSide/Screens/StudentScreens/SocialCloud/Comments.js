@@ -19,12 +19,12 @@ const currentUser = {
   Type: "Student",
   GroupId: 0,
   UserId: 1,
-  PersonalId: 222,
-  Password: 222,
-  FirstName: "Teacher2",
-  LastName: "teacher2",
-  Phone: 222,
-  Email: "teacher2@gmail.com",
+  PersonalId: 111,
+  Password: 111,
+  FirstName: "Student1",
+  LastName: "student1",
+  Phone: 0,
+  Email: "aa2@gmail.com",
   PictureUrl: null,
   ParentPhone: null,
   IsAdmin: 0,
@@ -47,7 +47,7 @@ export default function Comments({ route }) {
       .get(`http://10.0.2.2:5283/api/PostsComments/postId/${post.PostId}`)
       .then((res) => {
         setPostComment(res.data);
-        console.log("getComments " + JSON.stringify(postComment));
+        //console.log("getComments " + JSON.stringify(postComment));
       })
       .catch((err) => console.log("getComments " + err));
   };
@@ -83,20 +83,17 @@ export default function Comments({ route }) {
         } else {
           Alert.alert("Error", "Comment was failed");
         }
-        return res.json();
+        //return res.json();
+        getComments();
       })
       .then(
-        (result) => {
-          console.log("suc in post comment to DB ", result);
+        (res) => {
+          console.log("suc in post comment to DB ", res);
         },
         (error) => {
           console.log("ERR in post comment to DB", error);
         }
       );
-
-    getComments();
-    // const cArr = [newComment, ...postComment];
-    // setPostComment(cArr);
     setComment("");
   }
 

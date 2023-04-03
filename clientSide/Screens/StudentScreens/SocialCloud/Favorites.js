@@ -7,15 +7,15 @@ import { Card } from "react-native-paper";
 
 //temporary user for tests
 const currentUser = {
-  Type: "Teacher",
+  Type: "Student",
   GroupId: 0,
-  UserId: 2,
-  personalId: 222,
-  Password: 222,
-  FirstName: "Teacher2",
-  LastName: "teacher2",
-  Phone: 222,
-  Email: "teacher2@gmail.com",
+  UserId: 1,
+  PersonalId: 111,
+  Password: 111,
+  FirstName: "Student1",
+  LastName: "student1",
+  Phone: 0,
+  Email: "aa2@gmail.com",
   PictureUrl: null,
   ParentPhone: null,
   IsAdmin: 0,
@@ -51,7 +51,7 @@ export default function Favorites() {
           prevList.filter((fav) => fav.postId !== postId)
         );
         userFavorites();
-        console.log("userFavorites ", JSON.stringify(favorite));
+        //console.log("userFavorites ", JSON.stringify(favorite));
       })
 
       .catch((err) => {
