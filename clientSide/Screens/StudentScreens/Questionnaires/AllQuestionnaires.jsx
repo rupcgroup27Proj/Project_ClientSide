@@ -1,29 +1,29 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { Divider, List } from 'react-native-paper';
+import axios from 'axios';
 import { useUser } from '../../../Components/Contexts/UserContext';
 
 
 const AllQuestionnaires = ({ navigation }) => {
   const { currentUser } = useUser();
-  const [questionnaires, setQuestionnaires] = useState([{ title: 1 }]);
+  const [questionnaires, setQuestionnaires] = useState([]);
 
   useEffect(() => {
     const getAllQuestionnaires = async () => {
       try {
         const response = await axios.get(`http://10.0.2.2:5283/api/Questionnaires/groupId/${currentUser.groupId}`);
         setQuestionnaires(response.data);
-      } catch (error) { console.log(error) }
+      } catch (error) { console.log(error); }
     }
     getAllQuestionnaires()
-    console.log(currentUser)
   }, [])
 
 
   const handlePress = (questionnaire) => {
     navigation.navigate('Questionnaire', { questionnaire });
   };
+
 
   return (
     <View >
@@ -37,7 +37,7 @@ const AllQuestionnaires = ({ navigation }) => {
               titleNumberOfLines={2}
               description={questionnaire.Description}
               left={(item) => <List.Icon {...item} icon="file-question-outline" />} />
-            <Divider></Divider>
+            <Divider/>
           </TouchableOpacity>
 
         ))}

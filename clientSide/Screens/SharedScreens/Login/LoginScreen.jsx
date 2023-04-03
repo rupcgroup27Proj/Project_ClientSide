@@ -1,23 +1,22 @@
+//Formatted
 import React, { useState } from 'react';
-import { View, Alert, ImageBackground } from 'react-native';
-import { Button, TextInput, Title } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+import { View, ImageBackground } from 'react-native';
+import { ActivityIndicator, Button, TextInput, Title, Text } from 'react-native-paper';
 import { SelectList } from 'react-native-dropdown-select-list'
 import { styles } from './Styles'
 import { useUser } from '../../../Components/Contexts/UserContext';
 
 
 const LoginScreen = () => {
+
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [userType, setUserType] = useState('');
-  const { login } = useUser();
-
+  const { login, isDisabled } = useUser(); //Destructuring the context for "login" function.
   const data = [
     { key: '1', value: 'Student' },
     { key: '2', value: 'Teacher' },
-    { key: '3', value: 'Guide' },
+    { key: '3', value: 'Guide' }
   ]
 
   const handleLogin = async () => {
@@ -27,7 +26,7 @@ const LoginScreen = () => {
 
   return (
     <ImageBackground
-      source={require('../../../Images/LoginBackground.jpeg')}
+      source={require('../../../assets/Images/LoginBackground.jpeg')}
       style={styles.background}
       blurRadius={1}
     >
@@ -43,23 +42,30 @@ const LoginScreen = () => {
           dropdownTextStyles={{ color: 'white' }}
         />
         <TextInput
+          disabled={isDisabled}
           label="User ID"
           value={userId}
           onChangeText={text => setUserId(text)}
           style={styles.firstInput}
-          theme={{ colors: { primary: '#FFFFFF' } }}
+          keyboardType='numeric'
         />
         <TextInput
+          disabled={isDisabled}
           label="Password"
           value={password}
           secureTextEntry={true}
           onChangeText={text => setPassword(text)}
           style={styles.input}
-          theme={{ colors: { primary: '#FFFFFF' } }}
         />
-        <Button mode="contained" onPress={handleLogin} buttonColor='#035afc' style={styles.button}>
-          Login
-        </Button>
+
+        {isDisabled
+          ?
+          <ActivityIndicator size="large" />
+          : <Button mode="contained" onPress={handleLogin} style={styles.button}>
+            Login
+          </Button>
+        }
+
       </View>
     </ImageBackground>
   );

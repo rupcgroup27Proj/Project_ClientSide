@@ -1,7 +1,6 @@
 import 'react-native-gesture-handler'; //By React Navigation docs, this import must always be imported first!
 import React from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
 //Admin Screens
 import AddDelegations from '../../Screens/AdminScreens/Delegations/AddDelegations/AddDelegations'
 import AllDelegetions from '../../Screens/AdminScreens/Delegations/AllDelegations/AllDelegetions'

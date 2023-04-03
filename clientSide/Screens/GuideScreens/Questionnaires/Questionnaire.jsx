@@ -1,242 +1,152 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Divider, IconButton, RadioButton, Text, TextInput, useTheme } from 'react-native-paper';
-import { ScrollView, View, TouchableOpacity, Alert } from 'react-native';
+import { Alert, ScrollView, View } from 'react-native';
+import { Button, Divider, RadioButton, Title } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useUser } from '../../../Components/Contexts/UserContext';
+import { styles } from './QuestionnaireStyles';
 
-const tagsAPI = 'http://10.0.2.2:5283/api/Tags/builtInTags'
 
+const Questionnaire = ({ route }) => {
 
-const Questionnaire = () => {
-    const [title, setTitle] = useState();
-    const [description, setDescription] = useState();
-    const [tags, setTags] = useState([]);
-    const [selectedTags, setSelectedTags] = useState([])
-    const [questions, setQuestions] = useState([]);
-    const theme = useTheme();
+    const { questionnaire } = route.params;
+    const getCorrectAnswers = () => {
+        const arr = [];
+        questionnaire.Questions.forEach(question => { arr.push(question.CorrectOption) });
+        return arr;
+    }
+    const [answers, setAnswers] = useState(new Array(questionnaire.Questions.length).fill(null));
+    const [correctAnswers, setCorrectAnswers] = useState(getCorrectAnswers);
+    const [isCompleted, setIsCompleted] = useState(false);
+    const [completedOptions, setCompletedOptions] = useState([]);
+    const [isLoading, setIsLoading] = useState(true)
     const { currentUser } = useUser();
 
-    const getTags = async () => {
-        await axios.get(tagsAPI)
-            .then((res) => { setTags(res.data) })
-            .catch((err) => console.log(err))
-    }
-
     useEffect(() => {
-        getTags();
-    }, [])
+        (async function () {
+            setAnswers(new Array(questionnaire.Questions.length).fill(null))
+            const completedQuestionnaires = await AsyncStorage.getItem('completedQuestionnaires');
+            if (!completedQuestionnaires)
+                return;
+            const isSubmitted = JSON.parse(completedQuestionnaires).includes(parseInt(questionnaire.Id));
+            setIsCompleted(isSubmitted);
+            const cqOptions = await AsyncStorage.getItem('chosenOptions');
+            if (!cqOptions)
+                return;
+            setCompletedOptions(JSON.parse(cqOptions));
+            setIsLoading(false);
+        })()
+    }, [questionnaire.Id, isCompleted])
 
 
-    const addQuestion = (type) => {
-        const question = { type };
-        question.text = '';
-        question.options = [{ value: '' }, { value: '' }, { value: '' }, { value: '' }];
-        question.correctOption = 0;
-        setQuestions([...questions, question]);
-    };
-
-    const updateQuestion = (index, newText) => {
-        const updatedQuestions = [...questions];
-        updatedQuestions[index].text = newText;
-        setQuestions(updatedQuestions);
-    };
-
-    const deleteQuestion = (questionIndex) => {
-        const updatedQuestions = questions.filter((option, index) => index != questionIndex);
-        setQuestions(updatedQuestions);
+    const handleAnswer = (index, answer) => {
+        const newAnswers = [...answers];
+        newAnswers[index] = answer;
+        setAnswers(newAnswers);
     }
 
-
-    const addOption = (questionIndex) => {
-        const updatedQuestions = [...questions];
-        updatedQuestions[questionIndex].options.push({ value: "" });
-        setQuestions(updatedQuestions);
-    }
-
-    const updateOption = (questionIndex, optionIndex, newText) => {
-        const updatedQuestions = [...questions];
-        updatedQuestions[questionIndex].options[optionIndex].value = newText;
-        setQuestions(updatedQuestions);
-    };
-
-    const deleteOption = (questionIndex, optionIndex) => {
-        const Questions = [...questions];
-        Questions[questionIndex].options = Questions[questionIndex].options.filter((option, index) => index != optionIndex);
-        Questions[questionIndex].correctOption = 0;
-        setQuestions(Questions);
-    };
-
-    const updateCorrectOption = (questionIndex, value) => {
-        const updatedQuestions = [...questions];
-        updatedQuestions[questionIndex].correctOption = value;
-        setQuestions(updatedQuestions);
-    };
-
-    const validateQuestionnaire = () => {
-
-        if (title == '') return false;
-        if (description == '') return false;
-        if (questions.length == 0) return false;
-
-        const someClosedQuestionInvalid = questions.some(question => {
-            const isTextEmpty = question.text == '';
-            const isLowNumOfOptions = question.options.length < 2;
-            const isSomeOptionEmpty = question.options.some(option => option == '');
-            const noOptionHasBeenChosen = (question.correctOption == '');
-            return question.type == 'closed' &&
-                (isTextEmpty || isLowNumOfOptions || isSomeOptionEmpty || noOptionHasBeenChosen);
+    const calculateGrade = () => {
+        let numerator = 0;
+        let denominator = correctAnswers.length;
+        answers.forEach((answer, index) => {
+            if (answer == correctAnswers[index])
+                numerator++;
         });
-
-        if (someClosedQuestionInvalid) return false;
-
-        return true;
+        return (Math.floor((numerator / denominator) * 100))
     }
 
-    const postQuestionnaire = () => {
-        if (validateQuestionnaire()) {
-            const jsonQuestionnaire = {
-                questionnaire: {
-                    title: title,
-                    description: description,
-                    tags: selectedTags,
-                    questions: questions
-                }
-            }
-            
-            axios.post(`http://10.0.2.2:5283/api/Questionnaires/groupId/${currentUser.groupId}/json/${JSON.stringify(jsonQuestionnaire)}`)
-                .then((res) => console.log(res))
-                .catch((err) => console.log(err))
-            setQuestions([]);
-            setTags([]);
-            setTitle('');
-            setDescription('')
-            Alert.alert('Success', 'Questionnaire has been uploaded successfully.');
+    const updateStudentSmartElementTags = async () => {
+        const studentTags = questionnaire.Tags;
+        axios.put(`http://10.0.2.2:5283/api/Questionnaires/studentId/${currentUser.id}`, studentTags)
+            .then((res) => { console.log("User tags updated.") })
+            .catch((err) => console.log(err));
+    }
+
+    const handleSubmit = () => {
+        if (answers.includes(null)) {
+            Alert.alert('Error', 'All questions must be checked.');
+            return;
         }
-        else { Alert.alert('Error', 'All fields are required!'); }
+
+        const grade = calculateGrade();
+        Alert.alert('Grade', `Your grade is ${grade}.`);
+        if (grade < 55)
+            updateStudentSmartElementTags();
+
+        //Insert the questionnaire to asyncStorage for disabling it in future attempts to answer it again
+        (async function () {
+            const qId = parseInt(questionnaire.Id);
+            const cqs = await AsyncStorage.getItem('completedQuestionnaires');
+            if (cqs != null)
+                AsyncStorage.setItem('completedQuestionnaires', JSON.stringify([...(JSON.parse(cqs)), qId]));
+            else
+                AsyncStorage.setItem('completedQuestionnaires', JSON.stringify([qId]));
+
+            //Stores the answers for conditional styling
+            const chosenOptions = await AsyncStorage.getItem('chosenOptions');
+            const options = {
+                cQuestionnaireId: qId,
+                cOptions: answers
+            }
+            if (chosenOptions != null)
+                AsyncStorage.setItem('chosenOptions', JSON.stringify([...(JSON.parse(chosenOptions)), options]));
+            else
+                AsyncStorage.setItem('chosenOptions', JSON.stringify([options]));
+            setIsCompleted(true)
+        })()
+    }
+
+    const determineBgColor = (questionnaireId, questionIndex, optionText) => {
+        const questionnaire = completedOptions.find(q => q['cQuestionnaireId'] == questionnaireId);
+        if (questionnaire != undefined && questionnaire.cOptions[questionIndex] == correctAnswers[questionIndex] && questionnaire.cOptions[questionIndex] == optionText)
+            return 'green'
+        if (questionnaire != undefined && questionnaire.cOptions[questionIndex] == optionText)
+            return 'red'
+        return 'white'
+    }
+
+    const renderQuestion = (question, qindex) => {
+        return (
+            <View key={question.Text} style={styles.question}>
+                <Title style={styles.questionTitle}>{question.Text}</Title>
+                <View style={styles.radioGroup}>
+                    {question.Options.map((option, oindex) => (
+                        <RadioButton.Item
+                            style={{ backgroundColor: isCompleted ? determineBgColor(questionnaire.Id, qindex, option.text) : '#0096FF', borderWidth: 0.2, marginVertical: 1, borderRadius: 8, opacity: !isCompleted ? 1 : 0.8 }}
+                            disabled={isCompleted}
+                            key={option.choiceId}
+                            label={option.text}
+                            value={option.choiceId}
+                            status={answers[qindex] === option.text ? 'checked' : 'unchecked'}
+                            onPress={() => handleAnswer(qindex, option.text)}
+                            labelStyle={styles.radioLabel}
+                        />
+                    ))}
+                </View>
+                <Divider />
+            </View>
+        );
     }
 
 
     return (
-        <ScrollView>
-            <View style={{ padding: 10 }}>
-                <View style={{ flexDirection: 'row', flex: 10, marginBottom: 5 }}>
-                    <TextInput
-                        placeholder="Questionnaire Title"
-                        value={title}
-                        onChangeText={(text) => setTitle(text)}
-                        mode="flat"
-                        style={{ flex: 9, alignSelf: 'center' }}
-                    />
-                    <Button title="Post"
-                        mode='contained'
-                        onPress={() => postQuestionnaire()}
-                        style={{ flex: 1, alignSelf: 'center', marginLeft: 5 }}>
-                        Post
-                    </Button>
-                </View>
-
-                <Divider bold={true} />
-
-                <View style={{ flexDirection: 'row', marginBottom: 5 }}>
-                    <TextInput
-                        placeholder="Description"
-                        multiline={true}
-                        value={description}
-                        onChangeText={(text) => setDescription(text)}
-                        mode="outlined"
-                        style={{ flex: 9, alignSelf: 'center' }}
-                    />
-                </View>
-
-                <Divider bold={true} />
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                    {tags.map((tag) => (
-                        <TouchableOpacity
-                            key={tag.tagId}
-                            onPress={() =>
-                                //Dual functinality. On clicking a tag, IF the id already exists in the "tags" useState, THAN filter out
-                                //all tags that DO NOT match this id - it returns an array with all the selected tags but WITHOUT the
-                                //tag that has been clicked. ELSE, store the tag for future use.
-                                setSelectedTags(selectedTags.includes(tag) ? selectedTags.filter((t) => t.tagId !== tag.tagId) : [...selectedTags, tag])
-                            }
-                            style={{
-                                backgroundColor: selectedTags.includes(tag) ? theme.colors.tertiary : '#F2F2F2',//Conditional styling
-                                borderRadius: 16,
-                                paddingHorizontal: 16,
-                                paddingVertical: 8,
-                                margin: 4,
-                            }}
-                        >
-                            <Text>{tag.tagName}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-
-                <Divider bold={true} />
-
-                <View style={{ marginTop: 16 }}>
-                    {questions.map((question, questionIndex) => (
-                        <View key={questionIndex} style={{ marginBottom: 16 }}>
-                            <Text>Question {questionIndex + 1}:</Text>
-                            <TextInput
-                                placeholder={`Question text`}
-                                value={question.text}
-                                onChangeText={(newText) => updateQuestion(questionIndex, newText)}
-                                style={{ marginBottom: 8 }}
-                            />
-                            {questions[questionIndex].options.length !== 4 &&
-                                <View style={{ flexDirection: "row", }}>
-                                    <Button
-                                        mode='outlined'
-                                        onPress={() => addOption(questionIndex)}
-                                        style={{ marginTop: 5 }}>
-                                        Add option
-                                    </Button>
-                                </View>}
-                            {questions[questionIndex].options.length !== 0 &&
-                                <View>
-                                    <Text style={{ marginLeft: "75%" }}>Correct:</Text>
-                                </View>}
-                            {question.options.map((option, optionIndex) => (
-                                <View key={optionIndex} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-                                    <TextInput
-                                        placeholder={`Option ${optionIndex + 1}`}
-                                        value={option.value}
-                                        onChangeText={(newText) => updateOption(questionIndex, optionIndex, newText)}
-                                        style={{ flex: 1, marginRight: 8 }}
-                                    />
-                                    <RadioButton
-                                        onPress={() => updateCorrectOption(questionIndex, option)}
-                                        status={questions[questionIndex].correctOption === option && option !== "" ? 'checked' : 'unchecked'}
-                                    />
-                                    <IconButton
-                                        onPress={() => deleteOption(questionIndex, optionIndex)}
-                                        icon="delete"
-                                        size={20}
-                                    />
-                                </View>
-                            ))}
-                            <Button
-                                mode='elevated'
-                                onPress={() => deleteQuestion(questionIndex)}
-                                style={{ alignSelf: 'center', marginBottom: 10 }}>
-                                Delete question
-                            </Button>
-                            <Divider bold={true} />
-                        </View>
-                    ))}
-                </View>
-
-                <View style={{ marginBottom: 15 }}>
-                    <Button onPress={() => addQuestion('closed')} mode={'contained'}>
-                        Add Question
-                    </Button>
-                </View>
-
-                <Divider bold={true} />
-
-            </View>
-        </ScrollView>
+        <>
+            {isLoading
+                ?
+                <></>
+                :
+                (<ScrollView>
+                    <View style={styles.container}>
+                        <Title style={styles.title}>{questionnaire.Title}</Title>
+                        <Title style={styles.description}>{questionnaire.Description}</Title>
+                        <Divider />
+                        {questionnaire.Questions.map(renderQuestion)}
+                        <Button mode="contained" onPress={handleSubmit} style={styles.submitButton} disabled={isCompleted}>
+                            {isCompleted ? 'Already submitted' : 'Submit'}
+                        </Button>
+                    </View>
+                </ScrollView>)}
+        </>
     );
 };
 

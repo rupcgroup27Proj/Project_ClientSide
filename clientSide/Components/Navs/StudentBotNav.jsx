@@ -1,10 +1,5 @@
-
-import { View, Text } from 'react-native'
 import React from 'react'
-
-
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
-
 //Main screens for the tab navigator.
 import Home from "../../Screens/StudentScreens/Home/Home"
 import MyMap from "../../Screens/StudentScreens/MyMap/MyMap"
