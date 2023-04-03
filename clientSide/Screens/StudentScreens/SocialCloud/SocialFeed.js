@@ -15,13 +15,14 @@ import { Card, Appbar, Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import IoniconsIcon from "react-native-vector-icons/Ionicons";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
+import { useUser } from "../../../Components/Contexts/UserContext";
 
 //temporary user for tests
 const currentUser = {
   Type: "Student",
   GroupId: 0,
-  UserId: 1,
-  personalId: 222,
+  UserId: 2,
+  PersonalId: 222, //////////לשנות////////////
   Password: 222,
   FirstName: "Teacher2",
   LastName: "teacher2",
@@ -35,6 +36,7 @@ const currentUser = {
 };
 
 export default function SocialFeed({ post, navigation }) {
+  //const {currentUser}=useUser();
   const [posts, setPosts] = useState([]);
   const [postsTags, setPostsTags] = useState([]);
   const [postsLikes, setPostsLikes] = useState([]);
@@ -42,7 +44,7 @@ export default function SocialFeed({ post, navigation }) {
 
   useEffect(() => {
     getAllPosts();
-    // postTags();
+    postTags();
     userLikes();
     userFavorites();
   }, []);
@@ -60,14 +62,15 @@ export default function SocialFeed({ post, navigation }) {
   }
 
   //get post's tags
-  // function postTags() {
-  //   axios
-  //     .get(`http://10.0.2.2:5283/api/Tags/postId/${postId}`)
-  //     .then((res) => {
-  //       setPostsTags(res.data);
-  //     })
-  //     .catch((err) => console.log("postTags " + err));
-  // }
+  function postTags() {
+    axios
+      .get(`http://10.0.2.2:5283/api/SocialCloud/groupId/${currentUser.GroupId}`)
+      .then((res) => {
+        setPostsTags(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => console.log("postTags " + err));
+  }
 
   //get user's likes
   const userLikes = async () => {
@@ -132,7 +135,7 @@ export default function SocialFeed({ post, navigation }) {
         `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.UserId}/postId/${postId}`
       )
       .then((res) => {
-        setFavorite((prevList) => [...prevList, { postId }]);
+        setFavorite((prevList) => [...prevList, { postId : postId }]);
         userFavorites();
         console.log("userFavorites ", JSON.stringify(favorite));
       })
@@ -195,36 +198,38 @@ export default function SocialFeed({ post, navigation }) {
 
       {posts.map((post) => (
         <Card style={styles.card}>
-          <View key={post.postId}>
+          {console.log(post)}
+
+          <View key={post.PostId}>
             <IoniconsIcon name="ios-person" size={30} color="black">
-              <Text style={styles.username}>{post.postId}</Text>
+              <Text style={styles.username}>{post.FirstName}</Text>
             </IoniconsIcon>
           </View>
-          <Image source={{ uri: post.fileUrl }} style={styles.image}></Image>
+          <Image source={{ uri: post.FileUrl }} style={styles.image}></Image>
           <View>
             {(currentUser.Type === "Teacher" ||
-              post.studentId === currentUser.UserId) && (
+              post.StudentId === currentUser.PersonalId) && (
               <TouchableOpacity
                 style={{ left: 360, bottom: 308 }}
-                onPress={() => RemovePost(post.postId)}
+                onPress={() => RemovePost(post.PostId)}
               >
                 <IoniconsIcon name="trash-outline" size={20} color="black" />
               </TouchableOpacity>
             )}
-            {postsLikes.some((like) => like.postId === post.postId) &&
+            {postsLikes.some((like) => like.postId === post.PostId) &&
               currentUser.Type === "Student" && (
                 <TouchableOpacity
                   style={{ left: 12, bottom: 5 }}
-                  onPress={() => RemoveLike(post.postId)}
+                  onPress={() => RemoveLike(post.PostId)}
                 >
                   <HeartIcon filled={true} />
                 </TouchableOpacity>
               )}
-            {!postsLikes.some((like) => like.postId === post.postId) &&
+            {!postsLikes.some((like) => like.postId === post.PostId) &&
               currentUser.Type === "Student" && (
                 <TouchableOpacity
                   style={{ left: 12, bottom: 5 }}
-                  onPress={() => AddLike(post.postId)}
+                  onPress={() => AddLike(post.PostId)}
                 >
                   <HeartIcon filled={false} />
                 </TouchableOpacity>
@@ -244,20 +249,20 @@ export default function SocialFeed({ post, navigation }) {
                 />
               </TouchableOpacity>
             }
-            {favorite.some((fav) => fav.postId === post.postId) &&
+            {favorite.some((fav) => fav.postId === post.PostId) &&
               currentUser.Type === "Student" && (
                 <TouchableOpacity
                   style={{ left: 360, bottom: 45 }}
-                  onPress={() => RemoveFav(post.postId)}
+                  onPress={() => RemoveFav(post.PostId)}
                 >
                   <FavoriteIcon filled={true} />
                 </TouchableOpacity>
               )}
-            {!favorite.some((fav) => fav.postId === post.postId) &&
+            {!favorite.some((fav) => fav.postId === post.PostId) &&
               currentUser.Type === "Student" && (
                 <TouchableOpacity
                   style={{ left: 360, bottom: 45 }}
-                  onPress={() => AddFav(post.postId)}
+                  onPress={() => AddFav(post.PostId)}
                 >
                   <FavoriteIcon filled={false} />
                 </TouchableOpacity>

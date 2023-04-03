@@ -18,8 +18,8 @@ import { Card } from "react-native-paper";
 const currentUser = {
   Type: "Student",
   GroupId: 0,
-  UserId: 3,
-  personalId: 222,
+  UserId: 1,
+  PersonalId: 222,
   Password: 222,
   FirstName: "Teacher2",
   LastName: "teacher2",
@@ -42,15 +42,15 @@ export default function Comments({ route }) {
   }, []);
 
   //get comments
-  function getComments() {
-    axios
-      .get(`http://10.0.2.2:5283/api/PostsComments/postId/${post.postId}`)
+  const getComments = async () => {
+    await axios
+      .get(`http://10.0.2.2:5283/api/PostsComments/postId/${post.PostId}`)
       .then((res) => {
         setPostComment(res.data);
         console.log("getComments " + JSON.stringify(postComment));
       })
       .catch((err) => console.log("getComments " + err));
-  }
+  };
 
   const handleCommentChange = (text) => {
     setComment(text);
@@ -61,7 +61,7 @@ export default function Comments({ route }) {
     const newComment = {
       commentId: 1,
       studentId: currentUser.UserId,
-      postId: post.postId,
+      postId: post.PostId,
       commentText: comment,
     };
 
@@ -94,6 +94,9 @@ export default function Comments({ route }) {
         }
       );
 
+    getComments();
+    // const cArr = [newComment, ...postComment];
+    // setPostComment(cArr);
     setComment("");
   }
 
@@ -112,9 +115,9 @@ export default function Comments({ route }) {
               `http://10.0.2.2:5283/api/PostsComments/commentId/${commentId}`
             )
             .then((res) => {
-              setPostComment((prevList) =>
-                prevList.filter((c) => c.commentId !== commentId)
-              );
+              // setPostComment((prevList) =>
+              //   prevList.filter((c) => c.commentId !== commentId)
+              // );
               getComments();
               console.log("getComments ", JSON.stringify(postComment));
             })
@@ -128,64 +131,72 @@ export default function Comments({ route }) {
   }
 
   return (
-    <Card style={styles.card}>
-      <IoniconsIcon name="ios-person" size={25} color="black">
-        <Text style={styles.username}>{post.postId}</Text>
-      </IoniconsIcon>
-      <View style={{ height: 240, width: "100%" }}>
-        <Image
-          source={{ uri: post.fileUrl }}
-          style={{ flex: 1, marginTop: 10 }}
-        />
-      </View>
-      {currentUser.Type === "Student" && (
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <TextInput
-            style={{ flex: 1, height: 50 }}
-            placeholder="Add a comment..."
-            onChangeText={handleCommentChange}
-            value={comment}
+    <ScrollView>
+      <Card style={styles.card}>
+        <IoniconsIcon name="ios-person" size={25} color="black">
+          <Text style={styles.username}>{post.PostId}</Text>
+        </IoniconsIcon>
+        <View style={{ height: 240, width: "100%" }}>
+          <Image
+            source={{ uri: post.FileUrl }}
+            style={{ flex: 1, marginTop: 10 }}
           />
-          <IoniconsIcon name="send" size={20} onPress={() => addNewComment()} />
         </View>
-      )}
+        {currentUser.Type === "Student" && (
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <TextInput
+              style={{ flex: 1, height: 50 }}
+              placeholder="Add a comment..."
+              onChangeText={handleCommentChange}
+              value={comment}
+            />
+            <IoniconsIcon
+              name="send"
+              size={20}
+              onPress={() => addNewComment()}
+            />
+          </View>
+        )}
 
-      <ScrollView style={{ marginTop: 10 }}>
-        {postComment.map((c) => (
-          <Card
-            key={c.commentId}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              height: 50,
-              marginTop: 15,
-              backgroundColor: "gray",
-            }}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View>
-                <IoniconsIcon name="ios-person" size={25} color="black" />
+        <ScrollView style={{ marginTop: 10 }}>
+          {postComment.map((c) => (
+            <Card
+              key={c.commentId}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                height: 50,
+                marginTop: 15,
+                backgroundColor: "gray",
+              }}
+            >
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View>
+                  <IoniconsIcon name="ios-person" size={25} color="black" />
+                </View>
+                <View>
+                  <Text style={styles.username}>{c.studentId}</Text>
+                  <Text>{c.commentText}</Text>
+                </View>
+                <View>
+                  {(currentUser.Type === "Teacher" ||
+                    c.studentId === currentUser.UserId) && (
+                    <TouchableOpacity
+                      onPress={() => RemoveComment(c.commentId)}
+                    >
+                      <IoniconsIcon
+                        name="trash-outline"
+                        size={20}
+                        color="black"
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
               </View>
-              <View>
-                <Text style={styles.username}>{c.studentId}</Text>
-                <Text>{c.commentText}</Text>
-              </View>
-              <View>
-                {(currentUser.Type === "Teacher" ||
-                  c.studentId === currentUser.UserId) && (
-                  <TouchableOpacity onPress={() => RemoveComment(c.commentId)}>
-                    <IoniconsIcon
-                      name="trash-outline"
-                      size={20}
-                      color="black"
-                    />
-                  </TouchableOpacity>
-                )}
-              </View>
-            </View>
-          </Card>
-        ))}
-      </ScrollView>
-    </Card>
+            </Card>
+          ))}
+        </ScrollView>
+      </Card>
+    </ScrollView>
   );
 }
