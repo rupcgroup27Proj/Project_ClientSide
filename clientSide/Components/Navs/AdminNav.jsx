@@ -2,11 +2,11 @@ import 'react-native-gesture-handler'; //By React Navigation docs, this import m
 import React from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 //Admin Screens
-import AddDelegations from '../../Screens/AdminScreens/Delegations/AddDelegations/AddDelegations'
+import AddSchool from '../../Screens/AdminScreens/Delegations/AddDelegations/AddSchool'
 import AllDelegetions from '../../Screens/AdminScreens/Delegations/AllDelegations/AllDelegetions'
 import AddUsers from '../../Screens/SharedScreens/Users/AddUsers/AddUsers'
 import AllUsers from '../../Screens/SharedScreens/Users/AllUsers/AllUsers'
-
+import Home from '../../Screens/AdminScreens/Home/Home'
 
 const AdminNav = () => {
 
@@ -14,7 +14,8 @@ const AdminNav = () => {
 
     return (
         <Drawer.Navigator>
-            <Drawer.Screen name="Create a delegation" component={AddDelegations} />
+            <Drawer.Screen name="Home" component={Home} />
+            <Drawer.Screen name="Create a delegation" component={AddSchool} />
             <Drawer.Screen name="All delegations" component={AllDelegetions} />
             <Drawer.Screen name="Add new user" component={AddUsers} />
             <Drawer.Screen name="All users" component={AllUsers} />

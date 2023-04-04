@@ -4,6 +4,7 @@ import { ActivityIndicator } from 'react-native-paper';
 import { useUser } from './Components/Contexts/UserContext'; //User context for laoding screen and getting the user
 import LoginScreen from './Screens/SharedScreens/Login/LoginScreen'; //LoginScreen
 //Navs
+import AdminBotNav from './Components/Navs/AdminBotNav';
 import AdminNav from './Components/Navs/AdminNav';
 import StudentDrawer from './Components/Navs/StudentDrawer'
 import GuideDrawer from './Components/Navs/GuideDrawer';
@@ -25,7 +26,7 @@ const Main = () => {
         <>
             {!currentUser ? <LoginScreen /> : (
                 <>
-                    {currentUser.type == 'Admin' && <AdminNav />}
+                    {currentUser.type == 'Admin' && <AdminBotNav />}
                     {currentUser.type == 'Student' && <StudentDrawer />}
                     {currentUser.type == 'Teacher' && <TeacherDrawer />}
                     {currentUser.type == 'Guide' && <GuideDrawer />}

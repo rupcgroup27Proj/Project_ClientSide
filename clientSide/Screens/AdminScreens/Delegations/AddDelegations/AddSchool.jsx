@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, TextInput, TouchableOpacity } from "react-native";
 import { Styles } from "./Styles";
+import {  Divider ,Text } from 'react-native-paper';
 import axios from "axios";
 
 export default function AddSchool({ numGroup, navigation }) {
@@ -36,13 +37,18 @@ export default function AddSchool({ numGroup, navigation }) {
   }
 
   return (
-    <View style={Styles.container}>
-      <Text style={Styles.title}>Add New Delegation</Text>
+    <View style={{ backgroundColor: '#33383E', marginTop: 40, height: '100%', padding: 20 }}>
+      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20, color: 'white' , alignSelf:'center'}}>
+        Add New Delegation
+      </Text>
+      <Divider></Divider>
       <Text style={Styles.userTitle}>School Details</Text>
       <TextInput
         value={schoolName}
         onChangeText={handleInputChange}
         placeholder="School Name"
+        placeholderTextColor={'grey'}
+        cursorColor={'grey'}
         style={Styles.input}
       />
       <TouchableOpacity onPress={sendScholl} style={Styles.button}>

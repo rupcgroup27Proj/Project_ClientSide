@@ -10,6 +10,7 @@ export const Styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 30,
+    color: 'white'
   },
   input: {
     height: 50,
@@ -18,9 +19,10 @@ export const Styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,
+    color: 'white'
   },
   button: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#181B20",
     padding: 10,
     borderRadius: 10,
     alignItems: "center",
@@ -35,6 +37,7 @@ export const Styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
     marginTop: 10,
+    color: 'white'
   },
   container: {
     flex: 1,

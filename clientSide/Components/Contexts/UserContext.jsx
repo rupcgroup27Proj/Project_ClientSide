@@ -19,7 +19,7 @@ export default function UserProvider({ children }) {
 
     //If the user logged once, the app will log him in automatically using asyncStorage (after checking he has not been deleted from the server).
     const getLoggedUser = async () => {
-        //await AsyncStorage.removeItem('currentUser')
+        //await AsyncStorage.removeItem('currentUser');
         const currentUser = await AsyncStorage.getItem('currentUser');
         if (!currentUser) {
             setIsLoading(false);
@@ -48,6 +48,8 @@ export default function UserProvider({ children }) {
                 Alert.alert('Error', 'Credentials incorrect.');
                 return;
             }
+            if (loggedUser.isAdmin)
+                loggedUser.type = "Admin";
             AsyncStorage.setItem('currentUser', JSON.stringify(loggedUser));
             Alert.alert('Success', 'Login successful!');
             setCurrentUser(loggedUser);
@@ -58,6 +60,11 @@ export default function UserProvider({ children }) {
         setIsDisabled((prevDisabled) => !prevDisabled)
     }
 
+    const logout = () => {
+        AsyncStorage.removeItem('currentUser');
+        setCurrentUser(null);
+    }
+
     useEffect(() => {
         getLoggedUser();
     }, [])
@@ -65,8 +72,9 @@ export default function UserProvider({ children }) {
     const value = {
         currentUser, //Returns "currentUser" for convenient use all over the app.
         isLoading,   //Returns "isLoading" for the ActivityIndicator.
+        isDisabled,  //For handling the Login button.
         login,       //Returns "login" for logging in the user in the login screen for keeping it clean.
-        isDisabled   //For handling the Login button.
+        logout
     }
 
 
