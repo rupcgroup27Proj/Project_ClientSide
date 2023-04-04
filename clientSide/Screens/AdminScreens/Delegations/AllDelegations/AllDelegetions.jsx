@@ -1,9 +1,9 @@
 import { Text, View, StyleSheet, Modal, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
-import { Styles } from "./Styles";
 import { ScrollView } from "react-native-gesture-handler";
 import axios from "axios";
 import { Divider } from "react-native-paper";
+
 
 export default function AllDelegations({ delegation, navigation }) {
   const [pending, setPending] = useState([]);
@@ -150,14 +150,76 @@ export default function AllDelegations({ delegation, navigation }) {
         visible={modalVisible}
         onRequestClose={closeModal}
       >
+
         <View style={Style.modalView}>
-          <Text style={Style.modalText}>{selectedDelegation.schoolName}</Text>
+          <Text style={Style.modalTitle}>Delegation Details</Text>
+          <View style={Style.section}>
+            <Text style={Style.sectionTitle}>Delegation Information</Text>
+            <View style={Style.row}>
+              <Text style={Style.label}>Group ID:</Text>
+              <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.groupId}</Text>
+            </View>
+            <View style={Style.row}>
+              <Text style={Style.label}>School Name:</Text>
+              <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.schoolName}</Text>
+            </View>
+          </View>
+          <View style={Style.section}>
+            <Text style={Style.sectionTitle}>Teacher Information</Text>
+            <View style={Style.row}>
+              <Text style={Style.label}>Name:</Text>
+              <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.teacherFirstName}</Text>
+            </View>
+            <View style={Style.row}>
+              <Text style={Style.label}>ID:</Text>
+              <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.teacherId}</Text>
+            </View>
+            <View style={Style.row}>
+              <Text style={Style.label}>Email:</Text>
+              <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.teacherEmail}</Text>
+            </View>
+            <View style={Style.row}>
+              <Text style={Style.label}>Phone:</Text>
+              <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.phoneTeacher}</Text>
+            </View>
+          </View>
+          <View style={Style.section}>
+            <Text style={Style.sectionTitle}>Guide Information</Text>
+            <View style={Style.row}>
+              <Text style={Style.label}>Guide Name:</Text>
+              <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.guideFirstName}  </Text>
+            </View>
+            <View style={Style.row}>
+              <Text style={Style.label}>Guide ID:</Text>
+              <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.guideId}</Text>
+            </View>
+            <View style={Style.row}>
+              <Text style={Style.label}>Guide Email:</Text>
+              <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.guideEmail}</Text>
+            </View>
+            <View style={Style.row}>
+              <Text style={Style.label}>Guide Phone:</Text>
+              <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.phoneGuide}</Text>
+            </View>
+          </View>
+          <View style={Style.section}>
+            <Text style={Style.sectionTitle}>Dates</Text>
+            <View style={Style.row}>
+              <Text style={Style.label}>Start Date:</Text>
+              <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.startDate}</Text>
+            </View>
+            <View style={Style.row}>
+              <Text style={Style.label}>End Date:</Text>
+              <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.endDate}</Text>
+            </View>
+          </View>
           <TouchableOpacity onPress={closeModal}>
             <Text style={Style.modalClose}>Close</Text>
           </TouchableOpacity>
         </View>
       </Modal>
-    </ScrollView>
+
+    </ScrollView >
   );
 }
 
@@ -189,23 +251,55 @@ const Style = StyleSheet.create({
     flex: 2,
     margin: 'auto'
   },
+
   modalView: {
-    backgroundColor: '#33383E',
-    margin: 50,
-    padding: 40,
-    borderRadius: 10,
-    alignItems: 'center',
-    shadowColor: '#000',
+    backgroundColor: "#33383E",
+    margin: 20,
+    padding: 35,
+    borderRadius: 20,
+    alignItems: 'flex-start',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
   modalText: {
     fontSize: 24,
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
+  modalTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: 'white'
+  },
+  section: {
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: 'white'
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 5,
+    paddingLeft: 5
+  },
+  label: {
+    fontWeight: "bold",
+    marginRight: 10,
+    color: '#EAEAEA'
+  },
+  modalClose: {
+    marginTop: 20,
+    fontWeight: "bold",
+    color: "#2196F3",
+  },
 })
