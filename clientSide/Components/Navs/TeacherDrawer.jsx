@@ -11,6 +11,8 @@ import Profile from '../../Screens/SharedScreens/Profile/Profile'
 import GuideFeedback from '../../Screens/SharedScreens/GuideFeedback/GuideFeedback'
 import AddUsers from '../../Screens/SharedScreens/Users/AddUsers/AddUsers'
 import AllUsers from '../../Screens/SharedScreens/Users/AllUsers/AllUsers'
+import Logout from '../../Screens/SharedScreens/Logout/Logout'
+
 
 
 const TeacherDrawer = () => {
@@ -21,13 +23,16 @@ const TeacherDrawer = () => {
     <Drawer.Navigator>
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="Social Cloud" component={SocialCloud} />
-      <Drawer.Screen name="Daily Schedule" component={DailySchedule} />
-      <Drawer.Screen name="Notifications" component={Notifications} />
-      <Drawer.Screen name="Tasks" component={Tasks} />
       <Drawer.Screen name="Profile" component={Profile} />
-      <Drawer.Screen name="Guide Feedback" component={GuideFeedback} />
       <Drawer.Screen name="Add new user" component={AddUsers} />
       <Drawer.Screen name="All users" component={AllUsers} />
+      <Drawer.Screen name="Logout" component={Logout} />
+
+      {/* <Drawer.Screen name="Daily Schedule" component={DailySchedule} />
+      <Drawer.Screen name="Notifications" component={Notifications} />
+      <Drawer.Screen name="Tasks" component={Tasks} />
+      <Drawer.Screen name="Guide Feedback" component={GuideFeedback} /> */}
+
     </Drawer.Navigator>
   )
 }

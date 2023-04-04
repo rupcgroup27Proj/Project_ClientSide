@@ -9,6 +9,7 @@ import AdminNav from './Components/Navs/AdminNav';
 import StudentDrawer from './Components/Navs/StudentDrawer'
 import GuideDrawer from './Components/Navs/GuideDrawer';
 import TeacherDrawer from './Components/Navs/TeacherDrawer';
+import TeacherProvider from './Components/Contexts/TeacherContext';
 
 
 const Main = () => {
@@ -28,7 +29,7 @@ const Main = () => {
                 <>
                     {currentUser.type == 'Admin' && <AdminBotNav />}
                     {currentUser.type == 'Student' && <StudentDrawer />}
-                    {currentUser.type == 'Teacher' && <TeacherDrawer />}
+                    {currentUser.type == 'Teacher' && <TeacherProvider> <TeacherDrawer /> </TeacherProvider>}
                     {currentUser.type == 'Guide' && <GuideDrawer />}
                 </>
             )}
