@@ -12,22 +12,21 @@ import { styles } from "./Styles";
 import HeartIcon from "./HeartIcon";
 import FavoriteIcon from "./FavoriteIcon";
 import { Card, Appbar, Button } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
 import IoniconsIcon from "react-native-vector-icons/Ionicons";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
-import { useUser } from "../../../Components/Contexts/UserContext";
+//import { useUser } from "../../../Components/Contexts/UserContext";
 
 //temporary user for tests
 const currentUser = {
   Type: "Student",
   GroupId: 0,
-  UserId: 2,
-  PersonalId: 222, //////////לשנות////////////
-  Password: 222,
-  FirstName: "Teacher2",
-  LastName: "teacher2",
-  Phone: 222,
-  Email: "teacher2@gmail.com",
+  UserId: 1,
+  PersonalId: 111,
+  Password: 111,
+  FirstName: "Student1",
+  LastName: "student1",
+  Phone: 0,
+  Email: "aa2@gmail.com",
   PictureUrl: null,
   ParentPhone: null,
   IsAdmin: 0,
@@ -38,13 +37,13 @@ const currentUser = {
 export default function SocialFeed({ post, navigation }) {
   //const {currentUser}=useUser();
   const [posts, setPosts] = useState([]);
-  const [postsTags, setPostsTags] = useState([]);
+  //const [postsTags, setPostsTags] = useState([]);
   const [postsLikes, setPostsLikes] = useState([]);
   const [favorite, setFavorite] = useState([]);
 
   useEffect(() => {
     getAllPosts();
-    postTags();
+    //postTags();
     userLikes();
     userFavorites();
   }, []);
@@ -62,15 +61,15 @@ export default function SocialFeed({ post, navigation }) {
   }
 
   //get post's tags
-  function postTags() {
-    axios
-      .get(`http://10.0.2.2:5283/api/SocialCloud/groupId/${currentUser.GroupId}`)
-      .then((res) => {
-        setPostsTags(res.data);
-        console.log(res.data);
-      })
-      .catch((err) => console.log("postTags " + err));
-  }
+  // function postTags() {
+  //   axios
+  //     .get(`http://10.0.2.2:5283/api/SocialCloud/groupId/${currentUser.GroupId}`)
+  //     .then((res) => {
+  //       setPostsTags(res.data);
+  //       //console.log("postTags"+res.data);
+  //     })
+  //     .catch((err) => console.log("postTags " + err));
+  // }
 
   //get user's likes
   const userLikes = async () => {
@@ -91,9 +90,9 @@ export default function SocialFeed({ post, navigation }) {
         `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.UserId}/postId/${postId}`
       )
       .then((res) => {
-        setPostsLikes((prevList) => [...prevList, { postId }]);
+        setPostsLikes((prevList) => [...prevList, { postId : postId}]);
         userLikes();
-        console.log("postsLikes ", JSON.stringify(postsLikes));
+        //console.log("postsLikes ", JSON.stringify(postsLikes));
       })
       .catch((err) => {
         console.log("AddLike " + err);
@@ -111,7 +110,7 @@ export default function SocialFeed({ post, navigation }) {
           prevList.filter((like) => like.postId !== postId)
         );
         userLikes();
-        console.log("postsLikes ", JSON.stringify(postsLikes));
+        //console.log("postsLikes ", JSON.stringify(postsLikes));
       })
       .catch((err) => {
         console.log("RemoveLike " + err);
@@ -135,9 +134,9 @@ export default function SocialFeed({ post, navigation }) {
         `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.UserId}/postId/${postId}`
       )
       .then((res) => {
-        setFavorite((prevList) => [...prevList, { postId : postId }]);
+        setFavorite((prevList) => [...prevList, { postId }]);
         userFavorites();
-        console.log("userFavorites ", JSON.stringify(favorite));
+        //console.log("userFavorites ", JSON.stringify(favorite));
       })
       .catch((err) => {
         console.log("AddFav " + err);
@@ -155,7 +154,7 @@ export default function SocialFeed({ post, navigation }) {
           prevList.filter((fav) => fav.postId !== postId)
         );
         userFavorites();
-        console.log("userFavorites ", JSON.stringify(favorite));
+        //console.log("userFavorites ", JSON.stringify(favorite));
       })
 
       .catch((err) => {

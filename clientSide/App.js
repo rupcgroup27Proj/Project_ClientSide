@@ -32,7 +32,6 @@ import AddGuide from "./Screens/AdminScreens/Delegations/AddDelegations/AddGuide
 import AllDelegetions from "./Screens/AdminScreens/Delegations/AllDelegations/AllDelegetions";
 import DetailsDelegation from "./Screens/AdminScreens/Delegations/AllDelegations/DetailsDelegation";
 
-
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 

@@ -7,19 +7,18 @@ import { Card, useTheme, Text } from "react-native-paper";
 import { styles } from "./Styles";
 import Icon from "react-native-vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 
 //temporary user for tests
 const currentUser = {
   Type: "Student",
   GroupId: 0,
-  UserId: 2,
-  personalId: 222,
-  Password: 222,
-  FirstName: "Teacher2",
-  LastName: "teacher2",
-  Phone: 222,
-  Email: "teacher2@gmail.com",
+  UserId: 1,
+  PersonalId: 111,
+  Password: 111,
+  FirstName: "Student1",
+  LastName: "student1",
+  Phone: 0,
+  Email: "aa2@gmail.com",
   PictureUrl: null,
   ParentPhone: null,
   IsAdmin: 0,
@@ -155,14 +154,13 @@ export default function NewPost({ navigation }) {
         return res.json();
       })
       .then(
-        (result) => {
-          console.log("suc in post images to DB ", result);
+        (res) => {
+          console.log("suc in post images to DB ", res);
         },
         (error) => {
           console.log("ERR in post images to DB", error);
         }
       );
-
     setAllSelectedTags([]);
     setImage(null);
   };
