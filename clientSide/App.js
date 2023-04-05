@@ -22,7 +22,6 @@ const theme = {
 //social
 import NewPost from "./Screens/StudentScreens/SocialCloud/NewPost";
 import SocialFeed from "./Screens/StudentScreens/SocialCloud/SocialFeed";
-import Favorites from "./Screens/StudentScreens/SocialCloud/Favorites";
 import Comments from "./Screens/StudentScreens/SocialCloud/Comments";
 
 //delei
@@ -33,7 +32,7 @@ import AllDelegetions from "./Screens/AdminScreens/Delegations/AllDelegations/Al
 import DetailsDelegation from "./Screens/AdminScreens/Delegations/AllDelegations/DetailsDelegation";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-const Stack = createNativeStackNavigator();
+
 
 export default function App() {
   return (
@@ -41,11 +40,13 @@ export default function App() {
 
       <NavigationContainer>
         <UserProvider>
-          <PaperProvider theme={theme}>
+       
+            <PaperProvider theme={theme}>
 
-            <Main />
+              <Main />
 
-          </PaperProvider>
+            </PaperProvider>
+      
         </UserProvider>
       </NavigationContainer>
     </SafeAreaProvider>

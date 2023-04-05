@@ -10,6 +10,7 @@ import { styles } from './QuestionnaireStyles';
 const Questionnaire = ({ route }) => {
 
   const { questionnaire } = route.params;
+
   const getCorrectAnswers = () => {
     const arr = [];
     questionnaire.Questions.forEach(question => { arr.push(question.CorrectOption) });
@@ -26,13 +27,19 @@ const Questionnaire = ({ route }) => {
     (async function () {
       setAnswers(new Array(questionnaire.Questions.length).fill(null))
       const completedQuestionnaires = await AsyncStorage.getItem('completedQuestionnaires');
-      if (!completedQuestionnaires)
+      console.log(completedQuestionnaires)
+      if (!completedQuestionnaires) {
+        setIsLoading(false);
         return;
+      }
+
       const isSubmitted = JSON.parse(completedQuestionnaires).includes(parseInt(questionnaire.Id));
       setIsCompleted(isSubmitted);
       const cqOptions = await AsyncStorage.getItem('chosenOptions');
-      if (!cqOptions)
+      if (!cqOptions) {
+        setIsLoading(false);
         return;
+      }
       setCompletedOptions(JSON.parse(cqOptions));
       setIsLoading(false);
     })()
@@ -99,9 +106,9 @@ const Questionnaire = ({ route }) => {
   const determineBgColor = (questionnaireId, questionIndex, optionText) => {
     const questionnaire = completedOptions.find(q => q['cQuestionnaireId'] == questionnaireId);
     if (questionnaire != undefined && questionnaire.cOptions[questionIndex] == correctAnswers[questionIndex] && questionnaire.cOptions[questionIndex] == optionText)
-      return 'green'
+      return 'rgba(0, 255, 0, 0.8)'
     if (questionnaire != undefined && questionnaire.cOptions[questionIndex] == optionText)
-      return 'red'
+      return 'rgba(255, 0, 0, 0.8)'
     return 'white'
   }
 

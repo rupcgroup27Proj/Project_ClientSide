@@ -35,7 +35,7 @@ const currentUser = {
 };
 
 export default function SocialFeed({ post, navigation }) {
-  //const {currentUser}=useUser();
+  const { currentUser } = useUser();
   const [posts, setPosts] = useState([]);
   //const [postsTags, setPostsTags] = useState([]);
   const [postsLikes, setPostsLikes] = useState([]);
@@ -48,7 +48,7 @@ export default function SocialFeed({ post, navigation }) {
     userFavorites();
   }, []);
 
-  //get all images from server
+  //get all images from server /////////////////////////////////////////////////////////////////////////////////////////////////////////
   function getAllPosts() {
     axios
       .get(
@@ -90,7 +90,7 @@ export default function SocialFeed({ post, navigation }) {
         `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.UserId}/postId/${postId}`
       )
       .then((res) => {
-        setPostsLikes((prevList) => [...prevList, { postId : postId}]);
+        setPostsLikes((prevList) => [...prevList, { postId: postId }]);
         userLikes();
         //console.log("postsLikes ", JSON.stringify(postsLikes));
       })
@@ -190,7 +190,7 @@ export default function SocialFeed({ post, navigation }) {
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={() => navigation.navigate("NewPost")}
+            onPress={() => navigation.navigate("New Post", { updatePosts: getAllPosts })}
           />
         </TouchableOpacity>
       )}
@@ -208,13 +208,13 @@ export default function SocialFeed({ post, navigation }) {
           <View>
             {(currentUser.Type === "Teacher" ||
               post.StudentId === currentUser.PersonalId) && (
-              <TouchableOpacity
-                style={{ left: 360, bottom: 308 }}
-                onPress={() => RemovePost(post.PostId)}
-              >
-                <IoniconsIcon name="trash-outline" size={20} color="black" />
-              </TouchableOpacity>
-            )}
+                <TouchableOpacity
+                  style={{ left: 360, bottom: 308 }}
+                  onPress={() => RemovePost(post.PostId)}
+                >
+                  <IoniconsIcon name="trash-outline" size={20} color="black" />
+                </TouchableOpacity>
+              )}
             {postsLikes.some((like) => like.postId === post.PostId) &&
               currentUser.Type === "Student" && (
                 <TouchableOpacity

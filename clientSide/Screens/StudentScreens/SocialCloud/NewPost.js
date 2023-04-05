@@ -26,7 +26,8 @@ const currentUser = {
   EndDate: "02/02/2024",
 };
 
-export default function NewPost({ navigation }) {
+export default function NewPost({ navigation, route }) {
+  const { updatePosts } = route.params;
   const [image, setImage] = useState(null);
   const [allTags, setAllTags] = useState([]);
   const [allSelectedTags, setAllSelectedTags] = useState([]);
@@ -111,8 +112,10 @@ export default function NewPost({ navigation }) {
       newImage.studentId = 1;
       newImage.teacherId = currentUser.UserId;
       newImage.guideId = 1;
-    } else if (currentUser.Type == "Student") {
-      newImage.studentId = currentUser.UserId;
+
+    }//////////////////////////////////////////////////////////////////////// 
+    else if (currentUser.Type == "Student") {
+      newImage.studentId = 2
       newImage.teacherId = 1;
       newImage.guideId = 1;
     } else if (currentUser.Type == "Guide") {
@@ -125,6 +128,7 @@ export default function NewPost({ navigation }) {
       Tags: [...allSelectedTags],
     };
 
+   
     fetch(
       `http://10.0.2.2:5283/api/SocialCloud/tagsJson/${JSON.stringify(
         tagsJson
@@ -144,7 +148,8 @@ export default function NewPost({ navigation }) {
             {
               text: "OK",
               onPress: () => {
-                navigation.navigate("SocialFeed");
+                updatePosts();
+                navigation.navigate("Social Feed");
               },
             },
           ]);
@@ -163,6 +168,7 @@ export default function NewPost({ navigation }) {
       );
     setAllSelectedTags([]);
     setImage(null);
+  
   };
 
   return (

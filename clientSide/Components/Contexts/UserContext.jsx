@@ -46,10 +46,11 @@ export default function UserProvider({ children }) {
             const loggedUser = response.data;
             if (!response.data.email) {
                 Alert.alert('Error', 'Credentials incorrect.');
+                setIsDisabled((prevDisabled) => !prevDisabled)
                 return;
             }
             if (loggedUser.isAdmin)
-                loggedUser.type = "Admin";
+                loggedUser.type = "Admin"; 
             AsyncStorage.setItem('currentUser', JSON.stringify(loggedUser));
             Alert.alert('Success', 'Login successful!');
             setCurrentUser(loggedUser);
@@ -57,6 +58,7 @@ export default function UserProvider({ children }) {
             Alert.alert('Error', 'Encountered an error.');
             AsyncStorage.removeItem('currentUser');
         }
+       
         setIsDisabled((prevDisabled) => !prevDisabled)
     }
 

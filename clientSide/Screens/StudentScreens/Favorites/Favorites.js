@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ScrollView, View, TouchableOpacity, Image } from "react-native";
 import axios from "axios";
 import { styles } from "./Styles";
-import FavoriteIcon from "./FavoriteIcon";
+import FavoriteIcon from "../SocialCloud/FavoriteIcon";
 import { Card } from "react-native-paper";
 
 //temporary user for tests

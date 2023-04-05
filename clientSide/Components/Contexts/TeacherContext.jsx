@@ -1,6 +1,7 @@
 import { useContext, createContext, useState, useEffect } from "react";
 import { Alert } from "react-native";
 import axios from "axios";
+import { useUser } from "./UserContext";
 
 const TeacherContext = createContext();
 
@@ -13,41 +14,44 @@ export default function TeacherProvider({ children }) {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [remainingDays, setRemainingDays] = useState(null);
+    const { currentUser } = useUser();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("apiA");
-                const { startDate } = response.data;
-                setStartDate(startDate);
-                if (startDate === "1950") {
+                const response = await axios.get(`http://10.0.2.2:5283/api/Journeys/GetJourneyDatesAndSchoolName/groupId/${currentUser.groupId}`);
+                setStartDate(response.data.startDate);
+                setEndDate(response.data.endDate);
+                if (response.data.startDate === "1950-01-01T00:00:00")
                     setJourneyStarted(false);
-                } else {
+                else
                     setJourneyStarted(true);
-                }
+
             } catch (error) {
-                Alert.alert("Error", "Failed to fetch data from apiA.");
+                Alert.alert("Error", "Failed to fetch journey data from the server.");
             }
         };
         fetchData();
     }, []);
 
     useEffect(() => {
-        if (startDate !== "" && endDate !== "") {
-            const remainingTime = new Date(endDate) - new Date(startDate);
+        const today = new Date();
+        if (startDate !== "" && today < new Date(startDate)) {
+            const remainingTime = new Date(startDate) - today;
             const remainingDays = Math.ceil(remainingTime / (1000 * 60 * 60 * 24));
             setRemainingDays(remainingDays);
+        } else {
+            setRemainingDays(0);
         }
     }, [startDate, endDate]);
 
     const updateJourney = async (newStartDate, newEndDate) => {
+        console.log(`start: ${newStartDate.toISOString()}`)
+        console.log(`end: ${newEndDate.toISOString()}`)
         try {
-            await axios.put("ApiB", {
-                startDate: newStartDate,
-                endDate: newEndDate,
-            });
-            setStartDate(newStartDate);
-            setEndDate(newEndDate);
+            await axios.put(`http://10.0.2.2:5283/api/Journeys/groupId/${currentUser.groupId}/startDate/${newStartDate.toISOString()}/endDate/${newEndDate.toISOString()}`);
+            setStartDate(newStartDate.toISOString());
+            setEndDate(newEndDate.toISOString());
             setJourneyStarted(true);
         } catch (error) {
             Alert.alert("Error", "Failed to update journey.");

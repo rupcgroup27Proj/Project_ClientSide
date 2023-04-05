@@ -9,7 +9,7 @@ const Logout = ({ navigation }) => {
     useFocusEffect(
         React.useCallback(() => {
             Alert.alert(
-                'Title',
+                'Wait!',
                 `Are you sure you want to log out?`,
                 [
                     {

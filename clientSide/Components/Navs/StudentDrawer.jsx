@@ -3,7 +3,7 @@ import React from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 //Student screens
 import Home from '../../Screens/StudentScreens/Home/Home'
-import SocialCloud from '../../Screens/SharedScreens/SocialCloud/SocialCloud'
+import SocialCloud from '../SubNavs/SocialFeedNav'
 import Recommandations from '../../Screens/StudentScreens/Recommendations/Recommendations'
 import MyMap from '../../Screens/StudentScreens/MyMap/MyMap'
 import DailySchedule from '../../Screens/SharedScreens/DailySchedule/DailySchedule'
