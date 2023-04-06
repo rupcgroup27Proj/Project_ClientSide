@@ -13,26 +13,13 @@ import IoniconsIcon from "react-native-vector-icons/Ionicons";
 import { styles } from "./Styles";
 import axios from "axios";
 import { Card } from "react-native-paper";
+import { useUser } from "../../../Components/Contexts/UserContext";
 
-//temporary user for tests
-const currentUser = {
-  Type: "Student",
-  GroupId: 0,
-  UserId: 1,
-  PersonalId: 111,
-  Password: 111,
-  FirstName: "Student1",
-  LastName: "student1",
-  Phone: 0,
-  Email: "aa2@gmail.com",
-  PictureUrl: null,
-  ParentPhone: null,
-  IsAdmin: 0,
-  StartDate: "01/01/2020",
-  EndDate: "02/02/2024",
-};
 
 export default function Comments({ route }) {
+  const { currentUser } = useUser();
+  console.log(currentUser);
+
   const { post } = route.params;
   const [postComment, setPostComment] = useState([]);
   const [comment, setComment] = useState("");
@@ -60,7 +47,7 @@ export default function Comments({ route }) {
   function addNewComment() {
     const newComment = {
       commentId: 1,
-      studentId: currentUser.UserId,
+      studentId: currentUser.personalId,
       postId: post.PostId,
       commentText: comment,
     };
@@ -139,7 +126,7 @@ export default function Comments({ route }) {
             style={{ flex: 1, marginTop: 10 }}
           />
         </View>
-        {currentUser.Type === "Student" && (
+        {currentUser.type === "Student" && (
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <TextInput
               style={{ flex: 1, height: 50 }}
@@ -176,8 +163,8 @@ export default function Comments({ route }) {
                   <Text>{c.commentText}</Text>
                 </View>
                 <View>
-                  {(currentUser.Type === "Teacher" ||
-                    c.studentId === currentUser.UserId) && (
+                  {(currentUser.type === "Teacher" ||
+                    c.studentId === currentUser.personalId) && (
                     <TouchableOpacity
                       onPress={() => RemoveComment(c.commentId)}
                     >

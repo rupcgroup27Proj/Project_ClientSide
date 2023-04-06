@@ -4,27 +4,14 @@ import axios from "axios";
 import { styles } from "./Styles";
 import FavoriteIcon from "../SocialCloud/FavoriteIcon";
 import { Card } from "react-native-paper";
+import { useUser } from "../../../Components/Contexts/UserContext";
 
-//temporary user for tests
-const currentUser = {
-  Type: "Student",
-  GroupId: 0,
-  UserId: 1,
-  PersonalId: 111,
-  Password: 111,
-  FirstName: "Student1",
-  LastName: "student1",
-  Phone: 0,
-  Email: "aa2@gmail.com",
-  PictureUrl: null,
-  ParentPhone: null,
-  IsAdmin: 0,
-  StartDate: "01/01/2020",
-  EndDate: "02/02/2024",
-};
 
 export default function Favorites() {
   const [favorite, setFavorite] = useState([]);
+  const { currentUser } = useUser();
+  console.log(currentUser);
+
 
   useEffect(() => {
     userFavorites();
@@ -33,7 +20,7 @@ export default function Favorites() {
   //get user's favs
   const userFavorites = async () => {
     await axios
-      .get(`http://10.0.2.2:5283/api/FavList/studentId/${currentUser.UserId}`)
+      .get(`http://10.0.2.2:5283/api/FavList/studentId/${currentUser.personalId}`)
       .then((res) => {
         setFavorite(res.data);
       })
@@ -44,7 +31,7 @@ export default function Favorites() {
   function RemoveFav(postId) {
     axios
       .delete(
-        `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.UserId}/postId/${postId}`
+        `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.personalId}/postId/${postId}`
       )
       .then((res) => {
         setFavorite((prevList) =>
