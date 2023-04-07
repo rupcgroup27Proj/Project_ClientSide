@@ -42,8 +42,10 @@ export default function UserProvider({ children }) {
         }
         setIsDisabled((prevDisabled) => !prevDisabled)
         try {
+               
             const response = await axios.get(`http://10.0.2.2:5283/api/Generic/id/${userId}/password/${password}/type/${userType}`, { timeout: 5000 });
             const loggedUser = response.data;
+       
             if (!response.data.email) {
                 Alert.alert('Error', 'Credentials incorrect.');
                 setIsDisabled((prevDisabled) => !prevDisabled)

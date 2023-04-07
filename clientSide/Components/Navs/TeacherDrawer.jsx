@@ -31,10 +31,10 @@ const TeacherDrawer = () => {
           {remainingDays <= 0 ?
             <>
               <Drawer.Screen name="Social Cloud" component={SocialCloud} />
-              <Drawer.Screen name="Daily Schedule" component={DailySchedule} />
+              {/* <Drawer.Screen name="Daily Schedule" component={DailySchedule} />
               <Drawer.Screen name="Notifications" component={Notifications} />
               <Drawer.Screen name="Tasks" component={Tasks} />
-              <Drawer.Screen name="Guide Feedback" component={GuideFeedback} />
+              <Drawer.Screen name="Guide Feedback" component={GuideFeedback} /> */}
             </>
             : <>
               <Drawer.Screen name="Add new student" component={AddUsers} />

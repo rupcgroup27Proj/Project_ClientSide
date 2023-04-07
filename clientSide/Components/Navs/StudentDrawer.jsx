@@ -14,29 +14,40 @@ import Profile from '../../Screens/SharedScreens/Profile/Profile'
 import GuideFeedback from '../../Screens/SharedScreens/GuideFeedback/GuideFeedback'
 import Questionnaires from '../SubNavs/QuestionnairesNav'
 import Logout from '../../Screens/SharedScreens/Logout/Logout'
-
+import Favorites from '../../Screens/StudentScreens/Favorites/Favorites';
+import { useTeacher } from '../Contexts/TeacherContext';
 
 
 const StudentDrawer = () => {
 
+  const { journeyStarted, remainingDays } = useTeacher();
   const Drawer = createDrawerNavigator();
 
   return (
     <Drawer.Navigator>
       <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="Social Cloud" component={SocialCloud} />
-      <Drawer.Screen name="Recommandations" component={Recommandations} />
-      <Drawer.Screen name="Questionnaires" component={Questionnaires} />
-      <Drawer.Screen name="Personal Diary" component={PersonalDiary} />
-      <Drawer.Screen name="Profile" component={Profile} />
+      {journeyStarted && (
+        <>
+          <Drawer.Screen name="Profile" component={Profile} />
+          {remainingDays <= 0 ?
+            <>
+              <Drawer.Screen name="Social Cloud" component={SocialCloud} />
+              <Drawer.Screen name="Favorites" component={Favorites} />
+              <Drawer.Screen name="Questionnaires" component={Questionnaires} /> 
+              <Drawer.Screen name="Recommandations" component={Recommandations} />
+              {/* <Drawer.Screen name="Personal Diary" component={PersonalDiary} />
+              <Drawer.Screen name="My Map" component={MyMap} />
+              <Drawer.Screen name="Daily Schedule" component={DailySchedule} />
+              <Drawer.Screen name="Notifications" component={Notifications} />
+              <Drawer.Screen name="Tasks" component={Tasks} />
+              <Drawer.Screen name="Guide Feedback" component={GuideFeedback} /> */}
+            </>
+            : <>
+            </>
+          }
+        </>
+      )}
       <Drawer.Screen name="Logout" component={Logout} />
-
-      {/* <Drawer.Screen name="My Map" component={MyMap} />
-      <Drawer.Screen name="Daily Schedule" component={DailySchedule} />
-      <Drawer.Screen name="Notifications" component={Notifications} />
-      <Drawer.Screen name="Tasks" component={Tasks} />
-      <Drawer.Screen name="Guide Feedback" component={GuideFeedback} /> */}
-
     </Drawer.Navigator>
   )
 }

@@ -13,7 +13,7 @@ import TeacherProvider from './Components/Contexts/TeacherContext';
 const Main = () => {
 
     const { currentUser, isLoading } = useUser();
-    
+
 
     if (isLoading)
         return (
@@ -28,9 +28,9 @@ const Main = () => {
             {!currentUser ? <LoginScreen /> : (
                 <>
                     {currentUser.type == 'Admin' && <AdminBotNav />}
-                    {currentUser.type == 'Student' && <StudentDrawer />}
+                    {currentUser.type == 'Student' && <TeacherProvider><StudentDrawer /></TeacherProvider>}
                     {currentUser.type == 'Teacher' && <TeacherProvider><TeacherDrawer /></TeacherProvider>}
-                    {currentUser.type == 'Guide' && <GuideDrawer />}
+                    {currentUser.type == 'Guide' && <TeacherProvider><GuideDrawer /></TeacherProvider>}
                 </>
             )}
         </>

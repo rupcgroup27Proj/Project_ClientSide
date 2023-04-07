@@ -3,10 +3,10 @@ import { Styles } from "./Styles"
 import Recommandation from '../../../Components/Recommandations/Recommandation'
 import { ScrollView } from 'react-native-gesture-handler'
 import axios from 'axios'
+import { useUser } from '../../../Components/Contexts/UserContext'; //User context for laoding screen and getting the user
 
 //Wikipedia Get:
 const endpoint = 'https://en.wikipedia.org/w/api.php?'; //Wikipedia's API
-const RecommendationsAPI = `http://10.0.2.2:5283/api/SmartRecommandations/studentId/1` //what's the problem with local host? and why should i create a http request instead of https? 
 const params = {
   //Level 1 params
   action: 'query',     //Which action to perform. 'query' - fetch data from the api.
@@ -27,9 +27,11 @@ const params = {
 
 const Recommendations = () => {
 
+  const { currentUser } = useUser();
+  const RecommendationsAPI = `http://10.0.2.2:5283/api/SmartRecommandations/studentId/${currentUser.id}`
   const [recArray, setRecArray] = useState([]);
 
-  //for each tag, i wait for the axios request to be completed and that return the data of the page. i wait until all tags has finished, inserting them into
+  //For each tag, i wait for the axios request to be completed and that return the data of the page. i wait until all tags has finished, inserting them into
   //"array". if theres an error or something - i return null. than i filter the nulls and changing the state using SetRecArray.
   const GetRecommendations = async () => {
     const tags = await axios.get(RecommendationsAPI)//change to studentid from asyncStorage
