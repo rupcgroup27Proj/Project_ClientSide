@@ -17,6 +17,8 @@ import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import { Video, AVPlaybackStatus } from "expo-av";
 import { useUser } from "../../../Components/Contexts/UserContext";
 
+const u =
+  "https://firebasestorage.googleapis.com/v0/b/journey-to-poland.appspot.com/o/images%2F456.undefined.69917067-45ad-41df-ba12-f7fa4239eac7.mp4?alt=media&token=675a9b2b-4086-433e-b9d9-2050dab6e14a";
 export default function SocialFeed({ post, navigation }) {
   const { currentUser } = useUser();
   console.log(currentUser);
@@ -178,16 +180,18 @@ export default function SocialFeed({ post, navigation }) {
               <Text style={styles.username}>{post.FirstName}</Text>
             </IoniconsIcon>
           </View>
-          {post.Type === "I" ? (
-            <Image source={{ uri: post.FileUrl }} style={styles.image} />
-          ) : (
-            <Video
-              source={{ uri: post.FileUrl }}
-              useNativeControls={true}
-              resizeMode="contain"
-              styles={{ width: 200, height: 200 }}
-            />
-          )}
+          <Card.Content>
+            {post.Type === "I" ? (
+              <Image source={{ uri: post.FileUrl }} style={styles.image} />
+            ) : (
+              <Video
+                source={{ uri: post.FileUrl }}
+                useNativeControls={true}
+                resizeMode="contain"
+                style={{ width: 300, height: 300 }}
+              />
+            )}
+          </Card.Content>
           <View>
             {(currentUser.type === "Teacher" ||
               post.StudentId === currentUser.personalId) && (

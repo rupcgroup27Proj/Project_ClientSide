@@ -59,6 +59,26 @@ export default function Favorites() {
           >
             <FavoriteIcon filled={true} />
           </TouchableOpacity>
+          {fav.Tags.map((f) => (
+              <TouchableOpacity
+                key={f.TagId}
+                style={{
+                  backgroundColor: "black",
+                  borderRadius: 16,
+                  paddingHorizontal: 16,
+                  paddingVertical: 8,
+                  margin: 4,
+                }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                  }}
+                >
+                  {f.TagName}
+                </Text>
+              </TouchableOpacity>
+            ))}
         </Card>
       ))}
     </ScrollView>
