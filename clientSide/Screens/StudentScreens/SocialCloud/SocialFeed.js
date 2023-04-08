@@ -21,7 +21,6 @@ const u =
   "https://firebasestorage.googleapis.com/v0/b/journey-to-poland.appspot.com/o/images%2F456.undefined.69917067-45ad-41df-ba12-f7fa4239eac7.mp4?alt=media&token=675a9b2b-4086-433e-b9d9-2050dab6e14a";
 export default function SocialFeed({ post, navigation }) {
   const { currentUser } = useUser();
-  console.log(currentUser);
 
   const [posts, setPosts] = useState([]);
   const [postsLikes, setPostsLikes] = useState([]);
@@ -49,7 +48,7 @@ export default function SocialFeed({ post, navigation }) {
   const userLikes = async () => {
     await axios
       .get(
-        `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.personalId}`
+        `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.id}`
       )
       .then((res) => {
         setPostsLikes(res.data);
@@ -61,7 +60,7 @@ export default function SocialFeed({ post, navigation }) {
   function AddLike(postId) {
     axios
       .post(
-        `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.personalId}/postId/${postId}`
+        `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.id}/postId/${postId}`
       )
       .then((res) => {
         setPostsLikes((prevList) => [...prevList, { postId: postId }]);
@@ -77,7 +76,7 @@ export default function SocialFeed({ post, navigation }) {
   function RemoveLike(postId) {
     axios
       .delete(
-        `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.personalId}/postId/${postId}`
+        `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.id}/postId/${postId}`
       )
       .then((res) => {
         setPostsLikes((prevList) =>
@@ -93,9 +92,10 @@ export default function SocialFeed({ post, navigation }) {
 
   //get user's favs
   const userFavorites = async () => {
+   
     await axios
       .get(
-        `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.personalId}`
+        `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.id}`
       )
       .then((res) => {
         setFavorite(res.data);
@@ -104,15 +104,19 @@ export default function SocialFeed({ post, navigation }) {
   };
 
   //add to favs
-  function AddFav(postId) {
-    axios
-      .post(
-        `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.personalId}/postId/${postId}`
-      )
+  function AddFav(postId, Tags) {
+    const lowerCaseTags = Tags.map(tag => {
+      const lowerCaseObj = {};
+      for (const key in tag) {
+        lowerCaseObj[key.charAt(0).toLowerCase() + key.slice(1)] = tag[key];
+      }
+      return lowerCaseObj;
+    });
+
+    axios.post(`http://10.0.2.2:5283/api/FavList/studentId/${currentUser.id}/postId/${postId}`, lowerCaseTags)
       .then((res) => {
         setFavorite((prevList) => [...prevList, { postId }]);
         userFavorites();
-        //console.log("userFavorites ", JSON.stringify(favorite));
       })
       .catch((err) => {
         console.log("AddFav " + err);
@@ -120,14 +124,20 @@ export default function SocialFeed({ post, navigation }) {
   }
 
   //remove from favs
-  function RemoveFav(postId) {
+  function RemoveFav(postId, Tags) {
+    const lowerCaseTags = Tags.map(tag => {
+      const lowerCaseObj = {};
+      for (const key in tag) {
+        lowerCaseObj[key.charAt(0).toLowerCase() + key.slice(1)] = tag[key];
+      }
+      return lowerCaseObj;
+    });
+
     axios
-      .delete(
-        `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.personalId}/postId/${postId}`
-      )
+      .put(`http://10.0.2.2:5283/api/FavList/studentId/${currentUser.id}/postId/${postId}`,lowerCaseTags)
       .then((res) => {
         setFavorite((prevList) =>
-          prevList.filter((fav) => fav.postId !== postId)
+          prevList.filter((fav) => fav.PostId !== postId)
         );
         userFavorites();
         //console.log("userFavorites ", JSON.stringify(favorite));
@@ -137,6 +147,7 @@ export default function SocialFeed({ post, navigation }) {
         console.log("RemoveFav " + err);
       });
   }
+
 
   //remove post
   function RemovePost(postId) {
@@ -195,13 +206,13 @@ export default function SocialFeed({ post, navigation }) {
           <View>
             {(currentUser.type === "Teacher" ||
               post.StudentId === currentUser.personalId) && (
-              <TouchableOpacity
-                style={{ left: 360, bottom: 308 }}
-                onPress={() => RemovePost(post.PostId)}
-              >
-                <IoniconsIcon name="trash-outline" size={20} color="black" />
-              </TouchableOpacity>
-            )}
+                <TouchableOpacity
+                  style={{ left: 360, bottom: 308 }}
+                  onPress={() => RemovePost(post.PostId)}
+                >
+                  <IoniconsIcon name="trash-outline" size={20} color="black" />
+                </TouchableOpacity>
+              )}
             {postsLikes.some((like) => like.postId === post.PostId) &&
               currentUser.type === "Student" && (
                 <TouchableOpacity
@@ -235,20 +246,20 @@ export default function SocialFeed({ post, navigation }) {
                 />
               </TouchableOpacity>
             }
-            {favorite.some((fav) => fav.postId === post.PostId) &&
+            {favorite.some((fav) => fav.PostId === post.PostId) &&
               currentUser.type === "Student" && (
                 <TouchableOpacity
                   style={{ left: 360, bottom: 45 }}
-                  onPress={() => RemoveFav(post.PostId)}
+                  onPress={() => RemoveFav(post.PostId, post.Tags)}
                 >
                   <FavoriteIcon filled={true} />
                 </TouchableOpacity>
               )}
-            {!favorite.some((fav) => fav.postId === post.PostId) &&
+            {!favorite.some((fav) => fav.PostId === post.PostId) &&
               currentUser.type === "Student" && (
                 <TouchableOpacity
                   style={{ left: 360, bottom: 45 }}
-                  onPress={() => AddFav(post.PostId)}
+                  onPress={() => AddFav(post.PostId, post.Tags)}
                 >
                   <FavoriteIcon filled={false} />
                 </TouchableOpacity>
