@@ -14,36 +14,21 @@ import FavoriteIcon from "./FavoriteIcon";
 import { Card, Appbar, Button } from "react-native-paper";
 import IoniconsIcon from "react-native-vector-icons/Ionicons";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
+import { Video, AVPlaybackStatus } from "expo-av";
 import { useUser } from "../../../Components/Contexts/UserContext";
 
-//temporary user for tests
-// const currentUser = {
-//   Type: "Student",
-//   GroupId: 0,
-//   UserId: 1,
-//   PersonalId: 111,
-//   Password: 111,
-//   FirstName: "Student1",
-//   LastName: "student1",
-//   Phone: 0,
-//   Email: "aa2@gmail.com",
-//   PictureUrl: null,
-//   ParentPhone: null,
-//   IsAdmin: 0,
-//   StartDate: "01/01/2020",
-//   EndDate: "02/02/2024",
-// };
-
+const u =
+  "https://firebasestorage.googleapis.com/v0/b/journey-to-poland.appspot.com/o/images%2F456.undefined.69917067-45ad-41df-ba12-f7fa4239eac7.mp4?alt=media&token=675a9b2b-4086-433e-b9d9-2050dab6e14a";
 export default function SocialFeed({ post, navigation }) {
   const { currentUser } = useUser();
+  console.log(currentUser);
+
   const [posts, setPosts] = useState([]);
-  //const [postsTags, setPostsTags] = useState([]);
   const [postsLikes, setPostsLikes] = useState([]);
   const [favorite, setFavorite] = useState([]);
 
   useEffect(() => {
     getAllPosts();
-    //postTags();
     userLikes();
     userFavorites();
   }, []);
@@ -52,7 +37,7 @@ export default function SocialFeed({ post, navigation }) {
   function getAllPosts() {
     axios
       .get(
-        `http://10.0.2.2:5283/api/SocialCloud/groupId/${currentUser.GroupId}`
+        `http://10.0.2.2:5283/api/SocialCloud/groupId/${currentUser.groupId}`
       )
       .then((res) => {
         setPosts(res.data);
@@ -60,22 +45,11 @@ export default function SocialFeed({ post, navigation }) {
       .catch((err) => console.log("getAllPosts " + err));
   }
 
-  //get post's tags
-  // function postTags() {
-  //   axios
-  //     .get(`http://10.0.2.2:5283/api/SocialCloud/groupId/${currentUser.GroupId}`)
-  //     .then((res) => {
-  //       setPostsTags(res.data);
-  //       //console.log("postTags"+res.data);
-  //     })
-  //     .catch((err) => console.log("postTags " + err));
-  // }
-
   //get user's likes
   const userLikes = async () => {
     await axios
       .get(
-        `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.UserId}`
+        `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.personalId}`
       )
       .then((res) => {
         setPostsLikes(res.data);
@@ -87,12 +61,12 @@ export default function SocialFeed({ post, navigation }) {
   function AddLike(postId) {
     axios
       .post(
-        `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.UserId}/postId/${postId}`
+        `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.personalId}/postId/${postId}`
       )
       .then((res) => {
         setPostsLikes((prevList) => [...prevList, { postId: postId }]);
         userLikes();
-        //console.log("postsLikes ", JSON.stringify(postsLikes));
+        console.log("postsLikes ", JSON.stringify(postsLikes));
       })
       .catch((err) => {
         console.log("AddLike " + err);
@@ -103,7 +77,7 @@ export default function SocialFeed({ post, navigation }) {
   function RemoveLike(postId) {
     axios
       .delete(
-        `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.UserId}/postId/${postId}`
+        `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.personalId}/postId/${postId}`
       )
       .then((res) => {
         setPostsLikes((prevList) =>
@@ -120,7 +94,9 @@ export default function SocialFeed({ post, navigation }) {
   //get user's favs
   const userFavorites = async () => {
     await axios
-      .get(`http://10.0.2.2:5283/api/FavList/studentId/${currentUser.UserId}`)
+      .get(
+        `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.personalId}`
+      )
       .then((res) => {
         setFavorite(res.data);
       })
@@ -131,7 +107,7 @@ export default function SocialFeed({ post, navigation }) {
   function AddFav(postId) {
     axios
       .post(
-        `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.UserId}/postId/${postId}`
+        `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.personalId}/postId/${postId}`
       )
       .then((res) => {
         setFavorite((prevList) => [...prevList, { postId }]);
@@ -147,7 +123,7 @@ export default function SocialFeed({ post, navigation }) {
   function RemoveFav(postId) {
     axios
       .delete(
-        `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.UserId}/postId/${postId}`
+        `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.personalId}/postId/${postId}`
       )
       .then((res) => {
         setFavorite((prevList) =>
@@ -178,7 +154,7 @@ export default function SocialFeed({ post, navigation }) {
   return (
     <ScrollView style={{ marginTop: 25 }}>
       {/* <IoniconsIcon name="cloud" size={30} color="black"></IoniconsIcon> */}
-      {currentUser.Type === "Student" && (
+      {currentUser.type === "Student" && (
         <TouchableOpacity>
           <IoniconsIcon
             name="add"
@@ -190,33 +166,44 @@ export default function SocialFeed({ post, navigation }) {
               justifyContent: "center",
               alignItems: "center",
             }}
-            onPress={() => navigation.navigate("New Post", { updatePosts: getAllPosts })}
+            onPress={() =>
+              navigation.navigate("New Post", { updatePosts: getAllPosts })
+            }
           />
         </TouchableOpacity>
       )}
 
       {posts.map((post) => (
         <Card style={styles.card}>
-          {console.log(post)}
-
           <View key={post.PostId}>
             <IoniconsIcon name="ios-person" size={30} color="black">
               <Text style={styles.username}>{post.FirstName}</Text>
             </IoniconsIcon>
           </View>
-          <Image source={{ uri: post.FileUrl }} style={styles.image}></Image>
+          <Card.Content>
+            {post.Type === "I" ? (
+              <Image source={{ uri: post.FileUrl }} style={styles.image} />
+            ) : (
+              <Video
+                source={{ uri: post.FileUrl }}
+                useNativeControls={true}
+                resizeMode="contain"
+                style={{ width: 300, height: 300 }}
+              />
+            )}
+          </Card.Content>
           <View>
-            {(currentUser.Type === "Teacher" ||
-              post.StudentId === currentUser.PersonalId) && (
-                <TouchableOpacity
-                  style={{ left: 360, bottom: 308 }}
-                  onPress={() => RemovePost(post.PostId)}
-                >
-                  <IoniconsIcon name="trash-outline" size={20} color="black" />
-                </TouchableOpacity>
-              )}
+            {(currentUser.type === "Teacher" ||
+              post.StudentId === currentUser.personalId) && (
+              <TouchableOpacity
+                style={{ left: 360, bottom: 308 }}
+                onPress={() => RemovePost(post.PostId)}
+              >
+                <IoniconsIcon name="trash-outline" size={20} color="black" />
+              </TouchableOpacity>
+            )}
             {postsLikes.some((like) => like.postId === post.PostId) &&
-              currentUser.Type === "Student" && (
+              currentUser.type === "Student" && (
                 <TouchableOpacity
                   style={{ left: 12, bottom: 5 }}
                   onPress={() => RemoveLike(post.PostId)}
@@ -225,7 +212,7 @@ export default function SocialFeed({ post, navigation }) {
                 </TouchableOpacity>
               )}
             {!postsLikes.some((like) => like.postId === post.PostId) &&
-              currentUser.Type === "Student" && (
+              currentUser.type === "Student" && (
                 <TouchableOpacity
                   style={{ left: 12, bottom: 5 }}
                   onPress={() => AddLike(post.PostId)}
@@ -249,7 +236,7 @@ export default function SocialFeed({ post, navigation }) {
               </TouchableOpacity>
             }
             {favorite.some((fav) => fav.postId === post.PostId) &&
-              currentUser.Type === "Student" && (
+              currentUser.type === "Student" && (
                 <TouchableOpacity
                   style={{ left: 360, bottom: 45 }}
                   onPress={() => RemoveFav(post.PostId)}
@@ -258,7 +245,7 @@ export default function SocialFeed({ post, navigation }) {
                 </TouchableOpacity>
               )}
             {!favorite.some((fav) => fav.postId === post.PostId) &&
-              currentUser.Type === "Student" && (
+              currentUser.type === "Student" && (
                 <TouchableOpacity
                   style={{ left: 360, bottom: 45 }}
                   onPress={() => AddFav(post.PostId)}
@@ -266,6 +253,26 @@ export default function SocialFeed({ post, navigation }) {
                   <FavoriteIcon filled={false} />
                 </TouchableOpacity>
               )}
+            {post.Tags.map((t) => (
+              <TouchableOpacity
+                key={t.TagId}
+                style={{
+                  backgroundColor: "black",
+                  borderRadius: 16,
+                  paddingHorizontal: 16,
+                  paddingVertical: 8,
+                  margin: 4,
+                }}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                  }}
+                >
+                  {t.TagName}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </View>
         </Card>
       ))}

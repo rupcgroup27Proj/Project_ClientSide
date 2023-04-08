@@ -7,26 +7,13 @@ import { Card, useTheme, Text } from "react-native-paper";
 import { styles } from "./Styles";
 import Icon from "react-native-vector-icons/Ionicons";
 import { FontAwesome } from "@expo/vector-icons";
+import { useUser } from "../../../Components/Contexts/UserContext";
 
-//temporary user for tests
-const currentUser = {
-  Type: "Student",
-  GroupId: 0,
-  UserId: 1,
-  PersonalId: 111,
-  Password: 111,
-  FirstName: "Student1",
-  LastName: "student1",
-  Phone: 0,
-  Email: "aa2@gmail.com",
-  PictureUrl: null,
-  ParentPhone: null,
-  IsAdmin: 0,
-  StartDate: "01/01/2020",
-  EndDate: "02/02/2024",
-};
 
 export default function NewPost({ navigation, route }) {
+  const { currentUser } = useUser();
+  console.log(currentUser);
+
   const { updatePosts } = route.params;
   const [image, setImage] = useState(null);
   const [allTags, setAllTags] = useState([]);
@@ -41,7 +28,7 @@ export default function NewPost({ navigation, route }) {
   //get all tags
   const getAllTags = async () => {
     await axios
-      .get(`http://10.0.2.2:5283/api/Tags/groupId/${currentUser.GroupId}`)
+      .get(`http://10.0.2.2:5283/api/Tags/groupId/${currentUser.groupId}`)
       .then((res) => {
         setAllTags(res.data);
       })
@@ -98,30 +85,30 @@ export default function NewPost({ navigation, route }) {
   //upload image to db
   const uploadImagesDB = (imageLink) => {
     const newImage = {
-      groupId: currentUser.GroupId,
-      studentId: currentUser.UserId,
+      groupId: currentUser.groupId,
+      studentId: currentUser.personalId,
       teacherId: 1,
       guideId: 1,
       fileUrl: imageLink,
-      firstName: currentUser.FirstName,
-      LastName: currentUser.LastName,
+      firstName: currentUser.firstName,
+      LastName: currentUser.lastName,
       type: mediaType,
     };
 
-    if (currentUser.Type == "Teacher") {
+    if (currentUser.type == "Teacher") {
       newImage.studentId = 1;
-      newImage.teacherId = currentUser.UserId;
+      newImage.teacherId = currentUser.personalId;
       newImage.guideId = 1;
 
     }//////////////////////////////////////////////////////////////////////// 
-    else if (currentUser.Type == "Student") {
+    else if (currentUser.type == "Student") {
       newImage.studentId = 2
       newImage.teacherId = 1;
       newImage.guideId = 1;
-    } else if (currentUser.Type == "Guide") {
+    } else if (currentUser.type == "Guide") {
       newImage.studentId = 1;
       newImage.teacherId = 1;
-      newImage.guideId = currentUser.UserId;
+      newImage.guideId = currentUser.personalId;
     }
 
     const tagsJson = {
