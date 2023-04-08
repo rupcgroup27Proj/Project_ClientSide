@@ -1,9 +1,15 @@
 //Formatted
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { Card, DefaultTheme, Text, Provider as PaperProvider } from 'react-native-paper';
 import UserProvider from './Components/Contexts/UserContext';
 import Main from './Main'; //Main component
+
+
+
+
+import { Button } from 'react-native-paper';
+import { View } from 'react-native';
 
 //Customized theme - changing Paper's default purple colors. 
 const theme = {
@@ -12,41 +18,37 @@ const theme = {
   myOwnProperty: true,
   colors: {
     ...DefaultTheme.colors,
-    primary: 'blue',
+    primary: '#2196F3',
     secondary: 'rgba(44, 199, 242, 0.1)',
-    accent: 'green',
+    accent: '#FFFFFF',       //- secondary color for your app which complements the primary color.
+    background: '#F5F5F5',   // - background color for pages, such as lists.
+    surface: '#FFFFFF',      // - background color for elements containing content, such as cards.
+    textBlack: '#212121',    // - text color for content.
+    textWhite: '#FFFFFF'
     //myColor: 'black'
-  }
+  },
+  dark: false,
+
+  // placeholder:,  // - color for placeholder text, such as input placeholder.
+  // backdrop:,     // - color for backdrops of various components such as modals.
+  // onSurface:,    // - background color for snackbars
+  // notification:, // - background color for badges
 };
 
-//social
-import NewPost from "./Screens/StudentScreens/SocialCloud/NewPost";
-import SocialFeed from "./Screens/StudentScreens/SocialCloud/SocialFeed";
-import Comments from "./Screens/StudentScreens/SocialCloud/Comments";
 
-//delei
-import AddSchool from "./Screens/AdminScreens/Delegations/AddDelegations/AddSchool";
-import AddTeacher from "./Screens/AdminScreens/Delegations/AddDelegations/AddTeacher";
-import AddGuide from "./Screens/AdminScreens/Delegations/AddDelegations/AddGuide";
-import AllDelegetions from "./Screens/AdminScreens/Delegations/AllDelegations/AllDelegetions";
-import DetailsDelegation from "./Screens/AdminScreens/Delegations/AllDelegations/DetailsDelegation";
 
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 
 export default function App() {
   return (
     <SafeAreaProvider>
-
       <NavigationContainer>
         <UserProvider>
-       
-            <PaperProvider theme={theme}>
+          <PaperProvider theme={theme}>
 
-              <Main />
+            <Main />
 
-            </PaperProvider>
-      
+          </PaperProvider>
         </UserProvider>
       </NavigationContainer>
     </SafeAreaProvider>

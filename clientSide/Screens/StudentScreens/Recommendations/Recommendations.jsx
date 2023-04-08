@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Styles } from "./Styles"
 import Recommandation from '../../../Components/Recommandations/Recommandation'
 import { ScrollView } from 'react-native-gesture-handler'
 import axios from 'axios'
@@ -13,7 +12,7 @@ const params = {
   format: 'json',      //In what format we want the output.
   origin: '*',         //For avoiding CORS problems (like in our server).
   //Level 2 - inside 'query'
-  prop: 'extracts',    //What properties we want to get from the page. Title only? maybe a picture? etc. 'extracts' - all olain text.
+  prop: 'extracts|pageimages',    //What properties we want to get from the page. Title only? maybe a picture? etc. 'extracts' - all olain text.
   generator: 'search',
   //level 3 - inside 'extracts'
   exchars: 500,        //How many letters to return.
@@ -21,6 +20,8 @@ const params = {
   explaintext: true,   //Return the data as plain text (default is as a html div)
   //level 3 - inside 'generator'
   gsrlimit: 1,        //How many search results to get back.
+  piprop: 'thumbnail',
+  pithumbsize: 250 
 };
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -52,11 +53,28 @@ const Recommendations = () => {
         {
           pageId: page.pageid,
           title: page.title,
-          intro: page.extract
+          intro: removeBracketsAndContents(page.extract),
+          image: page.thumbnail.source
         }
       ))
   }
 
+  const removeBracketsAndContents = (str) => {
+    const stack = []
+    let newStr = ''
+    for (const char of str) {
+      if (char == '(') {
+        stack.push(char)
+      } else if (char == ')') {
+        stack.pop()
+      } else if (stack.length == 0) {
+        newStr += char
+      }
+    }
+    return newStr.replace("  ", " ")
+  }
+
+  
   useEffect(() => {
     GetRecommendations();
   }, [])
@@ -65,7 +83,7 @@ const Recommendations = () => {
   return (
     <ScrollView>
       {recArray.map((rcmnd, index) =>
-        <Recommandation page={rcmnd[0]} key={index} />
+        <Recommandation page={rcmnd[0]} key={index}/>
       )}
     </ScrollView>
   )

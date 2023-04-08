@@ -25,6 +25,7 @@ const currentUser = {
 
 export default function Favorites() {
   const [favorite, setFavorite] = useState([]);
+  
 
   useEffect(() => {
     userFavorites();
@@ -40,7 +41,7 @@ export default function Favorites() {
       .catch((err) => console.log("userFavorites " + err));
   };
 
-  // //remove from favs
+  //remove from favs
   function RemoveFav(postId) {
     axios
       .delete(

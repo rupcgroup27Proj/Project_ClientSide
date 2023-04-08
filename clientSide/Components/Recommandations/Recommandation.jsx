@@ -1,41 +1,24 @@
 import React from 'react';
 import { View, Image, Linking } from 'react-native';
 import { Card, Text } from 'react-native-paper';
-import { Video, AVPlaybackStatus } from 'expo-av';
-
 import { styles } from './Styles';
 
 
-//
-
 const Recommandation = ({ page }) => {
 
+    const uri = page.image;
 
 
-    //
     return (
-        <Card style={styles.card} onPress={()=>Linking.openURL(`https://en.wikipedia.org/?curid=${page.pageId}`)}>
+        <Card style={styles.card} onPress={() => Linking.openURL(`https://en.wikipedia.org/?curid=${page.pageId}`)}>
             <View style={styles.header}>
-                <Text style={styles.username}>{page.title}</Text>
+                <Text style={styles.title}>{page.title}</Text>
             </View>
-            <View>
-                <Text>{page.intro}</Text>
+            <View style={styles.imageView}>
+                <Image style={styles.image} source={{ uri: uri }} />
             </View>
-            
-             {/* type === 'I' ? (
-                 <Image source={{ uri: uri }} style={styles.image} />
-             ) : */}
-
-             
-                <View style={styles.textView}>
-                {/* <Text onPress={() => Linking.openURL(`https://en.wikipedia.org/?curid=${page.pageId}`)}>{uri}</Text>  */}
-                
-                </View>
-             
-            {/* : (
-                 <Video source={{ uri: uri }}  useNativeControls resizeMode="contain" style={styles.video} />
-            ) */}
-            
+            <Text style={styles.intro}>{page.intro}</Text>
+            <Text style={styles.intro}>Click here for more information</Text>
         </Card>
     );
 };
