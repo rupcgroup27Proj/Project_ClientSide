@@ -5,17 +5,28 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: "hidden",
     marginBottom: 7,
+    height: 385,
     marginTop: 7,
+    marginBottom: 10,
   },
   username: {
     padding: 10,
     fontWeight: "bold",
-    fontSize: 14,
+    fontSize: 15,
+  },
+  userNameComment: {
+    fontWeight: "bold",
+    fontSize: 12,
   },
   image: {
     height: 280,
     width: "100%",
-    marginTop:10
+    marginTop: 5,
+  },
+  video: {
+    height: 280,
+    width: 340,
+    marginTop: 5,
   },
   header: {
     backgroundColor: "#fff",
@@ -29,13 +40,22 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  card2: {
+  uploadcard: {
     borderRadius: 10,
     overflow: "hidden",
-    marginBottom: 10,
-    height: 280,
+    height: 260,
     width: "90%",
+    marginTop: 50, 
+    marginBottom: 20,
     backgroundColor: "gray",
+  },
+  commentCard: {
+    borderRadius: 10,
+    overflow: "hidden",
+    marginBottom: 7,
+    height: 340,
+    marginTop: 7,
+    marginBottom: 10,
   },
   container: {
     marginBottom: 100,

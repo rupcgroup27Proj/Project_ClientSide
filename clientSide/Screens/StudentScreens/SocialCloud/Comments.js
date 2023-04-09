@@ -3,19 +3,18 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   Image,
   TouchableOpacity,
   Alert,
   ScrollView,
 } from "react-native";
 import IoniconsIcon from "react-native-vector-icons/Ionicons";
+import { Video } from "expo-av";
 import { styles } from "./Styles";
 import axios from "axios";
 import { Card } from "react-native-paper";
 import { useUser } from "../../../Components/Contexts/UserContext";
 import { useAPI } from "../../../Components/Contexts/APIContext";
-
 
 export default function Comments({ route }) {
   const { currentUser } = useUser();
@@ -34,7 +33,6 @@ export default function Comments({ route }) {
       .get(`${simulatorAPI}/api/PostsComments/postId/${post.PostId}`)
       .then((res) => {
         setPostComment(res.data);
-        //console.log("getComments " + JSON.stringify(postComment));
       })
       .catch((err) => console.log("getComments " + err));
   };
@@ -47,7 +45,7 @@ export default function Comments({ route }) {
   function addNewComment() {
     const newComment = {
       commentId: 1,
-      studentId: currentUser.personalId,
+      studentId: currentUser.id,
       postId: post.PostId,
       commentText: comment,
     };
@@ -62,20 +60,19 @@ export default function Comments({ route }) {
     })
       .then((res) => {
         if (res.ok) {
-          Alert.alert("Success", "The comment was added successfully", [
+          Alert.alert("Success", "The comment was added successfully!", [
             {
               text: "OK",
             },
           ]);
         } else {
-          Alert.alert("Error", "Comment was failed");
+          Alert.alert("Error", "Comment was failed.");
         }
-        //return res.json();
         getComments();
       })
       .then(
         (res) => {
-          console.log("suc in post comment to DB ", res);
+          console.log("suc in post comment to DB", res);
         },
         (error) => {
           console.log("ERR in post comment to DB", error);
@@ -99,9 +96,9 @@ export default function Comments({ route }) {
               `${simulatorAPI}/api/PostsComments/commentId/${commentId}`
             )
             .then((res) => {
-              // setPostComment((prevList) =>
-              //   prevList.filter((c) => c.commentId !== commentId)
-              // );
+              setPostComment((prevList) =>
+                prevList.filter((c) => c.commentId !== commentId)
+              );
               getComments();
               console.log("getComments ", JSON.stringify(postComment));
             })
@@ -116,71 +113,102 @@ export default function Comments({ route }) {
 
   return (
     <ScrollView>
-      <Card style={styles.card}>
-        <IoniconsIcon name="ios-person" size={25} color="black">
-          <Text style={styles.username}>{post.PostId}</Text>
-        </IoniconsIcon>
-        <View style={{ height: 240, width: "100%" }}>
-          <Image
-            source={{ uri: post.FileUrl }}
-            style={{ flex: 1, marginTop: 10 }}
-          />
+      <Card style={styles.commentCard}>
+        <View
+          key={post.PostId}
+          style={{ flexDirection: "row", flexWrap: "wrap", marginTop: 10 }}
+        >
+          <IoniconsIcon name="ios-person" size={23} color="black">
+            <Text style={styles.username}>
+              {post.FirstName}
+              {` ${post.LastName}`}
+            </Text>
+          </IoniconsIcon>
         </View>
-        {currentUser.type === "Student" && (
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <TextInput
-              style={{ flex: 1, height: 50 }}
-              placeholder="Add a comment..."
-              onChangeText={handleCommentChange}
-              value={comment}
+        <Card.Content>
+          {post.Type === "I" ? (
+            <Image source={{ uri: post.FileUrl }} style={styles.image} />
+          ) : (
+            <Video
+              source={{ uri: post.FileUrl }}
+              useNativeControls={true}
+              resizeMode="contain"
+              style={styles.video}
             />
-            <IoniconsIcon
-              name="send"
-              size={20}
-              onPress={() => addNewComment()}
-            />
-          </View>
-        )}
-
-        <ScrollView style={{ marginTop: 10 }}>
-          {postComment.map((c) => (
-            <Card
-              key={c.commentId}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                height: 50,
-                marginTop: 15,
-                backgroundColor: "gray",
-              }}
-            >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <View>
-                  <IoniconsIcon name="ios-person" size={25} color="black" />
-                </View>
-                <View>
-                  <Text style={styles.username}>{c.studentId}</Text>
-                  <Text>{c.commentText}</Text>
-                </View>
-                <View>
-                  {(currentUser.type === "Teacher" ||
-                    c.studentId === currentUser.personalId) && (
-                      <TouchableOpacity
-                        onPress={() => RemoveComment(c.commentId)}
-                      >
-                        <IoniconsIcon
-                          name="trash-outline"
-                          size={20}
-                          color="black"
-                        />
-                      </TouchableOpacity>
-                    )}
-                </View>
-              </View>
-            </Card>
-          ))}
-        </ScrollView>
+          )}
+        </Card.Content>
       </Card>
+      {currentUser.type === "Student" && (
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            height: 60,
+            backgroundColor: "#696969",
+            borderRadius: 12,
+            marginBottom: 8,
+          }}
+        >
+          <TextInput
+            style={{ flex: 1, height: 50 }}
+            placeholder="Add a comment..."
+            onChangeText={handleCommentChange}
+            value={comment}
+          />
+          <IoniconsIcon name="send" size={20} onPress={() => addNewComment()} />
+        </View>
+      )}
+
+      <ScrollView>
+        {postComment.map((c) => (
+          <Card
+            key={c.commentId}
+            style={{
+              height: 50,
+              marginTop: 5,
+              backgroundColor: "#dcdcdc",
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <IoniconsIcon name="ios-person" size={15} color="black">
+                <Text style={styles.userNameComment}>
+                  {c.FirstName}
+                  {` ${c.LastName}`}
+                </Text>
+              </IoniconsIcon>
+              {(currentUser.type === "Teacher" ||
+                c.studentId === currentUser.id) && (
+                <TouchableOpacity
+                  style={{
+                    position: "absolute",
+                    right: 3,
+                    backgroundColor: "black",
+                    borderRadius: 15,
+                    width: 15,
+                    height: 15,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  onPress={() => RemoveComment(c.commentId)}
+                >
+                  <Text
+                    style={{ fontSize: 12, fontWeight: "bold", color: "white" }}
+                  >
+                    X
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            <View>
+              <Text
+                style={{ fontSize: 12, left:5}}
+              >
+                {c.commentText}
+              </Text>
+            </View>
+          </Card>
+        ))}
+      </ScrollView>
     </ScrollView>
   );
 }
