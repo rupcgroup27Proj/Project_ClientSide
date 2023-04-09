@@ -1,4 +1,4 @@
-import {  Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { styles } from "./styles";
@@ -11,13 +11,14 @@ export default function Home() {
     const [ongoing, setOnging] = useState(0);
     const [past, setPast] = useState(0);
     const [future, setFuture] = useState(0);
-
+    const { simulatorAPI } = useAPI();
+    
     useEffect(() => {
         getAllDelegetions();
     }, []);
 
     const getAllDelegetions = async () => {
-        await axios.get(`http://10.0.2.2:5283/api/Journeys/GetJourneyList`)
+        await axios.get(`${simulatorAPI}/api/Journeys/GetJourneyList`)
             .then((res) => {
                 res.data.forEach(journey => {
                     if (journey.startDate == "1950-01-01T00:00:00") {

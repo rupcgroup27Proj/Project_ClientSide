@@ -3,16 +3,17 @@ import { View, TouchableOpacity } from 'react-native';
 import { Divider, List } from 'react-native-paper';
 import axios from 'axios';
 import { useUser } from '../../../Components/Contexts/UserContext';
+import { useAPI } from '../../../Components/Contexts/APIContext';
 
 
 const AllQuestionnaires = ({ navigation }) => {
   const { currentUser } = useUser();
   const [questionnaires, setQuestionnaires] = useState([]);
-
+  const { simulatorAPI } = useAPI();
   useEffect(() => {
     const getAllQuestionnaires = async () => {
       try {
-        const response = await axios.get(`http://10.0.2.2:5283/api/Questionnaires/groupId/${currentUser.groupId}`);
+        const response = await axios.get(`${simulatorAPI}/api/Questionnaires/groupId/${currentUser.groupId}`);
         setQuestionnaires(response.data);
       } catch (error) { console.log(error); }
     }
@@ -37,7 +38,7 @@ const AllQuestionnaires = ({ navigation }) => {
               titleNumberOfLines={2}
               description={questionnaire.Description}
               left={(item) => <List.Icon {...item} icon="file-question-outline" />} />
-            <Divider/>
+            <Divider />
           </TouchableOpacity>
 
         ))}

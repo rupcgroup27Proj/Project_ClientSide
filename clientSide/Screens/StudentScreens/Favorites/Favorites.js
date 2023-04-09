@@ -5,12 +5,13 @@ import { styles } from "./Styles";
 import FavoriteIcon from "../SocialCloud/FavoriteIcon";
 import { Card, Text } from "react-native-paper";
 import { useUser } from "../../../Components/Contexts/UserContext";
+import { useAPI } from "../../../Components/Contexts/APIContext";
 
 
 export default function Favorites() {
   const [favorite, setFavorite] = useState([]);
   const { currentUser } = useUser();
-
+  const { simulatorAPI } = useAPI();
   console.log(currentUser);
 
 
@@ -21,7 +22,7 @@ export default function Favorites() {
   //get user's favs
   const userFavorites = async () => {
     await axios
-      .get(`http://10.0.2.2:5283/api/FavList/studentId/${currentUser.id}`)
+      .get(`${simulatorAPI}/api/FavList/studentId/${currentUser.id}`)
       .then((res) => {
         setFavorite(res.data);
       })
@@ -39,7 +40,7 @@ export default function Favorites() {
     });
     axios
       .put(
-        `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.id}/postId/${postId}`, lowerCaseTags
+        `${simulatorAPI}/api/FavList/studentId/${currentUser.id}/postId/${postId}`, lowerCaseTags
       )
       .then((res) => {
         setFavorite((prevList) =>

@@ -10,6 +10,7 @@ import Main from './Main'; //Main component
 
 import { Button } from 'react-native-paper';
 import { View } from 'react-native';
+import APIProvider from './Components/Contexts/APIContext';
 
 //Customized theme - changing Paper's default purple colors. 
 const theme = {
@@ -43,13 +44,15 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <UserProvider>
-          <PaperProvider theme={theme}>
+        <APIProvider>
+          <UserProvider>
+            <PaperProvider theme={theme}>
 
-            <Main />
+              <Main />
 
-          </PaperProvider>
-        </UserProvider>
+            </PaperProvider>
+          </UserProvider>
+        </APIProvider>
       </NavigationContainer>
     </SafeAreaProvider>
   );

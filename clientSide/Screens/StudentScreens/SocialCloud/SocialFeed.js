@@ -16,12 +16,13 @@ import IoniconsIcon from "react-native-vector-icons/Ionicons";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import { Video, AVPlaybackStatus } from "expo-av";
 import { useUser } from "../../../Components/Contexts/UserContext";
+import { useAPI } from "../../../Components/Contexts/APIContext";
 
 const u =
   "https://firebasestorage.googleapis.com/v0/b/journey-to-poland.appspot.com/o/images%2F456.undefined.69917067-45ad-41df-ba12-f7fa4239eac7.mp4?alt=media&token=675a9b2b-4086-433e-b9d9-2050dab6e14a";
 export default function SocialFeed({ post, navigation }) {
   const { currentUser } = useUser();
-
+  const { simulatorAPI } = useAPI();
   const [posts, setPosts] = useState([]);
   const [postsLikes, setPostsLikes] = useState([]);
   const [favorite, setFavorite] = useState([]);
@@ -36,7 +37,7 @@ export default function SocialFeed({ post, navigation }) {
   function getAllPosts() {
     axios
       .get(
-        `http://10.0.2.2:5283/api/SocialCloud/groupId/${currentUser.groupId}`
+        `${simulatorAPI}/api/SocialCloud/groupId/${currentUser.groupId}`
       )
       .then((res) => {
         setPosts(res.data);
@@ -48,7 +49,7 @@ export default function SocialFeed({ post, navigation }) {
   const userLikes = async () => {
     await axios
       .get(
-        `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.id}`
+        `${simulatorAPI}/api/PostsLikes/studentId/${currentUser.id}`
       )
       .then((res) => {
         setPostsLikes(res.data);
@@ -60,7 +61,7 @@ export default function SocialFeed({ post, navigation }) {
   function AddLike(postId) {
     axios
       .post(
-        `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.id}/postId/${postId}`
+        `${simulatorAPI}/api/PostsLikes/studentId/${currentUser.id}/postId/${postId}`
       )
       .then((res) => {
         setPostsLikes((prevList) => [...prevList, { postId: postId }]);
@@ -76,7 +77,7 @@ export default function SocialFeed({ post, navigation }) {
   function RemoveLike(postId) {
     axios
       .delete(
-        `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.id}/postId/${postId}`
+        `${simulatorAPI}/api/PostsLikes/studentId/${currentUser.id}/postId/${postId}`
       )
       .then((res) => {
         setPostsLikes((prevList) =>
@@ -92,10 +93,10 @@ export default function SocialFeed({ post, navigation }) {
 
   //get user's favs
   const userFavorites = async () => {
-   
+
     await axios
       .get(
-        `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.id}`
+        `${simulatorAPI}/api/FavList/studentId/${currentUser.id}`
       )
       .then((res) => {
         setFavorite(res.data);
@@ -113,7 +114,7 @@ export default function SocialFeed({ post, navigation }) {
       return lowerCaseObj;
     });
 
-    axios.post(`http://10.0.2.2:5283/api/FavList/studentId/${currentUser.id}/postId/${postId}`, lowerCaseTags)
+    axios.post(`${simulatorAPI}/api/FavList/studentId/${currentUser.id}/postId/${postId}`, lowerCaseTags)
       .then((res) => {
         setFavorite((prevList) => [...prevList, { postId }]);
         userFavorites();
@@ -134,7 +135,7 @@ export default function SocialFeed({ post, navigation }) {
     });
 
     axios
-      .put(`http://10.0.2.2:5283/api/FavList/studentId/${currentUser.id}/postId/${postId}`,lowerCaseTags)
+      .put(`${simulatorAPI}/api/FavList/studentId/${currentUser.id}/postId/${postId}`, lowerCaseTags)
       .then((res) => {
         setFavorite((prevList) =>
           prevList.filter((fav) => fav.PostId !== postId)
@@ -152,7 +153,7 @@ export default function SocialFeed({ post, navigation }) {
   //remove post
   function RemovePost(postId) {
     axios
-      .delete(`http://10.0.2.2:5283/api/SocialCloud/postId/${postId}`)
+      .delete(`${simulatorAPI}/api/SocialCloud/postId/${postId}`)
       .then((res) => {
         setPosts((prevList) => prevList.filter((p) => p.postId !== postId));
         getAllPosts();

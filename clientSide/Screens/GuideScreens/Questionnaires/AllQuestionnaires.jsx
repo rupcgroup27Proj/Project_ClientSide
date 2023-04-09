@@ -6,11 +6,13 @@ import { useUser } from '../../../Components/Contexts/UserContext';
 import { ScrollView } from 'react-native-gesture-handler';
 import { styles } from './QuestionnaireStyles';
 import { useFocusEffect } from '@react-navigation/native';
+import { useAPI } from '../../../Components/Contexts/APIContext';
 
 const AllQuestionnaires = ({ navigation }) => {
 
     const { currentUser } = useUser();
     const [questionnaires, setQuestionnaires] = useState([]);
+    const { simulatorAPI } = useAPI();
 
     useFocusEffect(
         useCallback(() => {
@@ -22,7 +24,7 @@ const AllQuestionnaires = ({ navigation }) => {
 
     const getAllQuestionnaires = async () => {
         try {
-            const response = await axios.get(`http://10.0.2.2:5283/api/Questionnaires/groupId/${currentUser.groupId}`);
+            const response = await axios.get(`${simulatorAPI}/api/Questionnaires/groupId/${currentUser.groupId}`);
             setQuestionnaires(response.data);
         } catch (error) { console.log(error); }
     }
@@ -53,7 +55,7 @@ const AllQuestionnaires = ({ navigation }) => {
                 {
                     text: 'OK',
                     onPress: () => {
-                        axios.delete(`http://10.0.2.2:5283/api/Questionnaires/questionnaireId/${questionnaireId}`)
+                        axios.delete(`${simulatorAPI}/api/Questionnaires/questionnaireId/${questionnaireId}`)
                             .then((res) => {
                                 console.log(res);
                                 getAllQuestionnaires();

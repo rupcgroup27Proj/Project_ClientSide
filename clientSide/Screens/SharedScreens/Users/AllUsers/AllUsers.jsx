@@ -4,17 +4,18 @@ import { DataTable, Divider } from 'react-native-paper';
 import axios from 'axios';
 import { Styles } from "./Styles"
 import { useUser } from '../../../../Components/Contexts/UserContext';
+import { useAPI } from '../../../../Components/Contexts/APIContext';
 
 const AllUsers = () => {
 
   const { currentUser } = useUser()
-
+  const { simulatorAPI } = useAPI();
   const [students, setStudents] = useState([]);
   const [sortDirection, setSortDirection] = useState(null);
   const [sortedField, setSortedField] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://10.0.2.2:5283/api/Students/groupId/${currentUser.groupId}`) // replace with your API endpoint
+    axios.get(`${simulatorAPI}/api/Students/groupId/${currentUser.groupId}`) // replace with your API endpoint
       .then(response => {
         setStudents(response.data);
       })

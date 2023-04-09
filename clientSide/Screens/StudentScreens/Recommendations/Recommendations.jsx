@@ -21,7 +21,7 @@ const params = {
   //level 3 - inside 'generator'
   gsrlimit: 1,        //How many search results to get back.
   piprop: 'thumbnail',
-  pithumbsize: 250 
+  pithumbsize: 250
 };
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -29,8 +29,10 @@ const params = {
 const Recommendations = () => {
 
   const { currentUser } = useUser();
-  const RecommendationsAPI = `http://10.0.2.2:5283/api/SmartRecommandations/studentId/${currentUser.id}`
+  const { simulatorAPI } = useAPI();
+  const RecommendationsAPI = `${simulatorAPI}/api/SmartRecommandations/studentId/${currentUser.id}`
   const [recArray, setRecArray] = useState([]);
+  
 
   //For each tag, i wait for the axios request to be completed and that return the data of the page. i wait until all tags has finished, inserting them into
   //"array". if theres an error or something - i return null. than i filter the nulls and changing the state using SetRecArray.
@@ -74,7 +76,7 @@ const Recommendations = () => {
     return newStr.replace("  ", " ")
   }
 
-  
+
   useEffect(() => {
     GetRecommendations();
   }, [])
@@ -83,7 +85,7 @@ const Recommendations = () => {
   return (
     <ScrollView>
       {recArray.map((rcmnd, index) =>
-        <Recommandation page={rcmnd[0]} key={index}/>
+        <Recommandation page={rcmnd[0]} key={index} />
       )}
     </ScrollView>
   )

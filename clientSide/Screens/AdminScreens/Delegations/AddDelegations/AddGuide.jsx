@@ -4,9 +4,11 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Styles } from "./Styles";
 import { SelectList } from "react-native-dropdown-select-list";
 import axios from "axios";
+import { useAPI } from "../../../../Components/Contexts/APIContext";
 
 export default function AddGuide({ route, navigation }) {
   const { numGroup2 } = route.params;
+  const { simulatorAPI } = useAPI();
   const [formDataGuide, setFormDataGuide] = useState({
     password: "",
     guideId: 0,
@@ -126,7 +128,7 @@ export default function AddGuide({ route, navigation }) {
     }
 
     axios
-      .post(`http://10.0.2.2:5283/api/Guides`, formDataGuide)
+      .post(`${simulatorAPI}/api/Guides`, formDataGuide)
       .then((res) => {
         console.log("SCC in formDataGuide ", res);
         alert("The delegation created succcessfully!");

@@ -2,6 +2,7 @@ import { useContext, createContext, useState, useEffect } from "react";
 import { Alert } from "react-native";
 import axios from "axios";
 import { useUser } from "./UserContext";
+import { useAPI } from "./APIContext";
 
 const TeacherContext = createContext();
 
@@ -15,11 +16,12 @@ export default function TeacherProvider({ children }) {
     const [endDate, setEndDate] = useState("");
     const [remainingDays, setRemainingDays] = useState(null);
     const { currentUser } = useUser();
+    const { simulatorAPI } = useAPI();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://10.0.2.2:5283/api/Journeys/GetJourneyDatesAndSchoolName/groupId/${currentUser.groupId}`);
+                const response = await axios.get(`${simulatorAPI}/api/Journeys/GetJourneyDatesAndSchoolName/groupId/${currentUser.groupId}`);
                 setStartDate(response.data.startDate);
                 setEndDate(response.data.endDate);
                 if (response.data.startDate === "1950-01-01T00:00:00")
@@ -49,7 +51,7 @@ export default function TeacherProvider({ children }) {
         console.log(`start: ${newStartDate.toISOString()}`)
         console.log(`end: ${newEndDate.toISOString()}`)
         try {
-            await axios.put(`http://10.0.2.2:5283/api/Journeys/groupId/${currentUser.groupId}/startDate/${newStartDate.toISOString()}/endDate/${newEndDate.toISOString()}`);
+            await axios.put(`${simulatorAPI}/api/Journeys/groupId/${currentUser.groupId}/startDate/${newStartDate.toISOString()}/endDate/${newEndDate.toISOString()}`);
             setStartDate(newStartDate.toISOString());
             setEndDate(newEndDate.toISOString());
             setJourneyStarted(true);

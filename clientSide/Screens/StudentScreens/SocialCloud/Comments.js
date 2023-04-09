@@ -14,12 +14,12 @@ import { styles } from "./Styles";
 import axios from "axios";
 import { Card } from "react-native-paper";
 import { useUser } from "../../../Components/Contexts/UserContext";
+import { useAPI } from "../../../Components/Contexts/APIContext";
 
 
 export default function Comments({ route }) {
   const { currentUser } = useUser();
-  console.log(currentUser);
-
+  const { simulatorAPI } = useAPI();
   const { post } = route.params;
   const [postComment, setPostComment] = useState([]);
   const [comment, setComment] = useState("");
@@ -31,7 +31,7 @@ export default function Comments({ route }) {
   //get comments
   const getComments = async () => {
     await axios
-      .get(`http://10.0.2.2:5283/api/PostsComments/postId/${post.PostId}`)
+      .get(`${simulatorAPI}/api/PostsComments/postId/${post.PostId}`)
       .then((res) => {
         setPostComment(res.data);
         //console.log("getComments " + JSON.stringify(postComment));
@@ -52,7 +52,7 @@ export default function Comments({ route }) {
       commentText: comment,
     };
 
-    fetch(`http://10.0.2.2:5283/api/PostsComments`, {
+    fetch(`${simulatorAPI}/api/PostsComments`, {
       method: "POST",
       body: JSON.stringify(newComment),
       headers: new Headers({
@@ -96,7 +96,7 @@ export default function Comments({ route }) {
         onPress: () => {
           axios
             .delete(
-              `http://10.0.2.2:5283/api/PostsComments/commentId/${commentId}`
+              `${simulatorAPI}/api/PostsComments/commentId/${commentId}`
             )
             .then((res) => {
               // setPostComment((prevList) =>
@@ -165,16 +165,16 @@ export default function Comments({ route }) {
                 <View>
                   {(currentUser.type === "Teacher" ||
                     c.studentId === currentUser.personalId) && (
-                    <TouchableOpacity
-                      onPress={() => RemoveComment(c.commentId)}
-                    >
-                      <IoniconsIcon
-                        name="trash-outline"
-                        size={20}
-                        color="black"
-                      />
-                    </TouchableOpacity>
-                  )}
+                      <TouchableOpacity
+                        onPress={() => RemoveComment(c.commentId)}
+                      >
+                        <IoniconsIcon
+                          name="trash-outline"
+                          size={20}
+                          color="black"
+                        />
+                      </TouchableOpacity>
+                    )}
                 </View>
               </View>
             </Card>

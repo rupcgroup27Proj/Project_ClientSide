@@ -4,9 +4,11 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Styles } from "./Styles";
 import { SelectList } from "react-native-dropdown-select-list";
 import axios from "axios";
+import { useAPI } from "../../../../Components/Contexts/APIContext";
 
 export default function AddTeacher({ numGroup2, route, navigation }) {
   const { numGroup } = route.params;
+  const { simulatorAPI } = useAPI();
   const [formDataTeacher, setFormDataTeacher] = useState({
     password: "",
     teacherId: 0,
@@ -126,10 +128,10 @@ export default function AddTeacher({ numGroup2, route, navigation }) {
     }
 
     axios
-      .post(`http://10.0.2.2:5283/api/Teachers`, formDataTeacher)
+      .post(`${simulatorAPI}/api/Teachers`, formDataTeacher)
       .then((res) => {
         console.log("SCC in formDataTeacher ", res);
-        navigation.navigate("AddGuide" , {numGroup2 : formDataTeacher.groupId});
+        navigation.navigate("AddGuide", { numGroup2: formDataTeacher.groupId });
       })
       .catch((error) => console.log("ERR in formDataTeacher", error));
   }

@@ -5,12 +5,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useUser } from '../../../Components/Contexts/UserContext';
 import { styles } from './QuestionnaireStyles';
+import { useAPI } from '../../../Components/Contexts/APIContext';
 
 
 const Questionnaire = ({ route }) => {
 
   const { questionnaire } = route.params;
-
+  const { simulatorAPI } = useAPI();
   const getCorrectAnswers = () => {
     const arr = [];
     questionnaire.Questions.forEach(question => { arr.push(question.CorrectOption) });
@@ -64,7 +65,7 @@ const Questionnaire = ({ route }) => {
 
   const updateStudentSmartElementTags = async () => {
     const studentTags = questionnaire.Tags;
-    axios.put(`http://10.0.2.2:5283/api/Questionnaires/studentId/${currentUser.id}`, studentTags)
+    axios.put(`${simulatorAPI}/api/Questionnaires/studentId/${currentUser.id}`, studentTags)
       .then((res) => { console.log("User tags updated.") })
       .catch((err) => console.log(err));
   }

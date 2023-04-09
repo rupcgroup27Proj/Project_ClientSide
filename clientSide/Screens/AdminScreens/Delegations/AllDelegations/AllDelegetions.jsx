@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import axios from "axios";
 import { Divider } from "react-native-paper";
+import { useAPI } from "../../../../Components/Contexts/APIContext";
 
 
 export default function AllDelegations({ delegation, navigation }) {
@@ -12,6 +13,7 @@ export default function AllDelegations({ delegation, navigation }) {
   const [future, setFuture] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedDelegation, setSelectedDelegation] = useState({});
+  const { simulatorAPI } = useAPI();
 
   useEffect(() => {
     getAllDelegetions();
@@ -19,7 +21,7 @@ export default function AllDelegations({ delegation, navigation }) {
 
   function getAllDelegetions() {
     axios
-      .get(`http://10.0.2.2:5283/api/Journeys/GetJourneyList`)
+      .get(`${simulatorAPI}/api/Journeys/GetJourneyList`)
       .then((res) => {
         res.data.forEach(dlg => {
           if (dlg.startDate == "1950-01-01T00:00:00") {

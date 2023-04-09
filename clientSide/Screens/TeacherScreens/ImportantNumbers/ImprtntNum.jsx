@@ -4,6 +4,7 @@ import { TextInput, List, IconButton, Divider } from 'react-native-paper';
 import axios from 'axios';
 import { Linking } from 'react-native';
 import { useUser } from '../../../Components/Contexts/UserContext';
+import { useAPI } from '../../../Components/Contexts/APIContext';
 
 
 const ImprtntNum = () => {
@@ -11,11 +12,11 @@ const ImprtntNum = () => {
     const [newPhone, setNewPhone] = useState('');
     const [newTitle, setNewTitle] = useState('');
     const [newNotes, setNewNotes] = useState('');
-
+    const { simulatorAPI } = useAPI();
     const { currentUser } = useUser();
 
     const fetchPhonebook = async () => {
-        const response = await axios.get(`http://10.0.2.2:5283/api/Phones/groupId/${currentUser.groupId}`);
+        const response = await axios.get(`${simulatorAPI}/api/Phones/groupId/${currentUser.groupId}`);
         setPhonebook(response.data);
     };
 
@@ -24,7 +25,7 @@ const ImprtntNum = () => {
     }, []);
 
     const deletePhonebookEntry = async (id) => {
-        await axios.delete(`http://10.0.2.2:5283/api/Phones/id/${id}`);
+        await axios.delete(`${simulatorAPI}/api/Phones/id/${id}`);
         fetchPhonebook();
     };
 
@@ -40,7 +41,7 @@ const ImprtntNum = () => {
             notes: newNotes,
             groupId: currentUser.groupId
         };
-        await axios.post(`http://10.0.2.2:5283/api/Phones`, newEntry);
+        await axios.post(`${simulatorAPI}/api/Phones`, newEntry);
         setNewPhone('');
         setNewTitle('');
         setNewNotes('');

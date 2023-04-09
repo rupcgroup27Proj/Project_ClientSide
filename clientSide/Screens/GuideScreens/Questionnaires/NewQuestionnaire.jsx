@@ -4,7 +4,7 @@ import { ScrollView, View, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import { useUser } from '../../../Components/Contexts/UserContext';
 
-const tagsAPI = 'http://10.0.2.2:5283/api/Tags/builtInTags'
+const tagsAPI = '${simulatorAPI}/api/Tags/builtInTags'
 
 
 const NewQuestionnaire = ({ route }) => {
@@ -15,7 +15,7 @@ const NewQuestionnaire = ({ route }) => {
     const [questions, setQuestions] = useState([]);
     const theme = useTheme();
     const { currentUser } = useUser();
-
+    const { simulatorAPI } = useAPI();
 
     const getTags = async () => {
         await axios.get(tagsAPI)
@@ -104,7 +104,7 @@ const NewQuestionnaire = ({ route }) => {
                 }
             }
 
-            axios.post(`http://10.0.2.2:5283/api/Questionnaires/groupId/${currentUser.groupId}/json/${JSON.stringify(jsonQuestionnaire)}`)
+            axios.post(`${simulatorAPI}/api/Questionnaires/groupId/${currentUser.groupId}/json/${JSON.stringify(jsonQuestionnaire)}`)
                 .then((res) => {
                     console.log(res);
                     route.params.getAllQuestionnaires();

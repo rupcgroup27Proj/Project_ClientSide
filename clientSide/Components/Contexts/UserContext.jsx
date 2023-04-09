@@ -3,6 +3,7 @@ import { useContext, createContext, useState, useEffect } from "react";
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { useAPI } from "./APIContext";
 
 const UserContext = createContext();
 
@@ -16,6 +17,7 @@ export default function UserProvider({ children }) {
     const [currentUser, setCurrentUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isDisabled, setIsDisabled] = useState(false);
+    const { simulatorAPI } = useAPI();
 
     //If the user logged once, the app will log him in automatically using asyncStorage (after checking he has not been deleted from the server).
     const getLoggedUser = async () => {
@@ -27,7 +29,7 @@ export default function UserProvider({ children }) {
         }
 
         try {
-            const response = await axios.get(`http://10.0.2.2:5283/api/Generic/id/${JSON.parse(currentUser).personalId}/password/${JSON.parse(currentUser).password}/type/${JSON.parse(currentUser).type}`, { timeout: 5000 });
+            const response = await axios.get(`${simulatorAPI}/api/Generic/id/${JSON.parse(currentUser).personalId}/password/${JSON.parse(currentUser).password}/type/${JSON.parse(currentUser).type}`, { timeout: 5000 });
             !response.data.email ? AsyncStorage.removeItem('currentUser') : setCurrentUser(JSON.parse(currentUser));
 
         } catch (error) { Alert.alert('Error', 'Cannot connect to the server.'); }
@@ -36,23 +38,23 @@ export default function UserProvider({ children }) {
 
     //Login a user after validating all fields.
     const login = async (userId, password, userType) => {
+
         if (!userId || !password || !userType) {
             Alert.alert('Error', 'All fields must be filled.');
             return;
         }
         setIsDisabled((prevDisabled) => !prevDisabled)
         try {
-               
-            const response = await axios.get(`http://10.0.2.2:5283/api/Generic/id/${userId}/password/${password}/type/${userType}`, { timeout: 5000 });
+            const response = await axios.get(`${simulatorAPI}/api/Generic/id/${userId}/password/${password}/type/${userType}`, { timeout: 5000 });
             const loggedUser = response.data;
-       
+
             if (!response.data.email) {
                 Alert.alert('Error', 'Credentials incorrect.');
                 setIsDisabled((prevDisabled) => !prevDisabled)
                 return;
             }
             if (loggedUser.isAdmin)
-                loggedUser.type = "Admin"; 
+                loggedUser.type = "Admin";
             AsyncStorage.setItem('currentUser', JSON.stringify(loggedUser));
             Alert.alert('Success', 'Login successful!');
             setCurrentUser(loggedUser);
@@ -60,7 +62,7 @@ export default function UserProvider({ children }) {
             Alert.alert('Error', 'Encountered an error.');
             AsyncStorage.removeItem('currentUser');
         }
-       
+
         setIsDisabled((prevDisabled) => !prevDisabled)
     }
 

@@ -3,16 +3,19 @@ import React, { useState } from 'react';
 import { View, ImageBackground } from 'react-native';
 import { ActivityIndicator, Button, TextInput, Title, Text } from 'react-native-paper';
 import { SelectList } from 'react-native-dropdown-select-list'
-import { styles } from './Styles'
+import { useTheme } from './Styles'
+
 import { useUser } from '../../../Components/Contexts/UserContext';
 
 
 const LoginScreen = () => {
-
+  const styles = useTheme();
+  
+  const { login, isDisabled } = useUser(); //Destructuring the context for "login" function.
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [userType, setUserType] = useState('');
-  const { login, isDisabled } = useUser(); //Destructuring the context for "login" function.
+
   const data = [
     { key: '1', value: 'Student' },
     { key: '2', value: 'Teacher' },
@@ -32,7 +35,7 @@ const LoginScreen = () => {
     >
       <View style={styles.container}>
 
-        <Title style={styles.title}>Login Screen</Title>
+        <Title style={styles.title}>Login</Title>
 
         <SelectList
           search={false}
@@ -65,7 +68,6 @@ const LoginScreen = () => {
             Login
           </Button>
         }
-
       </View>
     </ImageBackground>
   );

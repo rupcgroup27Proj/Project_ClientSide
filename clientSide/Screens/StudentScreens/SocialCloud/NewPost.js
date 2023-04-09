@@ -19,6 +19,7 @@ export default function NewPost({ navigation, route }) {
   const [allTags, setAllTags] = useState([]);
   const [allSelectedTags, setAllSelectedTags] = useState([]);
   const [mediaType, setMediaType] = useState(null);
+  const { simulatorAPI } = useAPI();
   const theme = useTheme();
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export default function NewPost({ navigation, route }) {
   //get all tags
   const getAllTags = async () => {
     await axios
-      .get(`http://10.0.2.2:5283/api/Tags/groupId/${currentUser.groupId}`)
+      .get(`${simulatorAPI}/api/Tags/groupId/${currentUser.groupId}`)
       .then((res) => {
         setAllTags(res.data);
       })
@@ -115,9 +116,9 @@ export default function NewPost({ navigation, route }) {
       Tags: [...allSelectedTags],
     };
 
-   
+
     fetch(
-      `http://10.0.2.2:5283/api/SocialCloud/tagsJson/${JSON.stringify(
+      `${simulatorAPI}/api/SocialCloud/tagsJson/${JSON.stringify(
         tagsJson
       )}`,
       {
@@ -155,7 +156,7 @@ export default function NewPost({ navigation, route }) {
       );
     setAllSelectedTags([]);
     setImage(null);
-  
+
   };
 
   return (

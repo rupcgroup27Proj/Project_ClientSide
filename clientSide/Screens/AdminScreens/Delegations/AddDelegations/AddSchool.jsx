@@ -9,10 +9,12 @@ import {
 import { Styles } from "./Styles";
 import { Divider } from "react-native-paper";
 import axios from "axios";
+import { useAPI } from "../../../../Components/Contexts/APIContext";
 
 export default function AddSchool() {
   const [schoolName, setSchoolName] = useState("");
   const [groupId, setGroupId] = useState("");
+  const { simulatorAPI } = useAPI();
 
   const [formDataTeacher, setFormDataTeacher] = useState({
     password: "",
@@ -263,7 +265,7 @@ export default function AddSchool() {
     }
 
     axios
-      .post(`http://10.0.2.2:5283/api/Journeys/schoolName/${schoolName}`)
+      .post(`${simulatorAPI}/api/Journeys/schoolName/${schoolName}`)
       .then((res) => {
         setGroupId(res.data);
         console.log({
@@ -271,7 +273,7 @@ export default function AddSchool() {
           groupId: groupId,
         });
         axios
-          .post(`http://10.0.2.2:5283/api/Teachers`, {
+          .post(`${simulatorAPI}/api/Teachers`, {
             ...formDataTeacher,
             groupId: groupId,
           })
@@ -281,7 +283,7 @@ export default function AddSchool() {
           .catch((error) => console.log("ERR in formDataTeacher", error));
 
         axios
-          .post(`http://10.0.2.2:5283/api/Guides`, {
+          .post(`${simulatorAPI}/api/Guides`, {
             ...formDataGuide,
             groupId: groupId,
           })

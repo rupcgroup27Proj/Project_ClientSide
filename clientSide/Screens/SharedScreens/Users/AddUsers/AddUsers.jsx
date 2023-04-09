@@ -7,6 +7,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useUser } from '../../../../Components/Contexts/UserContext';
 import { useTeacher } from '../../../../Components/Contexts/TeacherContext';
+import { useAPI } from '../../../../Components/Contexts/APIContext';
 
 const AddUsers = () => {
   const [fileUri, setFileUri] = useState('');//Excel useState
@@ -21,6 +22,7 @@ const AddUsers = () => {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [parentPhone, setParentPhone] = useState('');
+  const { simulatorAPI } = useAPI();
 
   const emailRegex = /^\S+@\S+\.\S{2,}$/;
 
@@ -50,7 +52,7 @@ const AddUsers = () => {
       type: "Student"
     };
 
-    axios.post('http://10.0.2.2:5283/api/Students', newStudent)
+    axios.post('${simulatorAPI}/api/Students', newStudent)
       .then(response => {
         console.log(response.data);
         alert('Student added successfully');
