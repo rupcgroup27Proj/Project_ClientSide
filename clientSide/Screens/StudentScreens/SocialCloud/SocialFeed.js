@@ -11,20 +11,20 @@ import axios from "axios";
 import { styles } from "./Styles";
 import HeartIcon from "./HeartIcon";
 import FavoriteIcon from "./FavoriteIcon";
-import { Card, Appbar, Button } from "react-native-paper";
+import { Card, FAB } from "react-native-paper";
 import IoniconsIcon from "react-native-vector-icons/Ionicons";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
-import { Video, AVPlaybackStatus } from "expo-av";
+import { Video } from "expo-av";
 import { useUser } from "../../../Components/Contexts/UserContext";
+import { useFavorites } from "../../../Components/Contexts/FavoritesContext";
+import { StyleSheet } from 'react-native';
 
-const u =
-  "https://firebasestorage.googleapis.com/v0/b/journey-to-poland.appspot.com/o/images%2F456.undefined.69917067-45ad-41df-ba12-f7fa4239eac7.mp4?alt=media&token=675a9b2b-4086-433e-b9d9-2050dab6e14a";
 export default function SocialFeed({ post, navigation }) {
   const { currentUser } = useUser();
+  const { favorite, userFavorites } = useFavorites();
 
   const [posts, setPosts] = useState([]);
   const [postsLikes, setPostsLikes] = useState([]);
-  const [favorite, setFavorite] = useState([]);
 
   useEffect(() => {
     getAllPosts();
@@ -32,7 +32,7 @@ export default function SocialFeed({ post, navigation }) {
     userFavorites();
   }, []);
 
-  //get all images from server /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //get all images from server
   function getAllPosts() {
     axios
       .get(
@@ -47,9 +47,7 @@ export default function SocialFeed({ post, navigation }) {
   //get user's likes
   const userLikes = async () => {
     await axios
-      .get(
-        `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.id}`
-      )
+      .get(`http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.id}`)
       .then((res) => {
         setPostsLikes(res.data);
       })
@@ -63,9 +61,7 @@ export default function SocialFeed({ post, navigation }) {
         `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.id}/postId/${postId}`
       )
       .then((res) => {
-        setPostsLikes((prevList) => [...prevList, { postId: postId }]);
         userLikes();
-        console.log("postsLikes ", JSON.stringify(postsLikes));
       })
       .catch((err) => {
         console.log("AddLike " + err);
@@ -79,33 +75,16 @@ export default function SocialFeed({ post, navigation }) {
         `http://10.0.2.2:5283/api/PostsLikes/studentId/${currentUser.id}/postId/${postId}`
       )
       .then((res) => {
-        setPostsLikes((prevList) =>
-          prevList.filter((like) => like.postId !== postId)
-        );
         userLikes();
-        //console.log("postsLikes ", JSON.stringify(postsLikes));
       })
       .catch((err) => {
         console.log("RemoveLike " + err);
       });
   }
 
-  //get user's favs
-  const userFavorites = async () => {
-   
-    await axios
-      .get(
-        `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.id}`
-      )
-      .then((res) => {
-        setFavorite(res.data);
-      })
-      .catch((err) => console.log("userFavorites " + err));
-  };
-
   //add to favs
   function AddFav(postId, Tags) {
-    const lowerCaseTags = Tags.map(tag => {
+    const lowerCaseTags = Tags.map((tag) => {
       const lowerCaseObj = {};
       for (const key in tag) {
         lowerCaseObj[key.charAt(0).toLowerCase() + key.slice(1)] = tag[key];
@@ -113,9 +92,13 @@ export default function SocialFeed({ post, navigation }) {
       return lowerCaseObj;
     });
 
-    axios.post(`http://10.0.2.2:5283/api/FavList/studentId/${currentUser.id}/postId/${postId}`, lowerCaseTags)
+    axios
+      .post(
+        `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.id}/postId/${postId}`,
+        lowerCaseTags
+      )
       .then((res) => {
-        setFavorite((prevList) => [...prevList, { postId }]);
+        // setFavorite((prevList) => [...prevList, { postId }]);
         userFavorites();
       })
       .catch((err) => {
@@ -125,7 +108,7 @@ export default function SocialFeed({ post, navigation }) {
 
   //remove from favs
   function RemoveFav(postId, Tags) {
-    const lowerCaseTags = Tags.map(tag => {
+    const lowerCaseTags = Tags.map((tag) => {
       const lowerCaseObj = {};
       for (const key in tag) {
         lowerCaseObj[key.charAt(0).toLowerCase() + key.slice(1)] = tag[key];
@@ -134,13 +117,15 @@ export default function SocialFeed({ post, navigation }) {
     });
 
     axios
-      .put(`http://10.0.2.2:5283/api/FavList/studentId/${currentUser.id}/postId/${postId}`,lowerCaseTags)
+      .put(
+        `http://10.0.2.2:5283/api/FavList/studentId/${currentUser.id}/postId/${postId}`,
+        lowerCaseTags
+      )
       .then((res) => {
-        setFavorite((prevList) =>
-          prevList.filter((fav) => fav.PostId !== postId)
-        );
+        // setFavorite((prevList) =>
+        //   prevList.filter((fav) => fav.PostId !== postId)
+        // );
         userFavorites();
-        //console.log("userFavorites ", JSON.stringify(favorite));
       })
 
       .catch((err) => {
@@ -148,49 +133,94 @@ export default function SocialFeed({ post, navigation }) {
       });
   }
 
-
   //remove post
   function RemovePost(postId) {
-    axios
-      .delete(`http://10.0.2.2:5283/api/SocialCloud/postId/${postId}`)
-      .then((res) => {
-        setPosts((prevList) => prevList.filter((p) => p.postId !== postId));
-        getAllPosts();
-      })
-      .catch((err) => {
-        console.log("RemovePost " + err);
-      });
+    Alert.alert("Wait!", "Are you sure you want to delete?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          axios
+            .delete(`http://10.0.2.2:5283/api/SocialCloud/postId/${postId}`)
+            .then((res) => {
+              setPosts((prevList) =>
+                prevList.filter((p) => p.postId !== postId)
+              );
+              getAllPosts();
+            })
+            .catch((err) => {
+              console.log("RemovePost " + err);
+            });
+        },
+      },
+    ]);
   }
 
   return (
-    <ScrollView style={{ marginTop: 25 }}>
-      {/* <IoniconsIcon name="cloud" size={30} color="black"></IoniconsIcon> */}
-      {currentUser.type === "Student" && (
-        <TouchableOpacity>
-          <IoniconsIcon
-            name="add"
-            size={25}
-            color="white"
-            style={{
-              borderRadius: 20,
-              backgroundColor: "black",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            onPress={() =>
-              navigation.navigate("New Post", { updatePosts: getAllPosts })
-            }
-          />
-        </TouchableOpacity>
+    <ScrollView style={{ marginTop: 5 }}>
+      <FAB
+        icon="plus"
+        style={{position:"absolute", margin: 16 ,backgroundColor:"red"}}
+        onPress={() =>
+          navigation.navigate("New Post", { updatePosts: getAllPosts })
+        }
+      />
+      {!posts &&(
+        <View>
+          <Text>NO POSTS YET ...</Text>
+        </View>
       )}
-
       {posts.map((post) => (
         <Card style={styles.card}>
-          <View key={post.PostId}>
-            <IoniconsIcon name="ios-person" size={30} color="black">
-              <Text style={styles.username}>{post.FirstName}</Text>
+          <View
+            key={post.PostId}
+            style={{ flexDirection: "row", flexWrap: "wrap", marginTop: 10 }}
+          >
+            <IoniconsIcon name="ios-person" size={23} color="black">
+              <Text style={styles.username}>
+                {post.FirstName}
+                {` ${post.LastName}`}
+              </Text>
             </IoniconsIcon>
+            {(currentUser.type === "Teacher" ||
+              post.StudentId === currentUser.personalId) && (
+              <TouchableOpacity
+                style={{ left: 220 }}
+                onPress={() => RemovePost(post.PostId)}
+              >
+                <IoniconsIcon name="trash-outline" size={20} color="black" />
+              </TouchableOpacity>
+            )}
           </View>
+
+          <ScrollView horizontal={true}>
+            <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+              {post.Tags.map((t) => (
+                <TouchableOpacity
+                  key={t.TagId}
+                  style={{
+                    backgroundColor: "gray",
+                    borderRadius: 13,
+                    paddingHorizontal: 8,
+                    paddingVertical: 1,
+                    margin: 4,
+                    marginTop: 7,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "white",
+                    }}
+                  >
+                    {t.TagName}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
           <Card.Content>
             {post.Type === "I" ? (
               <Image source={{ uri: post.FileUrl }} style={styles.image} />
@@ -199,24 +229,17 @@ export default function SocialFeed({ post, navigation }) {
                 source={{ uri: post.FileUrl }}
                 useNativeControls={true}
                 resizeMode="contain"
-                style={{ width: 300, height: 300 }}
+                style={styles.video}
               />
             )}
           </Card.Content>
-          <View>
-            {(currentUser.type === "Teacher" ||
-              post.StudentId === currentUser.personalId) && (
-                <TouchableOpacity
-                  style={{ left: 360, bottom: 308 }}
-                  onPress={() => RemovePost(post.PostId)}
-                >
-                  <IoniconsIcon name="trash-outline" size={20} color="black" />
-                </TouchableOpacity>
-              )}
+          <View
+            style={{ flexDirection: "row", flexWrap: "wrap", marginTop: 10 }}
+          >
             {postsLikes.some((like) => like.postId === post.PostId) &&
               currentUser.type === "Student" && (
                 <TouchableOpacity
-                  style={{ left: 12, bottom: 5 }}
+                  style={{ left: 12 }}
                   onPress={() => RemoveLike(post.PostId)}
                 >
                   <HeartIcon filled={true} />
@@ -225,7 +248,7 @@ export default function SocialFeed({ post, navigation }) {
             {!postsLikes.some((like) => like.postId === post.PostId) &&
               currentUser.type === "Student" && (
                 <TouchableOpacity
-                  style={{ left: 12, bottom: 5 }}
+                  style={{ left: 12 }}
                   onPress={() => AddLike(post.PostId)}
                 >
                   <HeartIcon filled={false} />
@@ -240,8 +263,8 @@ export default function SocialFeed({ post, navigation }) {
                   size={20}
                   color="black"
                   style={{
-                    left: 45,
-                    bottom: 25,
+                    left: 23,
+                    bottom: 3,
                   }}
                 />
               </TouchableOpacity>
@@ -249,7 +272,7 @@ export default function SocialFeed({ post, navigation }) {
             {favorite.some((fav) => fav.PostId === post.PostId) &&
               currentUser.type === "Student" && (
                 <TouchableOpacity
-                  style={{ left: 360, bottom: 45 }}
+                  style={{ left: 320 }}
                   onPress={() => RemoveFav(post.PostId, post.Tags)}
                 >
                   <FavoriteIcon filled={true} />
@@ -258,32 +281,12 @@ export default function SocialFeed({ post, navigation }) {
             {!favorite.some((fav) => fav.PostId === post.PostId) &&
               currentUser.type === "Student" && (
                 <TouchableOpacity
-                  style={{ left: 360, bottom: 45 }}
+                  style={{ left: 320 }}
                   onPress={() => AddFav(post.PostId, post.Tags)}
                 >
                   <FavoriteIcon filled={false} />
                 </TouchableOpacity>
               )}
-            {post.Tags.map((t) => (
-              <TouchableOpacity
-                key={t.TagId}
-                style={{
-                  backgroundColor: "black",
-                  borderRadius: 16,
-                  paddingHorizontal: 16,
-                  paddingVertical: 8,
-                  margin: 4,
-                }}
-              >
-                <Text
-                  style={{
-                    color: "white",
-                  }}
-                >
-                  {t.TagName}
-                </Text>
-              </TouchableOpacity>
-            ))}
           </View>
         </Card>
       ))}

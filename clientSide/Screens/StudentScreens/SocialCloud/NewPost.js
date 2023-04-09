@@ -3,17 +3,14 @@ import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { firebase } from "../../../Config";
 import axios from "axios";
-import { Card, useTheme, Text } from "react-native-paper";
+import { Card, useTheme, Text, Button } from "react-native-paper";
 import { styles } from "./Styles";
 import Icon from "react-native-vector-icons/Ionicons";
-import { FontAwesome } from "@expo/vector-icons";
 import { useUser } from "../../../Components/Contexts/UserContext";
-
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function NewPost({ navigation, route }) {
   const { currentUser } = useUser();
-  console.log(currentUser);
-
   const { updatePosts } = route.params;
   const [image, setImage] = useState(null);
   const [allTags, setAllTags] = useState([]);
@@ -57,36 +54,40 @@ export default function NewPost({ navigation, route }) {
   //upload image to firebase
   const uploadImage = async () => {
     console.log(image);
-    const response = await fetch(image);
-    const blob = await response.blob();
-    const filename =
-      `images/` +
-      `${currentUser.personalId}.` +
-      `${currentUser.GroupId}.` +
-      image.substring(image.lastIndexOf("/") + 1);
+    if (image === null) {
+      Alert.alert("Error", "Choose something to upload.");
+    } else if (allSelectedTags.length === 0) {
+      Alert.alert("Error", "Choose Tags pls.");
+    } else {
+      const response = await fetch(image);
+      const blob = await response.blob();
+      const filename =
+        `images/` +
+        `${currentUser.id}.` +
+        `${currentUser.groupId}.` +
+        image.substring(image.lastIndexOf("/") + 1);
+      var ref = firebase.storage().ref().child(filename).put(blob);
 
-    //const filename = image.substring(image.lastIndexOf("/") + 1);
-    var ref = firebase.storage().ref().child(filename).put(blob);
+      try {
+        await ref;
+        var imageRef = firebase.storage().ref().child(filename);
+        var imageLink = await imageRef.getDownloadURL();
 
-    try {
-      await ref;
-      var imageRef = firebase.storage().ref().child(filename);
-      var imageLink = await imageRef.getDownloadURL();
+        console.log(`Image ${filename} uploaded successfully`);
+      } catch (error) {
+        console.log("error in upload to FB", error);
+      }
 
-      console.log(`Image ${filename} uploaded successfully`);
-    } catch (error) {
-      console.log("error in upload to FB", error);
+      uploadImagesDB(imageLink);
+      setImage(null);
     }
-
-    uploadImagesDB(imageLink);
-    setImage(null);
   };
 
   //upload image to db
   const uploadImagesDB = (imageLink) => {
     const newImage = {
       groupId: currentUser.groupId,
-      studentId: currentUser.personalId,
+      studentId: currentUser.id,
       teacherId: 1,
       guideId: 1,
       fileUrl: imageLink,
@@ -97,25 +98,22 @@ export default function NewPost({ navigation, route }) {
 
     if (currentUser.type == "Teacher") {
       newImage.studentId = 1;
-      newImage.teacherId = currentUser.personalId;
+      newImage.teacherId = currentUser.id;
       newImage.guideId = 1;
-
-    }//////////////////////////////////////////////////////////////////////// 
-    else if (currentUser.type == "Student") {
-      newImage.studentId = 2
+    } else if (currentUser.type == "Student") {
+      newImage.studentId = currentUser.id;
       newImage.teacherId = 1;
       newImage.guideId = 1;
     } else if (currentUser.type == "Guide") {
       newImage.studentId = 1;
       newImage.teacherId = 1;
-      newImage.guideId = currentUser.personalId;
+      newImage.guideId = currentUser.id;
     }
 
     const tagsJson = {
       Tags: [...allSelectedTags],
     };
 
-   
     fetch(
       `http://10.0.2.2:5283/api/SocialCloud/tagsJson/${JSON.stringify(
         tagsJson
@@ -131,7 +129,7 @@ export default function NewPost({ navigation, route }) {
     )
       .then((res) => {
         if (res.ok) {
-          Alert.alert("Success", "Image uploaded successfully", [
+          Alert.alert("Success", "uploaded successfully!", [
             {
               text: "OK",
               onPress: () => {
@@ -141,57 +139,56 @@ export default function NewPost({ navigation, route }) {
             },
           ]);
         } else {
-          Alert.alert("Error", "Image upload failed");
+          Alert.alert("Error", "upload failed.");
         }
         return res.json();
       })
       .then(
         (res) => {
-          console.log("suc in post images to DB ", res);
+          console.log("suc in post images to DB", res);
         },
         (error) => {
           console.log("ERR in post images to DB", error);
         }
       );
+
     setAllSelectedTags([]);
     setImage(null);
-  
   };
 
   return (
-    <>
-      {/* <Appbar.Header style={styles.header}>
-        <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title="New Post" style={styles.title} />
-        <Icon
-          name="cloud-upload-outline"
-          size={30}
-          color="black"
-          style={{ flex: 2, alignItems: "center", justifyContent: "center" }}
-        />
-      </Appbar.Header> */}
-      <View style={styles.container}>
-        <Card style={styles.card2}>
-          {!image && (
-            <Icon
-              name="camera"
-              size={40}
-              style={{
-                top: 128,
-                left: 150,
-              }}
-              onPress={() => AddImage()}
-            ></Icon>
-          )}
-
-          {image && (
-            <View>
-              <Image source={{ uri: image }} style={styles.image} />
-            </View>
-          )}
-        </Card>
-
-        <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+    <View style={styles.container}>
+      <Card style={styles.uploadcard}>
+        {!image && (
+          <Icon
+            name="camera"
+            size={40}
+            style={{
+              top: 118,
+              left: 153,
+            }}
+            onPress={() => AddImage()}
+          ></Icon>
+        )}
+        {image && (
+          <View>
+            <Image
+              source={{ uri: image }}
+              style={{ height: 280, width: "100%" }}
+            />
+          </View>
+        )}
+      </Card>
+      <ScrollView horizontal={true}>
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            backgroundColor: "black",
+            marginTop: 20,
+            marginBottom: 130,
+          }}
+        >
           {allTags.map((tag) => (
             <TouchableOpacity
               key={tag.tagId}
@@ -205,7 +202,7 @@ export default function NewPost({ navigation, route }) {
               style={{
                 backgroundColor: allSelectedTags.includes(tag)
                   ? theme.colors.tertiary
-                  : "#F2F2F2", //Conditional styling
+                  : "#F2F2F2",
                 borderRadius: 16,
                 paddingHorizontal: 16,
                 paddingVertical: 8,
@@ -216,15 +213,16 @@ export default function NewPost({ navigation, route }) {
             </TouchableOpacity>
           ))}
         </View>
-        <TouchableOpacity onPress={() => uploadImage()}>
-          <FontAwesome
-            name="check-circle"
-            size={40}
-            style={{ top: 60 }}
-            color="black"
-          />
-        </TouchableOpacity>
-      </View>
-    </>
+      </ScrollView>
+      <TouchableOpacity onPress={() => uploadImage()}>
+        <Button
+          icon="cloud-upload-outline"
+          mode="contained"
+          style={{ backgroundColor: "black" }}
+        >
+          Upload
+        </Button>
+      </TouchableOpacity>
+    </View>
   );
 }

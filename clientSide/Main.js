@@ -1,40 +1,55 @@
 //Formatted
-import { View, Text } from 'react-native';
-import { ActivityIndicator } from 'react-native-paper';
-import { useUser } from './Components/Contexts/UserContext'; //User context for laoding screen and getting the user
-import LoginScreen from './Screens/SharedScreens/Login/LoginScreen'; //LoginScreen
+import { View, Text } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
+import { useUser } from "./Components/Contexts/UserContext"; //User context for laoding screen and getting the user
+import LoginScreen from "./Screens/SharedScreens/Login/LoginScreen"; //LoginScreen
 //Navs
-import AdminBotNav from './Components/Navs/AdminBotNav';
-import StudentDrawer from './Components/Navs/StudentDrawer'
-import GuideDrawer from './Components/Navs/GuideDrawer';
-import TeacherDrawer from './Components/Navs/TeacherDrawer';
-import TeacherProvider from './Components/Contexts/TeacherContext';
+import AdminBotNav from "./Components/Navs/AdminBotNav";
+import StudentDrawer from "./Components/Navs/StudentDrawer";
+import GuideDrawer from "./Components/Navs/GuideDrawer";
+import TeacherDrawer from "./Components/Navs/TeacherDrawer";
+import TeacherProvider from "./Components/Contexts/TeacherContext";
+import FavoritesProvider from "./Components/Contexts/FavoritesContext";
 
 const Main = () => {
+  const { currentUser, isLoading } = useUser();
 
-    const { currentUser, isLoading } = useUser();
-
-
-    if (isLoading)
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <ActivityIndicator size="large" />
-                <Text style={{ fontSize: 24 }}>Loading</Text>
-            </View>
-        )
-
+  if (isLoading)
     return (
-        <>
-            {!currentUser ? <LoginScreen /> : (
-                <>
-                    {currentUser.type == 'Admin' && <AdminBotNav />}
-                    {currentUser.type == 'Student' && <TeacherProvider><StudentDrawer /></TeacherProvider>}
-                    {currentUser.type == 'Teacher' && <TeacherProvider><TeacherDrawer /></TeacherProvider>}
-                    {currentUser.type == 'Guide' && <TeacherProvider><GuideDrawer /></TeacherProvider>}
-                </>
-            )}
-        </>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" />
+        <Text style={{ fontSize: 24 }}>Loading</Text>
+      </View>
     );
-}
 
-export default Main
+  return (
+    <>
+      {!currentUser ? (
+        <LoginScreen />
+      ) : (
+        <>
+          {currentUser.type == "Admin" && <AdminBotNav />}
+          {currentUser.type == "Student" && (
+            <FavoritesProvider>
+              <TeacherProvider>
+                <StudentDrawer />
+              </TeacherProvider>
+            </FavoritesProvider>
+          )}
+          {currentUser.type == "Teacher" && (
+            <TeacherProvider>
+              <TeacherDrawer />
+            </TeacherProvider>
+          )}
+          {currentUser.type == "Guide" && (
+            <TeacherProvider>
+              <GuideDrawer />
+            </TeacherProvider>
+          )}
+        </>
+      )}
+    </>
+  );
+};
+
+export default Main;
