@@ -2,6 +2,7 @@ import { Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { styles } from "./styles";
+import { useAPI } from '../../../Components/Contexts/APIContext';
 
 
 export default function Home() {

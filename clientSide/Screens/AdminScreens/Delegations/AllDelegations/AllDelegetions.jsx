@@ -2,7 +2,7 @@ import { Text, View, StyleSheet, Modal, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import axios from "axios";
-import { Divider } from "react-native-paper";
+import {  Divider } from "react-native-paper";
 import { useAPI } from "../../../../Components/Contexts/APIContext";
 
 
@@ -55,6 +55,7 @@ export default function AllDelegations({ delegation, navigation }) {
 
   return (
     <ScrollView style={{ backgroundColor: '#33383E', marginTop: 40, height: '100%' }}>
+
       <View style={{ backgroundColor: '#33383E' }}>
 
         <View style={Style.viewTitle}>
@@ -66,13 +67,13 @@ export default function AllDelegations({ delegation, navigation }) {
           ? <Text style={Style.text}>None</Text>
           : past.map((delegation) => {
             return (
-              <>
+              <View style={{flex: 5, flexDirection:'row'}}>
                 <Text key={Math.random() * 10000} style={Style.text}
                   onPress={() => openModal(delegation)} >
                   {delegation.schoolName}
                 </Text>
                 <Divider />
-              </>
+              </View>
 
             );
           })
@@ -244,7 +245,7 @@ const Style = StyleSheet.create({
     color: '#EAEAEA',
     paddingHorizontal: 20,
     paddingVertical: 10,
-    fontSize: 18
+    fontSize: 18,
   },
   num: {
     fontSize: 26,

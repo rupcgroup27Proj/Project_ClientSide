@@ -7,7 +7,7 @@ import {
   Text,
 } from "react-native";
 import { Styles } from "./Styles";
-import { Divider } from "react-native-paper";
+import { Button, Divider } from "react-native-paper";
 import axios from "axios";
 import { useAPI } from "../../../../Components/Contexts/APIContext";
 
@@ -60,13 +60,6 @@ export default function AddSchool() {
   const [guidePhoneError, setGuidePhoneError] = useState("");
   const [guideEmailError, setGuideEmailError] = useState("");
 
-  const handleSchoolNameInputChange = (schoolName) => {
-    if (!/^[a-zA-Z]+$/.test(schoolName)) {
-      setSchoolNameError("Please enter the School Name");
-    } else {
-      setSchoolNameError("");
-    }
-  };
 
   const validateTeacherPassword = (password) => {
     if (password.length < 6) {
@@ -322,7 +315,7 @@ export default function AddSchool() {
         <Text style={Styles.userTitle}>School Details</Text>
         <TextInput
           value={schoolName}
-          onChangeText={handleSchoolNameInputChange}
+          onChangeText={(value)=>setSchoolName(value)}
           placeholder="School Name"
           placeholderTextColor={"grey"}
           cursorColor={"grey"}
@@ -337,9 +330,11 @@ export default function AddSchool() {
         <TextInput
           value={formDataTeacher.firstName}
           onChangeText={(value) =>
-            handleTeacherInputChange("firstName", value)
+            נמ("firstName", value)
           }
           placeholder="First Name"
+          placeholderTextColor={"grey"}
+          cursorColor={"grey"}
           style={Styles.input}
         />
         {teacherFirstNameError ? (
@@ -347,6 +342,8 @@ export default function AddSchool() {
         ) : null}
         <TextInput
           value={formDataTeacher.lastName}
+          placeholderTextColor={"grey"}
+          cursorColor={"grey"}
           onChangeText={(value) =>
             handleTeacherInputChange("lastName", value)
           }
@@ -358,6 +355,8 @@ export default function AddSchool() {
         ) : null}
         <TextInput
           value={formDataTeacher.teacherId}
+          placeholderTextColor={"grey"}
+          cursorColor={"grey"}
           onChangeText={(value) => handleTeacherInputChange("teacherId", value)}
           placeholder="Id"
           style={Styles.input}
@@ -367,6 +366,8 @@ export default function AddSchool() {
         ) : null}
         <TextInput
           value={formDataTeacher.email}
+          placeholderTextColor={"grey"}
+          cursorColor={"grey"}
           onChangeText={(value) =>
             handleTeacherInputChange("email", value)
           }
@@ -378,6 +379,8 @@ export default function AddSchool() {
         ) : null}
         <TextInput
           value={formDataTeacher.phone}
+          placeholderTextColor={"grey"}
+          cursorColor={"grey"}
           onChangeText={(value) =>
             handleTeacherInputChange("phone", value)
           }
@@ -389,6 +392,8 @@ export default function AddSchool() {
         ) : null}
         <TextInput
           value={formDataTeacher.password}
+          placeholderTextColor={"grey"}
+          cursorColor={"grey"}
           placeholder="Password"
           onChangeText={(value) =>
             handleTeacherInputChange("password", value)
@@ -403,6 +408,8 @@ export default function AddSchool() {
         <Text style={Styles.userTitle}>Guide Details</Text>
         <TextInput
           value={formDataGuide.firstName}
+          placeholderTextColor={"grey"}
+          cursorColor={"grey"}
           onChangeText={(value) =>
             handleGuideInputChange("firstName", value)
           }
@@ -414,6 +421,8 @@ export default function AddSchool() {
         ) : null}
         <TextInput
           value={formDataGuide.lastName}
+          placeholderTextColor={"grey"}
+          cursorColor={"grey"}
           onChangeText={(value) =>
             handleGuideInputChange("lastName", value)
           }
@@ -425,6 +434,8 @@ export default function AddSchool() {
         ) : null}
         <TextInput
           value={formDataGuide.guideId}
+          placeholderTextColor={"grey"}
+          cursorColor={"grey"}
           onChangeText={(value) => handleGuideInputChange("guideId", value)}
           placeholder="Id"
           style={Styles.input}
@@ -432,6 +443,8 @@ export default function AddSchool() {
         {guideIdError ? <Text style={Styles.error}>{guideIdError}</Text> : null}
         <TextInput
           value={formDataGuide.email}
+          placeholderTextColor={"grey"}
+          cursorColor={"grey"}
           onChangeText={(value) => handleGuideInputChange("email", value)}
           placeholder="Email"
           style={Styles.input}
@@ -441,6 +454,8 @@ export default function AddSchool() {
         ) : null}
         <TextInput
           value={formDataGuide.phone}
+          placeholderTextColor={"grey"}
+          cursorColor={"grey"}
           onChangeText={(value) => handleGuideInputChange("phone", value)}
           placeholder="Phone Number"
           style={Styles.input}
@@ -450,6 +465,8 @@ export default function AddSchool() {
         ) : null}
         <TextInput
           value={formDataGuide.password}
+          placeholderTextColor={"grey"}
+          cursorColor={"grey"}
           placeholder="Password"
           onChangeText={(value) =>
             handleGuideInputChange("password", value)
@@ -461,9 +478,7 @@ export default function AddSchool() {
         ) : null}
       </View>
       <View>
-        <TouchableOpacity onPress={Submit} style={Styles.button}>
-          <Text style={Styles.buttonText}>Confirm</Text>
-        </TouchableOpacity>
+        <Button onPress={Submit} mode="contained" style={Styles.b}>Confirm</Button>
       </View>
     </ScrollView>
   );

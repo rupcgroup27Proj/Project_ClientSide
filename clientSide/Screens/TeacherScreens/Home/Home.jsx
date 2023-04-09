@@ -123,7 +123,12 @@ const Home = () => {
 
   else if (journeyStarted) {
     if (remainingDays)
-      return <Text style={{ fontSize: 24, marginHorizontal: 10, marginVertical: 20 }}>Remaining days until delegetion starts: {remainingDays}</Text>;
+      return (
+        <>
+          <Text style={{ fontSize: 24, marginHorizontal: 10, marginVertical: 20, textAlign:'center'}}>Remaining days until delegetion starts: </Text>
+          <Text style={{ fontSize: 50, textAlign:'center', color:'#2196F3', fontWeight:'bold'}}>{remainingDays}</Text>
+        </>
+      )
     else
       return <Text>Home</Text>;
   }

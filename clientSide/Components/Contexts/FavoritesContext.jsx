@@ -30,7 +30,7 @@ export default function FavoritesProvider({ children }) {
   };
 
   const value = {
-   favorite,
+    favorite,
    userFavorites
   };
 

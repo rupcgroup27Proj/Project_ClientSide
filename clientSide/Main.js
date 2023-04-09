@@ -37,9 +37,11 @@ const Main = () => {
             </FavoritesProvider>
           )}
           {currentUser.type == "Teacher" && (
-            <TeacherProvider>
-              <TeacherDrawer />
-            </TeacherProvider>
+            <FavoritesProvider>
+              <TeacherProvider>
+                <TeacherDrawer />
+              </TeacherProvider>
+            </FavoritesProvider>
           )}
           {currentUser.type == "Guide" && (
             <TeacherProvider>

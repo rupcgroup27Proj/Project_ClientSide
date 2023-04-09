@@ -19,7 +19,8 @@ export const Styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,
-    color: 'white'
+    color: 'white',
+    
   },
   button: {
     backgroundColor: "#181B20",
@@ -65,4 +66,8 @@ export const Styles = StyleSheet.create({
     fontWeight: "bold",
     marginRight: 10,
   },
+  b:{
+    marginBottom:'10%',
+    backgroundColor:'#181B20'
+  }
 });

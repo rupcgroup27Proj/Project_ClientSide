@@ -17,8 +17,9 @@ import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import { Video } from "expo-av";
 import { useUser } from "../../../Components/Contexts/UserContext";
 import { useAPI } from "../../../Components/Contexts/APIContext";
-import { useFavorites } from "../../../Components/Contexts/FavoritesContext";
+
 import { StyleSheet } from 'react-native';
+import { useFavorites } from "../../../Components/Contexts/FavoritesContext";
 
 export default function SocialFeed({ post, navigation }) {
   const { currentUser } = useUser();
