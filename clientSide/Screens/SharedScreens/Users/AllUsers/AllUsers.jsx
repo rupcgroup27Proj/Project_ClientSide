@@ -1,27 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { DataTable, Divider } from 'react-native-paper';
-import axios from 'axios';
 import { Styles } from "./Styles"
 import { useUser } from '../../../../Components/Contexts/UserContext';
-import { useAPI } from '../../../../Components/Contexts/APIContext';
 
 const AllUsers = () => {
 
-  const { currentUser } = useUser()
-  const { simulatorAPI } = useAPI();
-  const [students, setStudents] = useState([]);
+  const { currentUser, fetchStudents, students } = useUser()
   const [sortDirection, setSortDirection] = useState(null);
   const [sortedField, setSortedField] = useState(null);
-
+  
   useEffect(() => {
-    axios.get(`${simulatorAPI}/api/Students/groupId/${currentUser.groupId}`) // replace with your API endpoint
-      .then(response => {
-        setStudents(response.data);
-      })
-      .catch(error => {
-        Alert.alert('Error', 'Encounterd an error while fetching students.');
-      });
+    fetchStudents();
   }, []);
 
   const handleSort = (field) => {

@@ -8,6 +8,8 @@ import { styles } from "./Styles";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useUser } from "../../../Components/Contexts/UserContext";
 import { ScrollView } from "react-native-gesture-handler";
+import { useAPI } from "../../../Components/Contexts/APIContext";
+
 
 export default function NewPost({ navigation, route }) {
   const { currentUser } = useUser();
@@ -54,7 +56,6 @@ export default function NewPost({ navigation, route }) {
 
   //upload image to firebase
   const uploadImage = async () => {
-    console.log(image);
     if (image === null) {
       Alert.alert("Error", "Choose something to upload.");
     } else if (allSelectedTags.length === 0) {

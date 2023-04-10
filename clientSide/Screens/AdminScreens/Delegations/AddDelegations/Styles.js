@@ -69,5 +69,11 @@ export const Styles = StyleSheet.create({
   b:{
     marginBottom:'10%',
     backgroundColor:'#181B20'
+  },
+  error:{
+color:'white',
+marginTop: -10,
+marginBottom: 10,
+marginLeft:5
   }
 });

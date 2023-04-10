@@ -13,7 +13,6 @@ import { useFavorites } from "../../../Components/Contexts/FavoritesContext";
 export default function Favorites() {
   const { currentUser } = useUser();
   const { simulatorAPI } = useAPI();
-  console.log(currentUser);
 
   const { favorite, userFavorites } = useFavorites();
 

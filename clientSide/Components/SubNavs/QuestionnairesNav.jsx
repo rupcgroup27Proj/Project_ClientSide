@@ -17,7 +17,7 @@ export default function QuestionnairesNav() {
 
     return (
         <Stack.Navigator>
-            <Stack.Screen name="AllQuestionnaires" component={currentUser.type == 'Student' ? SQuestionnaires : GQuestionnaires} />
+            <Stack.Screen name="AllQuestionnaires" component={currentUser.type == 'Student' ? SQuestionnaires : GQuestionnaires} options={{ headerShown: false }}/>
             <Stack.Screen name="Questionnaire" component={currentUser.type == 'Student' ? SQuestionnaire : GQuestionnaire} options={{ headerShown: false }} />
             <Stack.Screen name="New Questionnaire" component={NewQuestionnaire} options={{ headerShown: false }} />
         </Stack.Navigator>

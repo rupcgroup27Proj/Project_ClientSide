@@ -102,7 +102,6 @@ export default function AddTeacher({ numGroup2, route, navigation }) {
   };
 
   function handleSubmitTeacher() {
-    console.log(formDataTeacher);
     // Check if all fields are filled
     if (
       !formDataTeacher.firstName ||

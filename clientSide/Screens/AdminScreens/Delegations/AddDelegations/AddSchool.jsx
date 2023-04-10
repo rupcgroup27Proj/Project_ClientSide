@@ -15,6 +15,7 @@ export default function AddSchool() {
   const [schoolName, setSchoolName] = useState("");
   const [groupId, setGroupId] = useState("");
   const { simulatorAPI } = useAPI();
+  const [isPosting, setIsPosting] = useState(false)
 
   const [formDataTeacher, setFormDataTeacher] = useState({
     password: "",
@@ -61,6 +62,36 @@ export default function AddSchool() {
   const [guideEmailError, setGuideEmailError] = useState("");
 
 
+  const resetForm = () => {
+    setIsPosting(false);
+    setSchoolName('');
+    setFormDataGuide({
+      password: "",
+      guideId: 0,
+      firstName: "",
+      lastName: "",
+      phone: 0,
+      email: "",
+      pictureUrl: "",
+      groupId: groupId,
+      startDate: "2023-04-03T11:51:06.983Z",
+      endDate: "2023-04-03T11:51:06.983Z",
+      type: "Guide",
+    });
+    setFormDataTeacher({
+      password: "",
+      teacherId: 0,
+      firstName: "",
+      lastName: "",
+      phone: 0,
+      email: "",
+      pictureUrl: "",
+      groupId: groupId,
+      startDate: "2023-04-03T11:51:06.983Z",
+      endDate: "2023-04-03T11:51:06.983Z",
+      type: "Teacher",
+    });
+  }
   const validateTeacherPassword = (password) => {
     if (password.length < 6) {
       setTeacherPasswordError("Password should be at least 6 characters long");
@@ -257,37 +288,43 @@ export default function AddSchool() {
       return;
     }
 
+    setIsPosting(true);
     axios
       .post(`${simulatorAPI}/api/Journeys/schoolName/${schoolName}`)
       .then((res) => {
-        setGroupId(res.data);
-        console.log({
+        axios.post(`${simulatorAPI}/api/Teachers`, {
           ...formDataTeacher,
-          groupId: groupId,
-        });
-        axios
-          .post(`${simulatorAPI}/api/Teachers`, {
-            ...formDataTeacher,
-            groupId: groupId,
-          })
+          groupId: parseInt(res.data),
+        })
           .then((res) => {
             console.log("SCC in formDataTeacher ", res);
           })
-          .catch((error) => console.log("ERR in formDataTeacher", error));
+          .catch((error) => {
+            console.log("ERR in formDataTeacher", error);
+            resetForm();
+            return;
+          });
 
         axios
           .post(`${simulatorAPI}/api/Guides`, {
             ...formDataGuide,
-            groupId: groupId,
+            groupId: parseInt(res.data)
           })
           .then((res) => {
             console.log("SCC in formDataGuide ", res);
           })
-          .catch((error) => console.log("ERR in formDataGuide", error));
+          .catch((error) => {
+            console.log("ERR in formDataGuide", error)
+            resetForm();
+            return;
+          });
       })
       .catch((err) => {
         console.log("sendSchooll " + err);
+        resetForm();
+        return;
       });
+    resetForm();
   }
 
   return (
@@ -315,7 +352,7 @@ export default function AddSchool() {
         <Text style={Styles.userTitle}>School Details</Text>
         <TextInput
           value={schoolName}
-          onChangeText={(value)=>setSchoolName(value)}
+          onChangeText={(value) => setSchoolName(value)}
           placeholder="School Name"
           placeholderTextColor={"grey"}
           cursorColor={"grey"}
@@ -330,7 +367,7 @@ export default function AddSchool() {
         <TextInput
           value={formDataTeacher.firstName}
           onChangeText={(value) =>
-            נמ("firstName", value)
+            handleTeacherInputChange("firstName", value)
           }
           placeholder="First Name"
           placeholderTextColor={"grey"}
@@ -478,7 +515,7 @@ export default function AddSchool() {
         ) : null}
       </View>
       <View>
-        <Button onPress={Submit} mode="contained" style={Styles.b}>Confirm</Button>
+        <Button onPress={Submit} mode="contained" style={Styles.b} disabled={isPosting}>Confirm</Button>
       </View>
     </ScrollView>
   );

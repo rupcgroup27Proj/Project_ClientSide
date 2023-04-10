@@ -11,6 +11,7 @@ import TeacherDrawer from "./Components/Navs/TeacherDrawer";
 import TeacherProvider from "./Components/Contexts/TeacherContext";
 import FavoritesProvider from "./Components/Contexts/FavoritesContext";
 
+
 const Main = () => {
   const { currentUser, isLoading } = useUser();
 
@@ -22,34 +23,35 @@ const Main = () => {
       </View>
     );
 
+    
   return (
     <>
-      {!currentUser ? (
-        <LoginScreen />
-      ) : (
-        <>
-          {currentUser.type == "Admin" && <AdminBotNav />}
-          {currentUser.type == "Student" && (
-            <FavoritesProvider>
+      {!currentUser
+        ? (<LoginScreen />)
+        : (
+          <>
+            {currentUser.type == "Admin" && <AdminBotNav />}
+            {currentUser.type == "Student" && (
+              <FavoritesProvider>
+                <TeacherProvider>
+                  <StudentDrawer />
+                </TeacherProvider>
+              </FavoritesProvider>
+            )}
+            {currentUser.type == "Teacher" && (
+              <FavoritesProvider>
+                <TeacherProvider>
+                  <TeacherDrawer />
+                </TeacherProvider>
+              </FavoritesProvider>
+            )}
+            {currentUser.type == "Guide" && (
               <TeacherProvider>
-                <StudentDrawer />
+                <GuideDrawer />
               </TeacherProvider>
-            </FavoritesProvider>
-          )}
-          {currentUser.type == "Teacher" && (
-            <FavoritesProvider>
-              <TeacherProvider>
-                <TeacherDrawer />
-              </TeacherProvider>
-            </FavoritesProvider>
-          )}
-          {currentUser.type == "Guide" && (
-            <TeacherProvider>
-              <GuideDrawer />
-            </TeacherProvider>
-          )}
-        </>
-      )}
+            )}
+          </>
+        )}
     </>
   );
 };

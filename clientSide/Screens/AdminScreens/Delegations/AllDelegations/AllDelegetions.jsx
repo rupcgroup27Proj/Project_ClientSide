@@ -2,7 +2,7 @@ import { Text, View, StyleSheet, Modal, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import axios from "axios";
-import {  Divider } from "react-native-paper";
+import { Divider, IconButton } from "react-native-paper";
 import { useAPI } from "../../../../Components/Contexts/APIContext";
 
 
@@ -20,28 +20,32 @@ export default function AllDelegations({ delegation, navigation }) {
   }, []);
 
   function getAllDelegetions() {
-    axios
-      .get(`${simulatorAPI}/api/Journeys/GetJourneyList`)
+    axios.get(`${simulatorAPI}/api/Journeys/GetJourneyList`)
       .then((res) => {
-        res.data.forEach(dlg => {
-          if (dlg.startDate == "1950-01-01T00:00:00") {
-            setPending(prev => [...prev, dlg])
-            return
-          }
-          if (Date.parse(dlg.endDate) < new Date()) {
-            setPast(prev => [...prev, dlg])
-            return
-          }
-          if (Date.parse(dlg.startDate) > new Date()) {
-            setFuture(prev => [...prev, dlg])
-            return
-          }
-          setOnging(prev => [...prev, dlg])
-        })
-      })
-      .catch((err) => console.log("getAllDelegetions " + err));
-  }
+        const pending = [];
+        const past = [];
+        const future = [];
+        const ongoing = [];
 
+        res.data.forEach((dlg) => {
+          if (dlg.startDate === "1950-01-01T00:00:00") {
+            pending.push(dlg);
+          } else if (Date.parse(dlg.endDate) < new Date()) {
+            past.push(dlg);
+          } else if (Date.parse(dlg.startDate) > new Date()) {
+            future.push(dlg);
+          } else {
+            ongoing.push(dlg);
+          }
+        });
+
+        setPending(pending);
+        setPast(past);
+        setFuture(future);
+        setOnging(ongoing);
+      })
+      .catch((err) => console.log("getAllDelegations " + err));
+  }
 
   function openModal(delegation) {
     setSelectedDelegation(delegation);
@@ -57,17 +61,16 @@ export default function AllDelegations({ delegation, navigation }) {
     <ScrollView style={{ backgroundColor: '#33383E', marginTop: 40, height: '100%' }}>
 
       <View style={{ backgroundColor: '#33383E' }}>
-
         <View style={Style.viewTitle}>
           <Text style={Style.title}>Past Delegations</Text>
-          <Text style={Style.num}>{past.length}</Text>
+          <Text style={Style.num}>{past.length}  </Text>
         </View>
 
         {past.length == 0
           ? <Text style={Style.text}>None</Text>
           : past.map((delegation) => {
             return (
-              <View style={{flex: 5, flexDirection:'row'}}>
+              <View style={{ flex: 5, flexDirection: 'row' }}>
                 <Text key={Math.random() * 10000} style={Style.text}
                   onPress={() => openModal(delegation)} >
                   {delegation.schoolName}
@@ -93,7 +96,7 @@ export default function AllDelegations({ delegation, navigation }) {
             return (
               <>
                 <Text key={Math.random() * 10000} style={Style.text}
-                  onPress={() => openModal(delegation)}  >
+                  onPress={() => openModal(delegation)}>
                   {delegation.schoolName}
                 </Text>
                 <Divider />

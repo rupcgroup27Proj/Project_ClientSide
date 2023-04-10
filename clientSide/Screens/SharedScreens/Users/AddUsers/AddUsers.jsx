@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text } from 'react-native';
 import { Styles } from "./Styles"
-import { IconButton, TextInput, Button, Divider } from 'react-native-paper';
+import { TextInput, Button, Divider } from 'react-native-paper';
 import axios from 'axios';
 import * as DocumentPicker from 'expo-document-picker';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -12,7 +12,7 @@ import { useAPI } from '../../../../Components/Contexts/APIContext';
 const AddUsers = () => {
   const [fileUri, setFileUri] = useState('');//Excel useState
 
-  const { currentUser } = useUser();
+  const { currentUser, fetchStudents } = useUser();
   const { startDate, endDate } = useTeacher();
 
   const [studentId, setStudentId] = useState('')
@@ -52,9 +52,8 @@ const AddUsers = () => {
       type: "Student"
     };
 
-    axios.post('${simulatorAPI}/api/Students', newStudent)
+    axios.post(`${simulatorAPI}/api/Students`, newStudent)
       .then(response => {
-        console.log(response.data);
         alert('Student added successfully');
         setStudentId('');
         setFirstName('');
@@ -63,6 +62,7 @@ const AddUsers = () => {
         setPhone('');
         setEmail('');
         setParentPhone('');
+        fetchStudents();
       })
       .catch(error => {
         console.log(error);

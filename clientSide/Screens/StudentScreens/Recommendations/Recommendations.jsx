@@ -3,6 +3,7 @@ import Recommandation from '../../../Components/Recommandations/Recommandation'
 import { ScrollView } from 'react-native-gesture-handler'
 import axios from 'axios'
 import { useUser } from '../../../Components/Contexts/UserContext'; //User context for laoding screen and getting the user
+import { useAPI } from '../../../Components/Contexts/APIContext';
 
 //Wikipedia Get:
 const endpoint = 'https://en.wikipedia.org/w/api.php?'; //Wikipedia's API

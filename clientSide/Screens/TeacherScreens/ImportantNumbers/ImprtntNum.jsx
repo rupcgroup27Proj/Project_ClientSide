@@ -59,18 +59,13 @@ const ImprtntNum = () => {
                 }}
                 right={() => (
                     <View style={{ flexDirection: 'row' }}>
-                        {item.groupId !== 0 && (
-                            <>
-                                <IconButton
-                                    icon="delete"
-                                    onPress={() => deletePhonebookEntry(item.id)}
-                                />
-                            </>
-                        )}
+                        <>
+                            {item.groupId !== 0 && (<IconButton icon="delete" onPress={() => deletePhonebookEntry(item.id)} />)}
+                            <IconButton icon="phone" style={{ marginRight: '-5%' }} />
+                        </>
                     </View>
                 )}
             />
-
         );
     };
     return (

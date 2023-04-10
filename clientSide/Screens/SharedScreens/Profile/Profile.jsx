@@ -4,7 +4,6 @@ import { useUser } from "../../../Components/Contexts/UserContext";
 
 const Profile = () => {
   const { currentUser } = useUser();
-  console.log(currentUser);
   return (
     <View>
       <View style={styles.container}>

@@ -1,6 +1,4 @@
-//Formatted
-import { useContext, createContext, useState } from "react";
-
+import { useContext, createContext } from "react";
 
 const APIContext = createContext();
 
@@ -10,11 +8,11 @@ export function useAPI() {
 }
 
 export default function APIProvider({ children }) {
-    const ruppinAPI = '';
-    const simulatorAPI = 'http://10.0.2.2:5283';
+    //ruppinApi = https://proj.ruppin.ac.il/cgroup27/prod
+    //simulator= http://10.0.2.2:5283
+    const simulatorAPI = 'https://proj.ruppin.ac.il/cgroup27/prod';
 
     const value = {
-        ruppinAPI,
         simulatorAPI
     }
 

@@ -56,7 +56,6 @@ export default function UserProvider({ children }) {
             if (loggedUser.isAdmin)
                 loggedUser.type = "Admin";
             AsyncStorage.setItem('currentUser', JSON.stringify(loggedUser));
-            Alert.alert('Success', 'Login successful!');
             setCurrentUser(loggedUser);
         } catch (error) {
             Alert.alert('Error', 'Encountered an error.');
@@ -71,6 +70,20 @@ export default function UserProvider({ children }) {
         setCurrentUser(null);
     }
 
+
+    //==================| for the teacher to render all students |==================//
+    const [students, setStudents] = useState([]);
+    const fetchStudents = () => {
+        axios.get(`${simulatorAPI}/api/Students/groupId/${currentUser.groupId}`)
+            .then(response => {
+                setStudents(response.data);
+            })
+            .catch(error => {
+                Alert.alert('Error', 'Encounterd an error while fetching students.');
+            });
+    }
+    //==============================================================================//
+
     useEffect(() => {
         getLoggedUser();
     }, [])
@@ -80,7 +93,9 @@ export default function UserProvider({ children }) {
         isLoading,   //Returns "isLoading" for the ActivityIndicator.
         isDisabled,  //For handling the Login button.
         login,       //Returns "login" for logging in the user in the login screen for keeping it clean.
-        logout
+        logout,
+        fetchStudents,
+        students
     }
 
 

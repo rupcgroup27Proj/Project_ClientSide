@@ -35,7 +35,7 @@ const LoginScreen = () => {
     >
       <View style={styles.container}>
 
-        <Title style={styles.title}>Login</Title>
+        <Title style={styles.title}>Welcome!</Title>
 
         <SelectList
           search={false}

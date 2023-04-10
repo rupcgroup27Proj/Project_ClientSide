@@ -102,7 +102,6 @@ export default function AddGuide({ route, navigation }) {
   };
 
   function handleSubmitGuide() {
-    console.log(handleSubmitGuide);
     // Check if all fields are filled
     if (
       !formDataGuide.firstName ||

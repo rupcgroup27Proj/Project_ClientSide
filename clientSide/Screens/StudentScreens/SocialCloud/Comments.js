@@ -48,6 +48,9 @@ export default function Comments({ route }) {
       studentId: currentUser.id,
       postId: post.PostId,
       commentText: comment,
+      createdAt: "2023-04-10T20:37:23.145Z",
+      firstName: 'a',
+      lastName: 'a'
     };
 
     fetch(`${simulatorAPI}/api/PostsComments`, {
@@ -171,37 +174,37 @@ export default function Comments({ route }) {
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <IoniconsIcon name="ios-person" size={15} color="black">
-                <Text style={styles.userNameComment}>
-                  {c.FirstName}
-                  {` ${c.LastName}`}
-                </Text>
+                {c.studentId == currentUser.id
+                  ? <Text style={styles.userNameComment}>Me</Text>
+                  : <Text style={styles.userNameComment}>{c.firstName}{` ${c.lastName}`}</Text>
+                }
               </IoniconsIcon>
               {(currentUser.type === "Teacher" ||
                 c.studentId === currentUser.id) && (
-                <TouchableOpacity
-                  style={{
-                    position: "absolute",
-                    right: 3,
-                    backgroundColor: "black",
-                    borderRadius: 15,
-                    width: 15,
-                    height: 15,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                  onPress={() => RemoveComment(c.commentId)}
-                >
-                  <Text
-                    style={{ fontSize: 12, fontWeight: "bold", color: "white" }}
+                  <TouchableOpacity
+                    style={{
+                      position: "absolute",
+                      right: 3,
+                      backgroundColor: "black",
+                      borderRadius: 15,
+                      width: 15,
+                      height: 15,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    onPress={() => RemoveComment(c.commentId)}
                   >
-                    X
-                  </Text>
-                </TouchableOpacity>
-              )}
+                    <Text
+                      style={{ fontSize: 12, fontWeight: "bold", color: "white" }}
+                    >
+                      X
+                    </Text>
+                  </TouchableOpacity>
+                )}
             </View>
             <View>
               <Text
-                style={{ fontSize: 12, left:5}}
+                style={{ fontSize: 12, left: 5 }}
               >
                 {c.commentText}
               </Text>

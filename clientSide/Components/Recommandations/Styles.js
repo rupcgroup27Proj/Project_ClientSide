@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     elevation: 5,
   },
   header: {
-    backgroundColor: '#F0F0F0',
+    backgroundColor: '#2196F3',
     padding: 10,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
@@ -35,8 +35,8 @@ export const styles = StyleSheet.create({
     textAlign: 'justify',
   },
   imageView: {
-    borderTopWidth: 2,
-    borderBottomWidth: 2,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
   },
   image: {
     width: '100%',

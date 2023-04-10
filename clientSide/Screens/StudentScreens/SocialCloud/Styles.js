@@ -3,16 +3,13 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   card: {
     borderRadius: 10,
-    overflow: "hidden",
-    marginBottom: 7,
-    height: 385,
-    marginTop: 7,
-    marginBottom: 10,
+    marginVertical: 5,
+    marginHorizontal: 10,
+    backgroundColor: 'white'
   },
   username: {
-    padding: 10,
     fontWeight: "bold",
-    fontSize: 15,
+    fontSize: 20,
   },
   userNameComment: {
     fontWeight: "bold",
@@ -20,8 +17,7 @@ export const styles = StyleSheet.create({
   },
   image: {
     height: 280,
-    width: "100%",
-    marginTop: 5,
+    width: "100%"
   },
   video: {
     height: 280,
@@ -45,7 +41,7 @@ export const styles = StyleSheet.create({
     overflow: "hidden",
     height: 260,
     width: "90%",
-    marginTop: 50, 
+    marginTop: 50,
     marginBottom: 20,
     backgroundColor: "gray",
   },

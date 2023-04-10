@@ -28,7 +28,6 @@ const Questionnaire = ({ route }) => {
     (async function () {
       setAnswers(new Array(questionnaire.Questions.length).fill(null))
       const completedQuestionnaires = await AsyncStorage.getItem('completedQuestionnaires');
-      console.log(completedQuestionnaires)
       if (!completedQuestionnaires) {
         setIsLoading(false);
         return;
@@ -120,7 +119,7 @@ const Questionnaire = ({ route }) => {
         <View style={styles.radioGroup}>
           {question.Options.map((option, oindex) => (
             <RadioButton.Item
-              style={{ backgroundColor: isCompleted ? determineBgColor(questionnaire.Id, qindex, option.text) : '#0096FF', borderWidth: 0.2, marginVertical: 1, borderRadius: 8, opacity: !isCompleted ? 1 : 0.8 }}
+              style={{ backgroundColor: isCompleted ? determineBgColor(questionnaire.Id, qindex, option.text) : '#0096FF', borderWidth: 0.2, marginVertical: 1, borderRadius: 8, opacity: !isCompleted ? 0.8 : 0.6 }}
               disabled={isCompleted}
               key={option.choiceId}
               label={option.text}
@@ -131,7 +130,7 @@ const Questionnaire = ({ route }) => {
             />
           ))}
         </View>
-        <Divider />
+        <Divider bold={true}/>
       </View>
     );
   }

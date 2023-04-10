@@ -48,8 +48,6 @@ export default function TeacherProvider({ children }) {
     }, [startDate, endDate]);
 
     const updateJourney = async (newStartDate, newEndDate) => {
-        console.log(`start: ${newStartDate.toISOString()}`)
-        console.log(`end: ${newEndDate.toISOString()}`)
         try {
             await axios.put(`${simulatorAPI}/api/Journeys/groupId/${currentUser.groupId}/startDate/${newStartDate.toISOString()}/endDate/${newEndDate.toISOString()}`);
             setStartDate(newStartDate.toISOString());

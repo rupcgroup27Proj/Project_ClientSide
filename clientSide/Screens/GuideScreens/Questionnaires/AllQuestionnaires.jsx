@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, TouchableOpacity, Alert } from 'react-native';
-import { Button, Divider, IconButton, List, Text } from 'react-native-paper';
+import { Button, Divider, IconButton, List, Text, useTheme } from 'react-native-paper';
 import axios from 'axios';
 import { useUser } from '../../../Components/Contexts/UserContext';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -10,10 +10,10 @@ import { useAPI } from '../../../Components/Contexts/APIContext';
 
 const AllQuestionnaires = ({ navigation }) => {
 
+    const theme = useTheme();
     const { currentUser } = useUser();
     const [questionnaires, setQuestionnaires] = useState([]);
     const { simulatorAPI } = useAPI();
-
     useFocusEffect(
         useCallback(() => {
             navigation.setOptions({
@@ -57,7 +57,6 @@ const AllQuestionnaires = ({ navigation }) => {
                     onPress: () => {
                         axios.delete(`${simulatorAPI}/api/Questionnaires/questionnaireId/${questionnaireId}`)
                             .then((res) => {
-                                console.log(res);
                                 getAllQuestionnaires();
                             })
                             .catch((err) => console.log(err))
@@ -70,15 +69,17 @@ const AllQuestionnaires = ({ navigation }) => {
     }
 
     return (
-
         <View>
-            <Text style={{ marginVertical: 10, marginLeft: 5 }}>All questionnaires created by you:</Text>
-            <Divider bold={true} />
+
+            <Text style={{ marginVertical: 10, marginLeft: 5, fontSize:16 }}>All questionnaires that was created by you:</Text>
+
             <ScrollView style={{ height: '80%' }}>
                 <List.Section>
-                    {questionnaires.map((questionnaire) => (
+                    {questionnaires.map((questionnaire, index) => (
                         <TouchableOpacity key={questionnaire.Id} onPress={() => handlePress(questionnaire)}>
+                            <Divider bold={true} />
                             <List.Item
+                                style={{ borderLeftWidth: 7, borderLeftColor: (index%2 == 0) ? theme.colors.primary : theme.colors.primarySec}}
                                 key={questionnaire.Id}
                                 title={questionnaire.Title}
                                 titleNumberOfLines={2}

@@ -3,8 +3,7 @@ import { Button, Divider, IconButton, RadioButton, Text, TextInput, useTheme } f
 import { ScrollView, View, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import { useUser } from '../../../Components/Contexts/UserContext';
-
-const tagsAPI = '${simulatorAPI}/api/Tags/builtInTags'
+import { useAPI } from '../../../Components/Contexts/APIContext';
 
 
 const NewQuestionnaire = ({ route }) => {
@@ -18,7 +17,7 @@ const NewQuestionnaire = ({ route }) => {
     const { simulatorAPI } = useAPI();
 
     const getTags = async () => {
-        await axios.get(tagsAPI)
+        await axios.get(`${simulatorAPI}/api/Tags/builtInTags`)
             .then((res) => { setTags(res.data) })
             .catch((err) => console.log(err))
     }
@@ -103,10 +102,9 @@ const NewQuestionnaire = ({ route }) => {
                     questions: questions
                 }
             }
-
-            axios.post(`${simulatorAPI}/api/Questionnaires/groupId/${currentUser.groupId}/json/${JSON.stringify(jsonQuestionnaire)}`)
+console.log(jsonQuestionnaire)
+            axios.post(`${simulatorAPI}/api/Questionnaires/groupId/${currentUser.groupId}`, jsonQuestionnaire)
                 .then((res) => {
-                    console.log(res);
                     route.params.getAllQuestionnaires();
                     Alert.alert('Success', 'Questionnaire has been uploaded successfully.');
                     setQuestions([]);
@@ -129,7 +127,7 @@ const NewQuestionnaire = ({ route }) => {
                         value={title}
                         onChangeText={(text) => setTitle(text)}
                         mode="flat"
-                        style={{ flex: 9, alignSelf: 'center', backgroundColor: 'rgba(135, 229, 255, 0.13)' }}
+                        style={{ flex: 9, alignSelf: 'center', backgroundColor: 'white' }}
                     />
                     <Button title="Post"
                         mode='contained'
@@ -148,7 +146,7 @@ const NewQuestionnaire = ({ route }) => {
                         value={description}
                         onChangeText={(text) => setDescription(text)}
                         mode="outlined"
-                        style={{ flex: 9, alignSelf: 'center', backgroundColor: 'rgba(135, 229, 255, 0.13)' }}
+                        style={{ flex: 9, alignSelf: 'center', backgroundColor: 'white' }}
                     />
                 </View>
 
@@ -166,7 +164,7 @@ const NewQuestionnaire = ({ route }) => {
                                     setSelectedTags(selectedTags.includes(tag) ? selectedTags.filter((t) => t.tagId !== tag.tagId) : [...selectedTags, tag])
                                 }
                                 style={{
-                                    backgroundColor: selectedTags.includes(tag) ? theme.colors.secondary : '#F2F2F2',
+                                    backgroundColor: selectedTags.includes(tag) ? theme.colors.secondary : 'white',
                                     borderRadius: 16,
                                     borderWidth: 0.1,
                                     paddingHorizontal: 16,
@@ -185,18 +183,18 @@ const NewQuestionnaire = ({ route }) => {
                 <View
                     style={{ marginBottom: 16 }}>
                     {questions.map((question, questionIndex) => (
-                        <View key={questionIndex} style={{ marginBottom: 16 }}>
+                        <View key={questionIndex} style={{ marginBottom: 16, marginTop: 5 }}>
                             <Text>Question {questionIndex + 1}:</Text>
                             <TextInput
                                 placeholder={`Question text`}
                                 value={question.text}
                                 onChangeText={(newText) => updateQuestion(questionIndex, newText)}
-                                style={{ marginBottom: 8, backgroundColor: theme.colors.secondary }}
+                                style={{ marginBottom: 8, backgroundColor: theme.colors.accent }}
                             />
                             {questions[questionIndex].options.length !== 4 &&
                                 <View style={{ flexDirection: "row", }}>
                                     <Button
-                                        mode='outlined'
+                                        mode='elevated'
                                         onPress={() => addOption(questionIndex)}
                                         style={{ marginTop: 5 }}>
                                         Add option
@@ -212,7 +210,7 @@ const NewQuestionnaire = ({ route }) => {
                                         placeholder={`Option ${optionIndex + 1}`}
                                         value={option.value}
                                         onChangeText={(newText) => updateOption(questionIndex, optionIndex, newText)}
-                                        style={{ flex: 1, marginRight: 8, backgroundColor: theme.colors.secondary }}
+                                        style={{ flex: 1, marginRight: 8, backgroundColor: theme.colors.accent }}
                                     />
                                     <RadioButton
                                         onPress={() => updateCorrectOption(questionIndex, option)}
@@ -239,6 +237,7 @@ const NewQuestionnaire = ({ route }) => {
             </ScrollView>
 
             <Divider bold={true} />
+
             <View >
                 <Button onPress={() => addQuestion('closed')} mode={'contained'} style={{ marginTop: 20, marginHorizontal: 10 }}>
                     Add Question
