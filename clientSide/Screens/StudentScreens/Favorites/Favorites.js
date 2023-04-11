@@ -17,9 +17,8 @@ export default function Favorites() {
   const { favorite, userFavorites } = useFavorites();
 
   useEffect(() => {
-    userFavorites()
+    userFavorites();
   }, []);
-
 
   //remove from favs
   function RemoveFav(postId, Tags) {
@@ -32,9 +31,10 @@ export default function Favorites() {
     });
     axios
       .put(
-        `${simulatorAPI}/api/FavList/studentId/${currentUser.id}/postId/${postId}`, lowerCaseTags
+        `${simulatorAPI}/api/FavList/studentId/${currentUser.id}/postId/${postId}`,
+        lowerCaseTags
       )
-      .then((res) => {      
+      .then((res) => {
         userFavorites();
       })
 
@@ -46,7 +46,9 @@ export default function Favorites() {
   return (
     <ScrollView>
       {favorite.map((fav) => (
+        
         <Card style={styles.card}>
+          {console.log(fav)}
           <View key={fav.PostId}>
             <TouchableOpacity
               style={{ left: 360, top: 7, position: "relative" }}
@@ -54,7 +56,7 @@ export default function Favorites() {
             >
               <FavoriteIcon filled={true} />
             </TouchableOpacity>
-            {/* <Card.Content>
+            <Card.Content>
               {fav.Type === "I" ? (
                 <Image source={{ uri: fav.FileUrl }} style={styles.image} />
               ) : (
@@ -65,8 +67,7 @@ export default function Favorites() {
                   style={styles.video}
                 />
               )}
-            </Card.Content> */}
-            <Image source={{ uri: fav.FileUrl }} style={styles.image} />
+            </Card.Content>
           </View>
           <ScrollView horizontal={true}>
             <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
@@ -93,26 +94,6 @@ export default function Favorites() {
               ))}
             </View>
           </ScrollView>
-          {/* {fav.Tags.map((f) => (
-            <TouchableOpacity
-              key={f.TagId}
-              style={{
-                backgroundColor: "gray",
-                borderRadius: 14,
-                paddingHorizontal: 14,
-                paddingVertical: 8,
-                margin: 3,
-              }}
-            >
-              <Text
-                style={{
-                  color: "white",
-                }}
-              >
-                {f.TagName}
-              </Text>
-            </TouchableOpacity>
-          ))} */}
         </Card>
       ))}
     </ScrollView>
