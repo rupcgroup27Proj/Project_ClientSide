@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { firebase } from "../../../Config";
 import axios from "axios";
-import { Card, useTheme, Text, Button } from "react-native-paper";
+import { Card, useTheme, Text, Button, Divider, TextInput } from "react-native-paper";
 import { styles } from "./Styles";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useUser } from "../../../Components/Contexts/UserContext";
@@ -18,6 +18,7 @@ export default function NewPost({ navigation, route }) {
   const [allTags, setAllTags] = useState([]);
   const [allSelectedTags, setAllSelectedTags] = useState([]);
   const [mediaType, setMediaType] = useState(null);
+  const [description, setDescription] = useState('')
   const { simulatorAPI } = useAPI();
   const theme = useTheme();
 
@@ -96,8 +97,9 @@ export default function NewPost({ navigation, route }) {
       firstName: currentUser.firstName,
       LastName: currentUser.lastName,
       type: mediaType,
-      likes:0,
-      comments:0
+      likes: 0,
+      comments: 0,
+      description: description
     };
 
     if (currentUser.type == "Teacher") {
@@ -117,7 +119,7 @@ export default function NewPost({ navigation, route }) {
     const tagsJson = {
       Tags: [...allSelectedTags],
     };
-
+    
     fetch(
       `${simulatorAPI}/api/SocialCloud/tagsJson/${JSON.stringify(
         tagsJson
@@ -157,10 +159,11 @@ export default function NewPost({ navigation, route }) {
 
     setAllSelectedTags([]);
     setImage(null);
+    setDescription('');
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView >
       <Card style={styles.uploadcard}>
         {!image && (
           <Icon
@@ -182,6 +185,8 @@ export default function NewPost({ navigation, route }) {
           </View>
         )}
       </Card>
+
+
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View
           style={{
@@ -217,6 +222,18 @@ export default function NewPost({ navigation, route }) {
           ))}
         </View>
       </ScrollView>
+
+      <View>
+        <Divider></Divider>
+        <TextInput
+          multiline={true}
+          placeholder="Write a description:"
+          value={description}
+          onChangeText={(text) => setDescription(text)} 
+          style={{ backgroundColor: 'white', margin: 10 }}></TextInput>
+        <Divider></Divider>
+      </View>
+
       <TouchableOpacity onPress={() => uploadImage()}>
         <Button
           icon="cloud-upload-outline"
@@ -226,6 +243,6 @@ export default function NewPost({ navigation, route }) {
           Upload
         </Button>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }

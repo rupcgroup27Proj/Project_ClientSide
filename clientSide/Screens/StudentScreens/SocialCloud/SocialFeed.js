@@ -17,6 +17,7 @@ import {
   Divider,
   FAB,
   IconButton,
+  TextInput,
   useTheme,
 } from "react-native-paper";
 import IoniconsIcon from "react-native-vector-icons/Ionicons";
@@ -219,12 +220,12 @@ export default function SocialFeed({ post, navigation }) {
                   )}
                   {(currentUser.type === "Teacher" ||
                     post.StudentId === currentUser.personalId) && (
-                    <IconButton
-                      icon="delete"
-                      size={20}
-                      onPress={() => RemovePost(post.PostId)}
-                    />
-                  )}
+                      <IconButton
+                        icon="delete"
+                        size={20}
+                        onPress={() => RemovePost(post.PostId)}
+                      />
+                    )}
                 </View>
               </View>
 
@@ -275,6 +276,9 @@ export default function SocialFeed({ post, navigation }) {
               </View>
               <Divider bold={true} />
 
+              <TextInput disabled={true} multiline={true}>{post.Description ? post.Description : "No description."}</TextInput>
+
+              <Divider bold={true} />
               <View
                 style={{
                   flexDirection: "row",
