@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  TextInput,
   Image,
   TouchableOpacity,
   Alert,
@@ -12,13 +11,20 @@ import IoniconsIcon from "react-native-vector-icons/Ionicons";
 import { Video } from "expo-av";
 import { styles } from "./Styles";
 import axios from "axios";
-import { Card } from "react-native-paper";
+import {
+  Card,
+  Divider,
+  IconButton,
+  TextInput,
+  useTheme,
+} from "react-native-paper";
 import { useUser } from "../../../Components/Contexts/UserContext";
 import { useAPI } from "../../../Components/Contexts/APIContext";
 
 export default function Comments({ route }) {
   const { currentUser } = useUser();
   const { simulatorAPI } = useAPI();
+  const theme = useTheme();
   const { post } = route.params;
   const [postComment, setPostComment] = useState([]);
   const [comment, setComment] = useState("");
@@ -49,8 +55,8 @@ export default function Comments({ route }) {
       postId: post.PostId,
       commentText: comment,
       createdAt: "2023-04-10T20:37:23.145Z",
-      firstName: 'a',
-      lastName: 'a'
+      firstName: "a",
+      lastName: "a",
     };
 
     fetch(`${simulatorAPI}/api/PostsComments`, {
@@ -95,9 +101,7 @@ export default function Comments({ route }) {
         text: "OK",
         onPress: () => {
           axios
-            .delete(
-              `${simulatorAPI}/api/PostsComments/commentId/${commentId}`
-            )
+            .delete(`${simulatorAPI}/api/PostsComments/commentId/${commentId}`)
             .then((res) => {
               setPostComment((prevList) =>
                 prevList.filter((c) => c.commentId !== commentId)
@@ -116,12 +120,21 @@ export default function Comments({ route }) {
 
   return (
     <ScrollView>
-      <Card style={styles.commentCard}>
+      <Card style={styles.card}>
         <View
           key={post.PostId}
-          style={{ flexDirection: "row", flexWrap: "wrap", marginTop: 10 }}
+          style={{
+            backgroundColor: theme.colors.primarySec,
+            paddingHorizontal: 5,
+            height: 50,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            borderTopRightRadius: 5,
+            borderTopLeftRadius: 5,
+          }}
         >
-          <IoniconsIcon name="ios-person" size={23} color="black">
+          <IoniconsIcon name="ios-person-circle-sharp" size={25} color="black">
             <Text style={styles.username}>
               {post.FirstName}
               {` ${post.LastName}`}
@@ -147,16 +160,22 @@ export default function Comments({ route }) {
             flexDirection: "row",
             alignItems: "center",
             height: 60,
-            backgroundColor: "#696969",
             borderRadius: 12,
             marginBottom: 8,
           }}
         >
           <TextInput
-            style={{ flex: 1, height: 50 }}
+            style={{
+              flex: 1,
+              height: 50,
+              marginHorizontal: 5,
+              borderCurve: 10,
+              backgroundColor: "white",
+            }}
             placeholder="Add a comment..."
             onChangeText={handleCommentChange}
             value={comment}
+            mode="flat"
           />
           <IoniconsIcon name="send" size={20} onPress={() => addNewComment()} />
         </View>
@@ -167,47 +186,59 @@ export default function Comments({ route }) {
           <Card
             key={c.commentId}
             style={{
-              height: 50,
-              marginTop: 5,
-              backgroundColor: "#dcdcdc",
+              marginVertical: 5,
+              marginHorizontal: 10,
+              backgroundColor: theme.colors.accent,
             }}
           >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <IoniconsIcon name="ios-person" size={15} color="black">
-                {c.studentId == currentUser.id
-                  ? <Text style={styles.userNameComment}>Me</Text>
-                  : <Text style={styles.userNameComment}>{c.firstName}{` ${c.lastName}`}</Text>
-                }
-              </IoniconsIcon>
-              {(currentUser.type === "Teacher" ||
-                c.studentId === currentUser.id) && (
-                  <TouchableOpacity
-                    style={{
-                      position: "absolute",
-                      right: 3,
-                      backgroundColor: "black",
-                      borderRadius: 15,
-                      width: 15,
-                      height: 15,
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                    onPress={() => RemoveComment(c.commentId)}
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <View style={{ flex: 7 }}>
+                <View
+                  style={{
+                    backgroundColor: theme.colors.primarySec,
+                    paddingVertical: 5,
+                    paddingLeft: 5,
+                    borderBottomWidth: 1,
+                    borderBottomColor: theme.colors.primary,
+                  }}
+                >
+                  <IoniconsIcon
+                    name="ios-person-circle-sharp"
+                    size={15}
+                    color="black"
                   >
-                    <Text
-                      style={{ fontSize: 12, fontWeight: "bold", color: "white" }}
-                    >
-                      X
-                    </Text>
-                  </TouchableOpacity>
-                )}
-            </View>
-            <View>
-              <Text
-                style={{ fontSize: 12, left: 5 }}
+                    {c.studentId == currentUser.id ? (
+                      <Text style={styles.userNameComment}>Me</Text>
+                    ) : (
+                      <Text style={styles.userNameComment}>
+                        {c.firstName}
+                        {` ${c.lastName}`}
+                      </Text>
+                    )}
+                  </IoniconsIcon>
+                </View>
+                <View style={{ paddingVertical: 10, paddingLeft: 10 }}>
+                  <Text style={{ fontSize: 12 }}>{c.commentText}</Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  borderLeftWidth: 2,
+                  borderLeftColor: theme.colors.primary,
+                  justifyContent: "center",
+                }}
               >
-                {c.commentText}
-              </Text>
+                {(currentUser.type === "Teacher" ||
+                  c.studentId === currentUser.id) && (
+                  <IconButton
+                    icon="delete"
+                    size={17}
+                    onPress={() => RemoveComment(c.commentId)}
+                  ></IconButton>
+                )}
+              </View>
             </View>
           </Card>
         ))}

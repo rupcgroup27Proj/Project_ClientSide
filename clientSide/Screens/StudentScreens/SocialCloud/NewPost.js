@@ -96,6 +96,8 @@ export default function NewPost({ navigation, route }) {
       firstName: currentUser.firstName,
       LastName: currentUser.lastName,
       type: mediaType,
+      likes:0,
+      comments:0
     };
 
     if (currentUser.type == "Teacher") {
@@ -143,7 +145,6 @@ export default function NewPost({ navigation, route }) {
         } else {
           Alert.alert("Error", "upload failed.");
         }
-        return res.json();
       })
       .then(
         (res) => {
@@ -181,7 +182,7 @@ export default function NewPost({ navigation, route }) {
           </View>
         )}
       </Card>
-      <ScrollView horizontal={true}>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View
           style={{
             flexDirection: "row",
