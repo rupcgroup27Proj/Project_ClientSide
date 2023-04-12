@@ -3,13 +3,19 @@ import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { firebase } from "../../../Config";
 import axios from "axios";
-import { Card, useTheme, Text, Button, Divider, TextInput } from "react-native-paper";
+import {
+  useTheme,
+  Text,
+  Button,
+  Divider,
+  TextInput,
+  Chip,
+} from "react-native-paper";
 import { styles } from "./Styles";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useUser } from "../../../Components/Contexts/UserContext";
 import { ScrollView } from "react-native-gesture-handler";
 import { useAPI } from "../../../Components/Contexts/APIContext";
-
 
 export default function NewPost({ navigation, route }) {
   const { currentUser } = useUser();
@@ -18,7 +24,7 @@ export default function NewPost({ navigation, route }) {
   const [allTags, setAllTags] = useState([]);
   const [allSelectedTags, setAllSelectedTags] = useState([]);
   const [mediaType, setMediaType] = useState(null);
-  const [description, setDescription] = useState('')
+  const [description, setDescription] = useState("");
   const { simulatorAPI } = useAPI();
   const theme = useTheme();
 
@@ -99,7 +105,7 @@ export default function NewPost({ navigation, route }) {
       type: mediaType,
       likes: 0,
       comments: 0,
-      description: description
+      description: description,
     };
 
     if (currentUser.type == "Teacher") {
@@ -119,11 +125,9 @@ export default function NewPost({ navigation, route }) {
     const tagsJson = {
       Tags: [...allSelectedTags],
     };
-    
+
     fetch(
-      `${simulatorAPI}/api/SocialCloud/tagsJson/${JSON.stringify(
-        tagsJson
-      )}`,
+      `${simulatorAPI}/api/SocialCloud/tagsJson/${JSON.stringify(tagsJson)}`,
       {
         method: "POST",
         body: JSON.stringify(newImage),
@@ -159,19 +163,19 @@ export default function NewPost({ navigation, route }) {
 
     setAllSelectedTags([]);
     setImage(null);
-    setDescription('');
+    setDescription("");
   };
 
   return (
-    <ScrollView >
-      <Card style={styles.uploadcard}>
+    <ScrollView>
+      <View style={styles.uploadcard}>
         {!image && (
           <Icon
             name="camera"
-            size={40}
+            size={25}
             style={{
-              top: 118,
-              left: 153,
+              justifyContent: "center",
+              alignSelf: "center",
             }}
             onPress={() => AddImage()}
           ></Icon>
@@ -180,25 +184,41 @@ export default function NewPost({ navigation, route }) {
           <View>
             <Image
               source={{ uri: image }}
-              style={{ height: 280, width: "100%" }}
+              style={{ height: 150, width: 150 }}
             />
           </View>
         )}
-      </Card>
+      </View>
 
+      <View>
+        <TextInput
+          placeholder="Write a description..."
+          value={description}
+          onChangeText={(text) => setDescription(text)}
+          style={{
+            flex: 1,
+            height: 50,
+            marginHorizontal: 5,
+            borderCurve: 10,
+            backgroundColor: "white",
+            marginTop: 35,
+          }}
+          mode="flat"
+        ></TextInput>
+      </View>
+      <Divider bold={true} />
 
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <View
           style={{
             flexDirection: "row",
             flexWrap: "wrap",
-            backgroundColor: "black",
-            marginTop: 20,
-            marginBottom: 130,
+            marginVertical: 2,
+            marginTop: 35,
           }}
         >
           {allTags.map((tag) => (
-            <TouchableOpacity
+            <Chip
               key={tag.tagId}
               onPress={() =>
                 setAllSelectedTags(
@@ -209,32 +229,21 @@ export default function NewPost({ navigation, route }) {
               }
               style={{
                 backgroundColor: allSelectedTags.includes(tag)
-                  ? theme.colors.tertiary
-                  : "#F2F2F2",
-                borderRadius: 16,
-                paddingHorizontal: 16,
-                paddingVertical: 8,
-                margin: 4,
+                  ? theme.colors.backdrop
+                  : "#696969",
+                marginHorizontal: 2,
               }}
             >
-              <Text>{tag.tagName}</Text>
-            </TouchableOpacity>
+              <Text>#{tag.tagName}</Text>
+            </Chip>
           ))}
         </View>
       </ScrollView>
 
-      <View>
-        <Divider></Divider>
-        <TextInput
-          multiline={true}
-          placeholder="Write a description:"
-          value={description}
-          onChangeText={(text) => setDescription(text)} 
-          style={{ backgroundColor: 'white', margin: 10 }}></TextInput>
-        <Divider></Divider>
-      </View>
-
-      <TouchableOpacity onPress={() => uploadImage()}>
+      <TouchableOpacity
+        style={{ marginTop: 75, marginHorizontal: 80 }}
+        onPress={() => uploadImage()}
+      >
         <Button
           icon="cloud-upload-outline"
           mode="contained"

@@ -17,6 +17,7 @@ import {
   IconButton,
   TextInput,
   useTheme,
+  Chip,
 } from "react-native-paper";
 import { useUser } from "../../../Components/Contexts/UserContext";
 import { useAPI } from "../../../Components/Contexts/APIContext";
@@ -135,25 +136,65 @@ export default function Comments({ route }) {
           }}
         >
           <IoniconsIcon name="ios-person-circle-sharp" size={25} color="black">
-            <Text style={styles.username}>
-              {post.FirstName}
-              {` ${post.LastName}`}
-            </Text>
+            {post.StudentId === currentUser.personalId ? (
+              <Text style={styles.username}>Me</Text>
+            ) : (
+              <Text style={styles.username}>
+                {post.FirstName}
+                {` ${post.LastName}`}
+              </Text>
+            )}
           </IoniconsIcon>
         </View>
-        <Card.Content>
-          {post.Type === "I" ? (
-            <Image source={{ uri: post.FileUrl }} style={styles.image} />
-          ) : (
-            <Video
-              source={{ uri: post.FileUrl }}
-              useNativeControls={true}
-              resizeMode="contain"
-              style={styles.video}
-            />
-          )}
-        </Card.Content>
+
+        <Divider bold={true} />
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              marginVertical: 2,
+            }}
+          >
+            {post.Tags.map((t) => (
+              <Chip
+                textStyle={{ color: "white" }}
+                style={{
+                  backgroundColor: theme.colors.backdrop,
+                  marginHorizontal: 2,
+                }}
+              >
+                #{t.TagName}
+              </Chip>
+            ))}
+          </View>
+        </ScrollView>
+        <Divider bold={true} />
+
+        <View>
+          <Card.Content>
+            {post.Type === "I" ? (
+              <Image source={{ uri: post.FileUrl }} style={styles.image} />
+            ) : (
+              <Video
+                source={{ uri: post.FileUrl }}
+                useNativeControls={true}
+                resizeMode="contain"
+                style={styles.video}
+              />
+            )}
+          </Card.Content>
+        </View>
+
+        <Divider bold={true} />
+        {post.Description && (
+          <TextInput disabled={true} multiline={true}>
+            {post.Description}
+          </TextInput>
+        )}
+        <Divider bold={true} />
       </Card>
+
       {currentUser.type === "Student" && (
         <View
           style={{
