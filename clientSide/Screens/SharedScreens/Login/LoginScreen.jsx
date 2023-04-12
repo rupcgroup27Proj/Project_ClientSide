@@ -50,7 +50,7 @@ const LoginScreen = () => {
           value={userId}
           onChangeText={text => setUserId(text)}
           style={styles.firstInput}
-          keyboardType='numeric'
+          keyboardType='number-pad'
         />
         <TextInput
           disabled={isDisabled}

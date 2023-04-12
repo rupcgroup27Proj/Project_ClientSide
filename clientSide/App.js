@@ -1,12 +1,15 @@
 import { NavigationContainer } from '@react-navigation/native';
+import { I18nManager } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import {  DefaultTheme,  Provider as PaperProvider } from 'react-native-paper';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import UserProvider from './Components/Contexts/UserContext';
 import APIProvider from './Components/Contexts/APIContext';
-import Main from './Main'; 
+import Main from './Main';
+import { useEffect } from 'react';
+
 
 const theme = {
-  ...DefaultTheme,roundness: 5, myOwnProperty: true,
+  ...DefaultTheme, roundness: 5, myOwnProperty: true,
   colors: {
     ...DefaultTheme.colors,
     primary: '#2196F3',
@@ -23,6 +26,12 @@ const theme = {
 
 
 export default function App() {
+
+  useEffect(() => {
+    I18nManager.allowRTL(false);
+    I18nManager.forceRTL(false);
+  })
+  
   return (
     <SafeAreaProvider>
       <NavigationContainer>
