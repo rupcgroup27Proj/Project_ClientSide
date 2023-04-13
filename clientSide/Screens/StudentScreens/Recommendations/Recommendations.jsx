@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import Recommandation from '../../../Components/Recommandations/Recommandation'
-import { ScrollView } from 'react-native-gesture-handler'
-import axios from 'axios'
+import React, { useEffect, useState, } from 'react';
+import { Text } from 'react-native-paper';
+import Recommandation from '../../../Components/Recommandations/Recommandation';
+import { ScrollView } from 'react-native-gesture-handler';
+import axios from 'axios';
 import { useUser } from '../../../Components/Contexts/UserContext'; //User context for laoding screen and getting the user
 import { useAPI } from '../../../Components/Contexts/APIContext';
 
@@ -33,7 +34,7 @@ const Recommendations = () => {
   const { simulatorAPI } = useAPI();
   const RecommendationsAPI = `${simulatorAPI}/api/SmartRecommandations/studentId/${currentUser.id}`
   const [recArray, setRecArray] = useState([]);
-  
+  const [isLoading, setIsLoading] = useState(true)
 
   //For each tag, i wait for the axios request to be completed and that return the data of the page. i wait until all tags has finished, inserting them into
   //"array". if theres an error or something - i return null. than i filter the nulls and changing the state using SetRecArray.
@@ -47,7 +48,8 @@ const Recommendations = () => {
       catch { return null }
     }).filter(promise => promise !== null)
     )
-    setRecArray(array)
+    setRecArray(array);
+    setIsLoading(false);
   }
 
   const gatherPages = (pages) => {
@@ -85,9 +87,21 @@ const Recommendations = () => {
 
   return (
     <ScrollView>
-      {recArray.map((rcmnd, index) =>
-        <Recommandation page={rcmnd[0]} key={index} />
-      )}
+      {
+        isLoading
+          ? <></>
+          : <>
+            {
+              recArray.length == 0
+                ? <Text>No recommendations yet.</Text>
+                : <>
+                  {recArray.map((rcmnd, index) =>
+                    <Recommandation page={rcmnd[0]} key={index} />
+                  )}
+                </>
+            }
+          </>
+      }
     </ScrollView>
   )
 }

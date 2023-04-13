@@ -26,14 +26,12 @@ export const styles = StyleSheet.create({
     marginBottom: 5,
   },
   uploadcard: {
-    borderRadius: 10,
-    height: 150, 
-    width:150,
-    marginTop: 50,
-    marginBottom: 20,
-    marginHorizontal: 10,
+    height: 300, 
+    width:'100%',
+    marginTop: 10,
     backgroundColor: "gray",
     justifyContent: "center",
-
+    borderTopWidth: 1,
+    borderBottomWidth: 1
   },
 });

@@ -26,7 +26,7 @@ export default function Comments({ route }) {
   const { currentUser } = useUser();
   const { simulatorAPI } = useAPI();
   const theme = useTheme();
-  const { post } = route.params;
+  const { post, updatePosts } = route.params;
   const [postComment, setPostComment] = useState([]);
   const [comment, setComment] = useState("");
 
@@ -49,7 +49,12 @@ export default function Comments({ route }) {
   };
 
   //add comment
-  function addNewComment() {
+  function addNewComment(commentText) {
+    if (!commentText) {
+      Alert.alert('Error', `Can't send an empty comment!`)
+      return;
+    }
+
     const newComment = {
       commentId: 1,
       studentId: currentUser.id,
@@ -79,6 +84,7 @@ export default function Comments({ route }) {
           Alert.alert("Error", "Comment was failed.");
         }
         getComments();
+        updatePosts();
       })
       .then(
         (res) => {
@@ -108,6 +114,7 @@ export default function Comments({ route }) {
                 prevList.filter((c) => c.commentId !== commentId)
               );
               getComments();
+              updatePosts();
               console.log("getComments ", JSON.stringify(postComment));
             })
 
@@ -273,12 +280,12 @@ export default function Comments({ route }) {
               >
                 {(currentUser.type === "Teacher" ||
                   c.studentId === currentUser.id) && (
-                  <IconButton
-                    icon="delete"
-                    size={17}
-                    onPress={() => RemoveComment(c.commentId)}
-                  ></IconButton>
-                )}
+                    <IconButton
+                      icon="delete"
+                      size={17}
+                      onPress={() => RemoveComment(c.commentId)}
+                    ></IconButton>
+                  )}
               </View>
             </View>
           </Card>

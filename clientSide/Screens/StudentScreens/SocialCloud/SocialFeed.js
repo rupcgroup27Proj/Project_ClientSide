@@ -42,6 +42,7 @@ export default function SocialFeed({ post, navigation }) {
     userFavorites();
   }, []);
 
+
   //get all images from server
   function getAllPosts() {
     axios
@@ -64,32 +65,20 @@ export default function SocialFeed({ post, navigation }) {
 
   //add like
   function AddLike(postId) {
+    setPostsLikes(prev => [...prev, { postId: postId, studentId: currentUser.id }])
     axios
       .post(
         `${simulatorAPI}/api/PostsLikes/studentId/${currentUser.id}/postId/${postId}`
       )
-      .then((res) => {
-        userLikes();
-        getAllPosts();
-      })
-      .catch((err) => {
-        console.log("AddLike " + err);
-      });
   }
 
   //remove like
   function RemoveLike(postId) {
+    setPostsLikes(prev => [...prev].filter(like => like.postId != postId && like.studentId != currentUser.id))
     axios
       .delete(
         `${simulatorAPI}/api/PostsLikes/studentId/${currentUser.id}/postId/${postId}`
       )
-      .then((res) => {
-        userLikes();
-        getAllPosts();
-      })
-      .catch((err) => {
-        console.log("RemoveLike " + err);
-      });
   }
 
   //add to favs
@@ -223,12 +212,12 @@ export default function SocialFeed({ post, navigation }) {
                   )}
                   {(currentUser.type === "Teacher" ||
                     post.StudentId === currentUser.personalId) && (
-                    <IconButton
-                      icon="delete"
-                      size={20}
-                      onPress={() => RemovePost(post.PostId)}
-                    />
-                  )}
+                      <IconButton
+                        icon="delete"
+                        size={20}
+                        onPress={() => RemovePost(post.PostId)}
+                      />
+                    )}
                 </View>
               </View>
 
@@ -278,57 +267,51 @@ export default function SocialFeed({ post, navigation }) {
                 </Card.Content>
               </View>
 
-              <View
-                style={{
-                  flexDirection: "row",
-                  flexWrap: "wrap",
-                  marginVertical: 10,
-                }}
-              >
-                {isStudent && (
-                  <TouchableOpacity
-                    style={{ left: 12 }}
-                    onPress={() => {
-                      isPostLiked
-                        ? RemoveLike(post.PostId)
-                        : AddLike(post.PostId);
-                    }}
-                  >
-                    <HeartIcon filled={isPostLiked} />
-                  </TouchableOpacity>
-                )}
-
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("Comments", { post: post })
-                  }
-                >
-                  <FontAwesomeIcon
-                    name="comment-o"
-                    size={20}
-                    color="black"
-                    style={{ left: 23, bottom: 3 }}
-                  />
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  marginVertical: 5,
-                  paddingLeft: 15,
-                }}
-              >
-                <Text style={{ fontWeight: "bold" }}>{post.Likes} likes</Text>
-
-                {post.Description && (
+              {post.Description && (
                   <TextInput disabled={true} multiline={true}>
                     {post.Description}
                   </TextInput>
                 )}
 
+              <View
+                style={{
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  marginTop: 10,
+                  justifyContent: 'flex-start',
+                  paddingLeft: 10
+                }}
+              >
+
+                {isStudent && (
+                  <TouchableOpacity style={{ padding: 5 }} onPress={() => { isPostLiked ? RemoveLike(post.PostId) : AddLike(post.PostId); }}>
+                    <HeartIcon filled={isPostLiked} />
+                  </TouchableOpacity>
+                )}
+                <Text style={{ fontWeight: "bold", paddingVertical: 5 }}>{postsLikes.filter(like => like.postId == post.PostId).length} likes</Text>
+
+                <TouchableOpacity style={{ padding: 5, marginLeft: 15 }} onPress={() => navigation.navigate("Comments", { post: post ,updatePosts: getAllPosts})} >
+                  <FontAwesomeIcon
+                    name="comment-o"
+                    size={20}
+                    color="black"
+                  />
+                </TouchableOpacity>
+                <Text style={{ fontWeight: "bold", paddingVertical: 5 }}>{post.Comments} comments</Text>
+
+              </View>
+
+              <View
+                style={{
+                  paddingBottom: 5,
+                  paddingLeft: 20,
+                }}
+              >
+
                 <Text
                   style={{ fontWeight: "bold" }}
                   onPress={() =>
-                    navigation.navigate("Comments", { post: post })
+                    navigation.navigate("Comments", { post: post, updatePosts: getAllPosts})
                   }
                 >
                   View all {post.Comments} comments

@@ -184,13 +184,50 @@ export default function NewPost({ navigation, route }) {
           <View>
             <Image
               source={{ uri: image }}
-              style={{ height: 150, width: 150 }}
+              style={{ height: 300, width: '100%' }}
             />
           </View>
         )}
       </View>
 
+
+
       <View>
+        <Text style={{ paddingLeft: 5 }}>Tags:</Text>
+        <Divider bold={true} />
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              marginVertical: 2,
+            }}
+          >
+            {allTags.map((tag) => (
+              <Chip
+                key={tag.tagId}
+                onPress={() =>
+                  setAllSelectedTags(
+                    allSelectedTags.includes(tag)
+                      ? allSelectedTags.filter((t) => t.tagId !== tag.tagId)
+                      : [...allSelectedTags, tag]
+                  )
+                }
+                style={{
+                  backgroundColor: allSelectedTags.includes(tag)
+                    ? theme.colors.primary
+                    : theme.colors.secondary,
+                  marginHorizontal: 2, marginVertical: 2
+                }}
+              >
+                <Text>{tag.tagName}</Text>
+              </Chip>
+            ))}
+          </View>
+        </ScrollView>
+
+        <Divider bold={true} />
+
         <TextInput
           placeholder="Write a description..."
           value={description}
@@ -201,44 +238,13 @@ export default function NewPost({ navigation, route }) {
             marginHorizontal: 5,
             borderCurve: 10,
             backgroundColor: "white",
-            marginTop: 35,
+            marginTop: 15,
           }}
           mode="flat"
         ></TextInput>
       </View>
-      <Divider bold={true} />
 
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <View
-          style={{
-            flexDirection: "row",
-            flexWrap: "wrap",
-            marginVertical: 2,
-            marginTop: 35,
-          }}
-        >
-          {allTags.map((tag) => (
-            <Chip
-              key={tag.tagId}
-              onPress={() =>
-                setAllSelectedTags(
-                  allSelectedTags.includes(tag)
-                    ? allSelectedTags.filter((t) => t.tagId !== tag.tagId)
-                    : [...allSelectedTags, tag]
-                )
-              }
-              style={{
-                backgroundColor: allSelectedTags.includes(tag)
-                  ? theme.colors.backdrop
-                  : "#696969",
-                marginHorizontal: 2,
-              }}
-            >
-              <Text>#{tag.tagName}</Text>
-            </Chip>
-          ))}
-        </View>
-      </ScrollView>
+
 
       <TouchableOpacity
         style={{ marginTop: 75, marginHorizontal: 80 }}
@@ -247,7 +253,7 @@ export default function NewPost({ navigation, route }) {
         <Button
           icon="cloud-upload-outline"
           mode="contained"
-          style={{ backgroundColor: "black" }}
+          style={{ backgroundColor: theme.colors.primary }}
         >
           Upload
         </Button>
