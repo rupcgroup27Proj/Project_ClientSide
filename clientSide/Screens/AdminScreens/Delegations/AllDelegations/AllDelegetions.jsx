@@ -17,7 +17,7 @@ export default function AllDelegations({ delegation, navigation }) {
 
   useEffect(() => {
     getAllDelegetions();
-  }, []);
+  }, [navigation]);
 
   function getAllDelegetions() {
     axios.get(`${simulatorAPI}/api/Journeys/GetJourneyList`)
