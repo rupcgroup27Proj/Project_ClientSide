@@ -89,13 +89,13 @@ const Recommendations = () => {
     <ScrollView>
       {
         isLoading &&
-            <>
-            {
-              recArray.length == 0
-                ? <Text>No recommendations yet.</Text>
-                : <>{recArray.map((rcmnd, index) => <Recommandation page={rcmnd[0]} key={index} />)}</>
-            }
-            </>
+        <>
+          {
+            recArray.length == 0
+              ? <Text>No recommendations yet.</Text>
+              : <>{recArray.map((rcmnd, index) => <Recommandation page={rcmnd[0]} key={index} />)}</>
+          }
+        </>
       }
     </ScrollView>
   )
