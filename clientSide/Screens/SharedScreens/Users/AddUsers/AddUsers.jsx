@@ -15,13 +15,13 @@ const AddUsers = () => {
   const { currentUser, fetchStudents } = useUser();
   const { startDate, endDate } = useTeacher();
 
-  const [studentId, setStudentId] = useState('')
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [password, setPassword] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [parentPhone, setParentPhone] = useState('');
+  const [studentId, setStudentId] = useState('147')
+  const [firstName, setFirstName] = useState('p');
+  const [lastName, setLastName] = useState('student');
+  const [password, setPassword] = useState('147');
+  const [phone, setPhone] = useState('1471471477');
+  const [email, setEmail] = useState('pStudent@gmail.com');
+  const [parentPhone, setParentPhone] = useState('1114447777');
   const { simulatorAPI } = useAPI();
 
   const emailRegex = /^\S+@\S+\.\S{2,}$/;
@@ -106,7 +106,7 @@ const AddUsers = () => {
 
   return (
     <ScrollView style={Styles.container}>
-      <Text style={Styles.title}>Add single student</Text>
+      <Text style={Styles.title}>Add student</Text>
       <Divider bold={true} />
       <TextInput
         label="Student ID"

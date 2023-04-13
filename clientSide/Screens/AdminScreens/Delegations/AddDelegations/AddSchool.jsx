@@ -12,18 +12,18 @@ import axios from "axios";
 import { useAPI } from "../../../../Components/Contexts/APIContext";
 
 export default function AddSchool() {
-  const [schoolName, setSchoolName] = useState("");
+  const [schoolName, setSchoolName] = useState("Pschool");                    //
   const [groupId, setGroupId] = useState("");
   const { simulatorAPI } = useAPI();
   const [isPosting, setIsPosting] = useState(false)
 
-  const [formDataTeacher, setFormDataTeacher] = useState({
-    password: "",
-    teacherId: 0,
-    firstName: "",
-    lastName: "",
-    phone: 0,
-    email: "",
+  const [formDataTeacher, setFormDataTeacher] = useState({                   //
+    password: "123",
+    teacherId: 123,
+    firstName: "p",
+    lastName: "teacher",
+    phone: 1231231233,
+    email: "pTeacher@gmail.com",
     pictureUrl: "",
     groupId: groupId,
     startDate: "2023-04-03T11:51:06.983Z",
@@ -31,13 +31,13 @@ export default function AddSchool() {
     type: "Teacher",
   });
 
-  const [formDataGuide, setFormDataGuide] = useState({
-    password: "",
-    guideId: 0,
-    firstName: "",
-    lastName: "",
-    phone: 0,
-    email: "",
+  const [formDataGuide, setFormDataGuide] = useState({                         //
+    password: "321",
+    guideId: 321,
+    firstName: "p",
+    lastName: "guide",
+    phone: 1321321321,
+    email: "pGuide@gmail.com",
     pictureUrl: "",
     groupId: groupId,
     startDate: "2023-04-03T11:51:06.983Z",
@@ -248,45 +248,9 @@ export default function AddSchool() {
 
   //send to server
   function Submit() {
-    // Check if all fields are filled
-    if (
-      !schoolName ||
-      !formDataTeacher.firstName ||
-      !formDataTeacher.lastName ||
-      !formDataTeacher.teacherId ||
-      !formDataTeacher.email ||
-      !formDataTeacher.phone ||
-      !formDataTeacher.password ||
-      !formDataGuide.firstName ||
-      !formDataGuide.lastName ||
-      !formDataGuide.guideId ||
-      !formDataGuide.email ||
-      !formDataGuide.phone ||
-      !formDataGuide.password
-    ) {
-      alert("Please fill in all the fields.");
-      return;
-    }
 
+    // Check if all fields are filled
     // Check if all fields are valid
-    if (
-      schoolNameError ||
-      teacherFirstNameError ||
-      teacherLastNameError ||
-      teacherIdError ||
-      teacherEmailError ||
-      teacherPhoneError ||
-      teacherPasswordError ||
-      guideFirstNameError ||
-      guideLastNameError ||
-      guideIdError ||
-      guideEmailError ||
-      guidePhoneError ||
-      guidePasswordError
-    ) {
-      console.log("Please correct the errors in the form.");
-      return;
-    }
 
     setIsPosting(true);
     axios
@@ -328,26 +292,13 @@ export default function AddSchool() {
   }
 
   return (
-    <ScrollView
-      style={{
-        backgroundColor: "#33383E",
-        marginTop: 40,
-        height: "100%",
-        padding: 20,
-      }}
-    >
-      <Text
-        style={{
-          fontSize: 24,
-          fontWeight: "bold",
-          marginBottom: 20,
-          color: "white",
-          alignSelf: "center",
-        }}
-      >
+    <ScrollView style={{ backgroundColor: "#33383E", marginTop: 40, height: "100%", padding: 20, }} >
+      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20, color: "white", alignSelf: "center", }} >
         Add New Delegation
       </Text>
+
       <Divider></Divider>
+
       <View>
         <Text style={Styles.userTitle}>School Details</Text>
         <TextInput
@@ -362,6 +313,7 @@ export default function AddSchool() {
           <Text style={Styles.error}>{schoolNameError}</Text>
         ) : null}
       </View>
+
       <View>
         <Text style={Styles.userTitle}>Teacher Details</Text>
         <TextInput
@@ -441,6 +393,7 @@ export default function AddSchool() {
           <Text style={Styles.error}>{teacherPasswordError}</Text>
         ) : null}
       </View>
+
       <View>
         <Text style={Styles.userTitle}>Guide Details</Text>
         <TextInput
@@ -514,9 +467,11 @@ export default function AddSchool() {
           <Text style={Styles.error}>{guidePasswordError}</Text>
         ) : null}
       </View>
+
       <View>
         <Button onPress={Submit} mode="contained" style={Styles.b} disabled={isPosting}>Confirm</Button>
       </View>
+
     </ScrollView>
   );
 }

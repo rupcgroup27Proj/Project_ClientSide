@@ -88,7 +88,8 @@ const Recommendations = () => {
   return (
     <ScrollView>
       {
-        isLoading &&
+        isLoading ? <></>
+        :
         <>
           {
             recArray.length == 0

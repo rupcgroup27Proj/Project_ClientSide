@@ -50,7 +50,8 @@ export default function Comments({ route }) {
 
   //add comment
   function addNewComment(commentText) {
-    if (!commentText) {
+    console.log(commentText)
+    if (commentText == undefined || commentText == "") {
       Alert.alert('Error', `Can't send an empty comment!`)
       return;
     }
@@ -225,7 +226,7 @@ export default function Comments({ route }) {
             value={comment}
             mode="flat"
           />
-          <IoniconsIcon name="send" size={20} onPress={() => addNewComment()} />
+          <IoniconsIcon name="send" size={20} onPress={() => addNewComment(comment)} />
         </View>
       )}
 

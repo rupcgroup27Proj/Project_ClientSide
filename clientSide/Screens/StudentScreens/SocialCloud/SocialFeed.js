@@ -268,10 +268,10 @@ export default function SocialFeed({ post, navigation }) {
               </View>
 
               {post.Description && (
-                  <TextInput disabled={true} multiline={true}>
-                    {post.Description}
-                  </TextInput>
-                )}
+                <TextInput disabled={true} multiline={true}>
+                  {post.Description}
+                </TextInput>
+              )}
 
               <View
                 style={{
@@ -279,18 +279,20 @@ export default function SocialFeed({ post, navigation }) {
                   flexWrap: "wrap",
                   marginTop: 10,
                   justifyContent: 'flex-start',
-                  paddingLeft: 10
                 }}
               >
 
                 {isStudent && (
-                  <TouchableOpacity style={{ padding: 5 }} onPress={() => { isPostLiked ? RemoveLike(post.PostId) : AddLike(post.PostId); }}>
-                    <HeartIcon filled={isPostLiked} />
-                  </TouchableOpacity>
+                  <>
+                    <TouchableOpacity style={{ padding: 5 }} onPress={() => { isPostLiked ? RemoveLike(post.PostId) : AddLike(post.PostId); }}>
+                      <HeartIcon filled={isPostLiked} />
+                    </TouchableOpacity>
+                    <Text style={{ fontWeight: "bold", paddingVertical: 5 }}>{postsLikes.filter(like => like.postId == post.PostId).length} likes</Text>
+                  </>
                 )}
-                <Text style={{ fontWeight: "bold", paddingVertical: 5 }}>{postsLikes.filter(like => like.postId == post.PostId).length} likes</Text>
 
-                <TouchableOpacity style={{ padding: 5, marginLeft: 15 }} onPress={() => navigation.navigate("Comments", { post: post ,updatePosts: getAllPosts})} >
+
+                <TouchableOpacity style={{ padding: 5, marginLeft: 15 }} onPress={() => navigation.navigate("Comments", { post: post, updatePosts: getAllPosts })} >
                   <FontAwesomeIcon
                     name="comment-o"
                     size={20}
@@ -311,7 +313,7 @@ export default function SocialFeed({ post, navigation }) {
                 <Text
                   style={{ fontWeight: "bold" }}
                   onPress={() =>
-                    navigation.navigate("Comments", { post: post, updatePosts: getAllPosts})
+                    navigation.navigate("Comments", { post: post, updatePosts: getAllPosts })
                   }
                 >
                   View all {post.Comments} comments

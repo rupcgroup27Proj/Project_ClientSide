@@ -7,11 +7,22 @@ import { useAPI } from '../../../Components/Contexts/APIContext';
 
 
 const NewQuestionnaire = ({ route }) => {
-    const [title, setTitle] = useState();
-    const [description, setDescription] = useState();
+    const [title, setTitle] = useState('example questionnaire Title');
+    const [description, setDescription] = useState('example questionnare Description');
     const [tags, setTags] = useState([]);
     const [selectedTags, setSelectedTags] = useState([])
-    const [questions, setQuestions] = useState([]);
+    const [questions, setQuestions] = useState([{
+        "correctOption": 0,
+        "options": [ {"value": "AAA",},{"value": "BBB",},{"value": "CCC", }, {"value": "DDD",}],
+        "text": "Example question 1",
+        "type": "closed",
+      },{
+        "correctOption": 0,
+        "options": [ {"value": "AAA",},{"value": "BBB",},{"value": "CCC", }, {"value": "DDD",}],
+        "text": "Example question 2",
+        "type": "closed",
+      }
+    ]);
     const theme = useTheme();
     const { currentUser } = useUser();
     const { simulatorAPI } = useAPI();

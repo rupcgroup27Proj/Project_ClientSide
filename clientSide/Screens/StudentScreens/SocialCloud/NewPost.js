@@ -3,14 +3,7 @@ import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { firebase } from "../../../Config";
 import axios from "axios";
-import {
-  useTheme,
-  Text,
-  Button,
-  Divider,
-  TextInput,
-  Chip,
-} from "react-native-paper";
+import { useTheme, Text, Button, Divider, TextInput, Chip } from "react-native-paper";
 import { styles } from "./Styles";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useUser } from "../../../Components/Contexts/UserContext";
@@ -19,13 +12,14 @@ import { useAPI } from "../../../Components/Contexts/APIContext";
 
 export default function NewPost({ navigation, route }) {
   const { currentUser } = useUser();
+  const { simulatorAPI } = useAPI();
   const { updatePosts } = route.params;
   const [image, setImage] = useState(null);
   const [allTags, setAllTags] = useState([]);
   const [allSelectedTags, setAllSelectedTags] = useState([]);
   const [mediaType, setMediaType] = useState(null);
   const [description, setDescription] = useState("");
-  const { simulatorAPI } = useAPI();
+  const [isUploading, setIsUploading] = useState(false);
   const theme = useTheme();
 
   useEffect(() => {
@@ -63,6 +57,7 @@ export default function NewPost({ navigation, route }) {
 
   //upload image to firebase
   const uploadImage = async () => {
+    setIsUploading(true)
     if (image === null) {
       Alert.alert("Error", "Choose something to upload.");
     } else if (allSelectedTags.length === 0) {
@@ -160,7 +155,7 @@ export default function NewPost({ navigation, route }) {
           console.log("ERR in post images to DB", error);
         }
       );
-
+    setIsUploading(false);
     setAllSelectedTags([]);
     setImage(null);
     setDescription("");
@@ -172,7 +167,7 @@ export default function NewPost({ navigation, route }) {
         {!image && (
           <Icon
             name="camera"
-            size={25}
+            size={100}
             style={{
               justifyContent: "center",
               alignSelf: "center",
@@ -231,6 +226,7 @@ export default function NewPost({ navigation, route }) {
         <TextInput
           placeholder="Write a description..."
           value={description}
+          disabled={isUploading}
           onChangeText={(text) => setDescription(text)}
           style={{
             flex: 1,
@@ -246,16 +242,14 @@ export default function NewPost({ navigation, route }) {
 
 
 
-      <TouchableOpacity
-        style={{ marginTop: 75, marginHorizontal: 80 }}
-        onPress={() => uploadImage()}
-      >
+      <TouchableOpacity style={{ marginTop: 75, marginHorizontal: 80 }} onPress={() => uploadImage()} >
         <Button
           icon="cloud-upload-outline"
           mode="contained"
           style={{ backgroundColor: theme.colors.primary }}
+          disabled={isUploading}
         >
-          Upload
+          {isUploading ?'Uploading...':'Upload'}
         </Button>
       </TouchableOpacity>
     </ScrollView>
