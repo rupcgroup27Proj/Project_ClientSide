@@ -1,9 +1,10 @@
 import { Text, View, StyleSheet, Modal, TouchableOpacity } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import axios from "axios";
 import { Divider, IconButton } from "react-native-paper";
 import { useAPI } from "../../../../Components/Contexts/APIContext";
+import { useFocusEffect } from "@react-navigation/native";
 
 
 export default function AllDelegations({ delegation, navigation }) {
@@ -15,9 +16,16 @@ export default function AllDelegations({ delegation, navigation }) {
   const [selectedDelegation, setSelectedDelegation] = useState({});
   const { simulatorAPI } = useAPI();
 
+
   useEffect(() => {
     getAllDelegetions();
-  }, [navigation]);
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getAllDelegetions();
+    }, [])
+  );
 
   function getAllDelegetions() {
     axios.get(`${simulatorAPI}/api/Journeys/GetJourneyList`)

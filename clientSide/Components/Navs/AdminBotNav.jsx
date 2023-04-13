@@ -13,9 +13,9 @@ const AdminBotNav = () => {
 
     return (
         <Tab.Navigator barStyle={{ backgroundColor: '#161B1F' }} activeColor='white' inactiveColor='grey'  >
-            <Tab.Screen name="Home" component={Home} options={{ tabBarIcon: "home"}}  />
+            <Tab.Screen name="Home" component={Home} options={{ tabBarIcon: "home" }} />
             <Tab.Screen name="Add Delegation" component={AddSchool} options={{ tabBarIcon: "airplane-plus" }} />
-            <Tab.Screen name="All Delegetions" component={AllDelegetions} options={{ tabBarIcon: "calendar-month" }} />
+            <Tab.Screen name="All Delegetions" component={AllDelegetions} options={{ tabBarIcon: "calendar-month"}} />
             <Tab.Screen name="Logout" component={Logout} options={{ tabBarIcon: "logout" }} />
         </Tab.Navigator>
     )
