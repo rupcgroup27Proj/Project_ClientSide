@@ -70,6 +70,7 @@ export default function SocialFeed({ post, navigation }) {
       )
       .then((res) => {
         userLikes();
+        getAllPosts();
       })
       .catch((err) => {
         console.log("AddLike " + err);
@@ -84,6 +85,7 @@ export default function SocialFeed({ post, navigation }) {
       )
       .then((res) => {
         userLikes();
+        getAllPosts();
       })
       .catch((err) => {
         console.log("RemoveLike " + err);
@@ -162,9 +164,9 @@ export default function SocialFeed({ post, navigation }) {
   return (
     <>
       <ScrollView>
-        {!posts && (
-          <View>
-            <Text>NO POSTS YET ...</Text>
+        {posts.length == 0 && (
+          <View style={{ alignItems: "center" }}>
+            <Text style={{ fontWeight: "bold" }}>NO POSTS YET ...</Text>
           </View>
         )}
 
@@ -206,6 +208,7 @@ export default function SocialFeed({ post, navigation }) {
                     </Text>
                   )}
                 </IoniconsIcon>
+
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                   {isStudent && (
                     <TouchableOpacity
@@ -220,12 +223,12 @@ export default function SocialFeed({ post, navigation }) {
                   )}
                   {(currentUser.type === "Teacher" ||
                     post.StudentId === currentUser.personalId) && (
-                      <IconButton
-                        icon="delete"
-                        size={20}
-                        onPress={() => RemovePost(post.PostId)}
-                      />
-                    )}
+                    <IconButton
+                      icon="delete"
+                      size={20}
+                      onPress={() => RemovePost(post.PostId)}
+                    />
+                  )}
                 </View>
               </View>
 
@@ -274,11 +277,7 @@ export default function SocialFeed({ post, navigation }) {
                   )}
                 </Card.Content>
               </View>
-              <Divider bold={true} />
 
-              <TextInput disabled={true} multiline={true}>{post.Description ? post.Description : "No description."}</TextInput>
-
-              <Divider bold={true} />
               <View
                 style={{
                   flexDirection: "row",
@@ -311,6 +310,29 @@ export default function SocialFeed({ post, navigation }) {
                     style={{ left: 23, bottom: 3 }}
                   />
                 </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  marginVertical: 5,
+                  paddingLeft: 15,
+                }}
+              >
+                <Text style={{ fontWeight: "bold" }}>{post.Likes} likes</Text>
+
+                {post.Description && (
+                  <TextInput disabled={true} multiline={true}>
+                    {post.Description}
+                  </TextInput>
+                )}
+
+                <Text
+                  style={{ fontWeight: "bold" }}
+                  onPress={() =>
+                    navigation.navigate("Comments", { post: post })
+                  }
+                >
+                  View all {post.Comments} comments
+                </Text>
               </View>
             </Card>
           );

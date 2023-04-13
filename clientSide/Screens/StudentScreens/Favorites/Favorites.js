@@ -4,7 +4,15 @@ import axios from "axios";
 import { styles } from "./Styles";
 import { Video } from "expo-av";
 import FavoriteIcon from "../SocialCloud/FavoriteIcon";
-import { Card, Text } from "react-native-paper";
+import {
+  Card,
+  Text,
+  Divider,
+  Chip,
+  useTheme,
+  TextInput,
+} from "react-native-paper";
+import IoniconsIcon from "react-native-vector-icons/Ionicons";
 import { useUser } from "../../../Components/Contexts/UserContext";
 import { useAPI } from "../../../Components/Contexts/APIContext";
 
@@ -13,7 +21,7 @@ import { useFavorites } from "../../../Components/Contexts/FavoritesContext";
 export default function Favorites() {
   const { currentUser } = useUser();
   const { simulatorAPI } = useAPI();
-
+  const theme = useTheme();
   const { favorite, userFavorites } = useFavorites();
 
   useEffect(() => {
@@ -45,17 +53,79 @@ export default function Favorites() {
 
   return (
     <ScrollView>
-      {favorite.map((fav) => (
-        
-        <Card style={styles.card}>
-          {console.log(fav)}
-          <View key={fav.PostId}>
-            <TouchableOpacity
-              style={{ left: 360, top: 7, position: "relative" }}
-              onPress={() => RemoveFav(fav.PostId, fav.Tags)}
+      {favorite.length == 0 && (
+        <View style={{ alignItems: "center" }}>
+          <Text style={{ fontWeight: "bold" }}>NO FAVORITES YET ...</Text>
+        </View>
+      )}
+
+      {favorite.map((fav) => {
+        return (
+          <Card style={styles.card}>
+            <View
+              key={fav.PostId}
+              style={{
+                backgroundColor: theme.colors.primarySec,
+                paddingHorizontal: 5,
+                height: 50,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                borderTopRightRadius: 5,
+                borderTopLeftRadius: 5,
+              }}
             >
-              <FavoriteIcon filled={true} />
-            </TouchableOpacity>
+              <IoniconsIcon
+                name="ios-person-circle-sharp"
+                size={25}
+                color="black"
+              >
+                {fav.StudentId === currentUser.personalId ? (
+                  <Text style={styles.username}>Me</Text>
+                ) : (
+                  <Text style={styles.username}>
+                    {fav.FirstName}
+                    {` ${fav.LastName}`}
+                  </Text>
+                )}
+              </IoniconsIcon>
+
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <TouchableOpacity
+                  onPress={() => RemoveFav(fav.PostId, fav.Tags)}
+                >
+                  <FavoriteIcon filled={true} />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <Divider bold={true} />
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  marginVertical: 2,
+                }}
+              >
+                {fav.Tags.map((f) => (
+                  <Chip
+                    textStyle={{ color: "white" }}
+                    style={{
+                      backgroundColor: theme.colors.backdrop,
+                      marginHorizontal: 2,
+                    }}
+                  >
+                    {f.TagName}
+                  </Chip>
+                ))}
+              </View>
+            </ScrollView>
+            <Divider bold={true} />
+
             <Card.Content>
               {fav.Type === "I" ? (
                 <Image source={{ uri: fav.FileUrl }} style={styles.image} />
@@ -68,34 +138,17 @@ export default function Favorites() {
                 />
               )}
             </Card.Content>
-          </View>
-          <ScrollView horizontal={true}>
-            <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-              {fav.Tags.map((f) => (
-                <TouchableOpacity
-                  key={f.TagId}
-                  style={{
-                    backgroundColor: "gray",
-                    borderRadius: 13,
-                    paddingHorizontal: 8,
-                    paddingVertical: 1,
-                    margin: 4,
-                    marginTop: 7,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "white",
-                    }}
-                  >
-                    {f.TagName}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </ScrollView>
-        </Card>
-      ))}
+
+            <Divider bold={true} />
+            {fav.Description && (
+              <TextInput disabled={true} multiline={true}>
+                {fav.Description}
+              </TextInput>
+            )}
+            <Divider bold={true} />
+          </Card>
+        );
+      })}
     </ScrollView>
   );
 }

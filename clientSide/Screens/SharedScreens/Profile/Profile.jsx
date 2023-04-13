@@ -1,46 +1,64 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
+import IoniconsIcon from "react-native-vector-icons/Ionicons";
+import { Divider, useTheme } from "react-native-paper";
 import { useUser } from "../../../Components/Contexts/UserContext";
 
 const Profile = () => {
   const { currentUser } = useUser();
+  console.log(currentUser);
+  const theme = useTheme();
+
   return (
     <View>
-      <View style={styles.container}>
-        <Text
-          style={styles.userName}
-        >{`${currentUser.firstName} ${currentUser.lastName}`}</Text>
-        <Text style={styles.userDetails}>{currentUser.email}</Text>
+      <View
+        style={{
+          height: 100,
+          // alignItems: "center",
+          // justifyContent: "center",
+          backgroundColor: theme.colors.backdrop,
+        }}
+      >
+        <IoniconsIcon name="ios-person-circle-sharp" size={50} color="black">
+          <Text
+            style={styles.userName}
+          >{`${currentUser.firstName} ${currentUser.lastName}`}</Text>
+        </IoniconsIcon>
+      </View>
+
+      <View
+        style={{ backgroundColor: theme.colors.primary, paddingHorizontal: 15 }}
+      >
+        <Text style={styles.userDetails}>ID</Text>
+        <Text style={styles.userDetails}>{currentUser.personalId}</Text>
+        <Divider bold={true} />
+
+        <Text style={styles.userDetails}>PHONE</Text>
         <Text style={styles.userDetails}>{currentUser.phone}</Text>
-        <Text style={styles.userDetails}>{`ID: ${currentUser.id}`}</Text>
+        <Divider bold={true} />
+
+        <Text style={styles.userDetails}>EMAIL</Text>
+        <Text style={styles.userDetails}>{currentUser.email}</Text>
+        <Divider bold={true} />
+
+        <Text style={styles.userDetails}>PARENT PHONE</Text>
+        <Text style={styles.userDetails}>{currentUser.parentPhone}</Text>
+        <Divider bold={true} />
       </View>
     </View>
   );
 };
 
-export default Profile
+export default Profile;
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
   userName: {
     fontWeight: "bold",
-    fontSize: 24,
-    marginBottom: 10,
+    fontSize: 20,
   },
   userDetails: {
-    fontSize: 18,
+    fontSize: 15,
     marginBottom: 5,
+    marginTop: 10,
   },
 });
