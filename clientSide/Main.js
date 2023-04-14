@@ -10,10 +10,13 @@ import GuideDrawer from "./Components/Navs/GuideDrawer";
 import TeacherDrawer from "./Components/Navs/TeacherDrawer";
 import TeacherProvider from "./Components/Contexts/TeacherContext";
 import FavoritesProvider from "./Components/Contexts/FavoritesContext";
+import GroupChoice from "./Screens/SharedScreens/GroupChoice/GroupChoice";
+import { useState } from "react";
 
 
 const Main = () => {
   const { currentUser, isLoading } = useUser();
+
 
   if (isLoading)
     return (
@@ -23,7 +26,7 @@ const Main = () => {
       </View>
     );
 
-    
+
   return (
     <>
       {!currentUser
@@ -39,16 +42,21 @@ const Main = () => {
               </FavoritesProvider>
             )}
             {currentUser.type == "Teacher" && (
-              <FavoritesProvider>
-                <TeacherProvider>
-                  <TeacherDrawer />
-                </TeacherProvider>
-              </FavoritesProvider>
+              (currentUser.groupId == -1)
+                ? <GroupChoice />
+                : <FavoritesProvider>
+                  <TeacherProvider>
+                    <TeacherDrawer />
+                  </TeacherProvider>
+                </FavoritesProvider>
+
             )}
             {currentUser.type == "Guide" && (
-              <TeacherProvider>
-                <GuideDrawer />
-              </TeacherProvider>
+              (currentUser.groupId == -1)
+                ? <GroupChoice/>
+                : <TeacherProvider>
+                  <GuideDrawer />
+                </TeacherProvider>
             )}
           </>
         )}

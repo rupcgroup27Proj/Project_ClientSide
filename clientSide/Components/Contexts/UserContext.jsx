@@ -27,12 +27,7 @@ export default function UserProvider({ children }) {
             setIsLoading(false);
             return;
         }
-
-        try {
-            const response = await axios.get(`${simulatorAPI}/api/Generic/id/${JSON.parse(currentUser).personalId}/password/${JSON.parse(currentUser).password}/type/${JSON.parse(currentUser).type}`, { timeout: 5000 });
-            !response.data.email ? AsyncStorage.removeItem('currentUser') : setCurrentUser(JSON.parse(currentUser));
-
-        } catch (error) { Alert.alert('Error', 'Cannot connect to the server.'); }
+        setCurrentUser(JSON.parse(currentUser));
         setIsLoading(false);
     }
 
@@ -46,7 +41,10 @@ export default function UserProvider({ children }) {
         setIsDisabled((prevDisabled) => !prevDisabled)
         try {
             const response = await axios.get(`${simulatorAPI}/api/Generic/id/${userId}/password/${password}/type/${userType}`, { timeout: 5000 });
-            const loggedUser = response.data;
+            let loggedUser = response.data;
+            
+            if (loggedUser.type == "Guide" || loggedUser.type == "Teacher")
+                loggedUser = { ...loggedUser, groupId: -1 };
 
             if (!response.data.email) {
                 Alert.alert('Error', 'Credentials incorrect.');
@@ -55,6 +53,7 @@ export default function UserProvider({ children }) {
             }
             if (loggedUser.isAdmin)
                 loggedUser.type = "Admin";
+
             AsyncStorage.setItem('currentUser', JSON.stringify(loggedUser));
             setCurrentUser(loggedUser);
         } catch (error) {
@@ -89,6 +88,7 @@ export default function UserProvider({ children }) {
     }, [])
 
     const value = {
+        setCurrentUser,
         currentUser, //Returns "currentUser" for convenient use all over the app.
         isLoading,   //Returns "isLoading" for the ActivityIndicator.
         isDisabled,  //For handling the Login button.

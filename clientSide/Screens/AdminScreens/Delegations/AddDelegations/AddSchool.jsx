@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Text,
+  Alert,
 } from "react-native";
 import { Styles } from "./Styles";
 import { Button, Divider } from "react-native-paper";
@@ -247,47 +248,92 @@ export default function AddSchool() {
   };
 
   //send to server
-  function Submit() {
-
+  const Submit = async () => {
     // Check if all fields are filled
-    // Check if all fields are valid
+    // if (
+    //   !schoolName ||
+    //   !formDataTeacher.firstName ||
+    //   !formDataTeacher.lastName ||
+    //   !formDataTeacher.teacherId ||
+    //   !formDataTeacher.email ||
+    //   !formDataTeacher.phone ||
+    //   !formDataTeacher.password ||
+    //   !formDataGuide.firstName ||
+    //   !formDataGuide.lastName ||
+    //   !formDataGuide.guideId ||
+    //   !formDataGuide.email ||
+    //   !formDataGuide.phone ||
+    //   !formDataGuide.password
+    // ) {
+    //   alert("Please fill in all the fields.");
+    //   return;
+    // }
+
+    // // Check if all fields are filled
+    // // Check if all fields are valid
+    // if (
+    //   schoolNameError ||
+    //   teacherFirstNameError ||
+    //   teacherLastNameError ||
+    //   teacherIdError ||
+    //   teacherEmailError ||
+    //   teacherPhoneError ||
+    //   teacherPasswordError ||
+    //   guideFirstNameError ||
+    //   guideLastNameError ||
+    //   guideIdError ||
+    //   guideEmailError ||
+    //   guidePhoneError ||
+    //   guidePasswordError
+    // ) {
+    //   console.log("Please correct the errors in the form.");
+    //   return;
+    // }
+    let teacherSuc = 0;
+    let guideSuc = 0;
+    let newGroupid = 0
 
     setIsPosting(true);
-    axios
-      .post(`${simulatorAPI}/api/Journeys/schoolName/${schoolName}`)
+    await axios.post(`${simulatorAPI}/api/Journeys/schoolName/${schoolName}`)
       .then((res) => {
-        axios.post(`${simulatorAPI}/api/Teachers`, {
-          ...formDataTeacher,
-          groupId: parseInt(res.data),
-        })
-          .then((res) => {
-            console.log("SCC in formDataTeacher ", res);
-          })
-          .catch((error) => {
-            console.log("ERR in formDataTeacher", error);
-            resetForm();
-            return;
-          });
-
-        axios
-          .post(`${simulatorAPI}/api/Guides`, {
-            ...formDataGuide,
-            groupId: parseInt(res.data)
-          })
-          .then((res) => {
-            console.log("SCC in formDataGuide ", res);
-          })
-          .catch((error) => {
-            console.log("ERR in formDataGuide", error)
-            resetForm();
-            return;
-          });
+        console.log("SCC in Journey ", res.data);
+        newGroupid = res.data;
       })
       .catch((err) => {
-        console.log("sendSchooll " + err);
+        Alert.alert('Error', `Couldn't open a new delegation`)
         resetForm();
         return;
       });
+
+    await axios.post(`${simulatorAPI}/api/Teachers`, { ...formDataTeacher, groupId: parseInt(newGroupid), })
+      .then((res) => {
+        console.log("SCC in formDataTeacher ", res.data);
+        teacherSuc = res.data;
+      })
+      .catch((error) => {
+        Alert.alert('Error', `Couldn't associate the teacher into the delegation`)
+        resetForm();
+        return;
+      });
+
+    await axios.post(`${simulatorAPI}/api/Guides`, { ...formDataGuide, groupId: parseInt(newGroupid) })
+      .then((res) => {
+        guideSuc = res.data;
+      })
+      .catch((error) => {
+        Alert.alert('Error', `Couldn't associate the guide into the delegation`)
+        resetForm();
+        return;
+      });
+
+    if (teacherSuc == 1 && guideSuc == 1)
+      Alert.alert('Success', `Teacher and guide already exist. They were associated to the delegation`)
+    else if (teacherSuc == 1 && guideSuc == 2)
+      Alert.alert('Success', `Teacher already exist. Created a new guide and associated them both to the delegation`)
+    else if (teacherSuc == 2 && guideSuc == 1)
+      Alert.alert('Success', `Guide already exist. Created a new teacher and associated them both to the delegation`)
+    else
+      Alert.alert('Success', `New techer and guide were created. They both were associated to the delegation`)
     resetForm();
   }
 

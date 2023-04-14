@@ -33,6 +33,9 @@ const TeacherDrawer = () => {
       {journeyStarted && (
         <>
           <Drawer.Screen name="Profile" component={Profile} options={{ drawerIcon: () => (<Icon name="account-circle" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
+          <Drawer.Screen name="All students" component={AllUsers} options={{ drawerIcon: () => (<Icon name="account-multiple" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
+          <Drawer.Screen name="Important numbers" component={ImprtntNum} options={{ drawerIcon: () => (<Icon name="phone-log" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
+
           {remainingDays <= 0
             ? <>
               <Drawer.Screen name="Social Cloud" component={SocialCloud} options={{ drawerIcon: () => (<Icon name="cloud" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
@@ -47,8 +50,6 @@ const TeacherDrawer = () => {
           }
         </>
       )}
-      <Drawer.Screen name="All students" component={AllUsers} options={{ drawerIcon: () => (<Icon name="account-multiple" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
-      <Drawer.Screen name="Important numbers" component={ImprtntNum} options={{ drawerIcon: () => (<Icon name="phone-log" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }}/>
       <Drawer.Screen name="Logout" component={Logout} options={{ drawerIcon: () => (<Icon name="logout" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
     </Drawer.Navigator>
   )

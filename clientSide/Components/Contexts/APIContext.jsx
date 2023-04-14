@@ -10,7 +10,7 @@ export function useAPI() {
 export default function APIProvider({ children }) {
     //ruppinApi = https://proj.ruppin.ac.il/cgroup27/prod
     //simulator= http://10.0.2.2:5283
-    const simulatorAPI = 'https://proj.ruppin.ac.il/cgroup27/prod';
+    const simulatorAPI = 'http://10.0.2.2:5283';
 
     const value = {
         simulatorAPI
