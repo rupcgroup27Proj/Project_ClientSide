@@ -338,7 +338,7 @@ export default function AddSchool() {
   }
 
   return (
-    <ScrollView style={{ backgroundColor: "#33383E", marginTop: 40, height: "100%", padding: 20, }} >
+    <ScrollView style={{ backgroundColor: "#33383E", height: "100%", paddingHorizontal: 20, paddingTop: 40 }} >
       <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20, color: "white", alignSelf: "center", }} >
         Add New Delegation
       </Text>
@@ -514,7 +514,7 @@ export default function AddSchool() {
         ) : null}
       </View>
 
-      <View>
+      <View style={{ marginBottom: 10 }}>
         <Button onPress={Submit} mode="contained" style={Styles.b} disabled={isPosting}>Confirm</Button>
       </View>
 

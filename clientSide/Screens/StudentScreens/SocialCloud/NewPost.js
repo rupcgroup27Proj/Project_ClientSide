@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { firebase } from "../../../Config";
 import axios from "axios";
-import { useTheme, Text, Button, Divider, TextInput, Chip } from "react-native-paper";
+import { useTheme, Text, Button, Divider, TextInput, Chip, ActivityIndicator } from "react-native-paper";
 import { styles } from "./Styles";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useUser } from "../../../Components/Contexts/UserContext";
@@ -60,8 +60,10 @@ export default function NewPost({ navigation, route }) {
     setIsUploading(true)
     if (image === null) {
       Alert.alert("Error", "Choose something to upload.");
+      setIsUploading(false);
     } else if (allSelectedTags.length === 0) {
       Alert.alert("Error", "Choose Tags pls.");
+      setIsUploading(false);
     } else {
       const response = await fetch(image);
       const blob = await response.blob();
@@ -81,7 +83,7 @@ export default function NewPost({ navigation, route }) {
       } catch (error) {
         console.log("error in upload to FB", error);
       }
-
+      setIsUploading(false);
       uploadImagesDB(imageLink);
       setImage(null);
     }
@@ -89,6 +91,7 @@ export default function NewPost({ navigation, route }) {
 
   //upload image to db
   const uploadImagesDB = (imageLink) => {
+    setIsUploading(true);
     const newImage = {
       groupId: currentUser.groupId,
       studentId: currentUser.id,
@@ -161,6 +164,7 @@ export default function NewPost({ navigation, route }) {
     setDescription("");
   };
 
+
   return (
     <ScrollView>
       <View style={styles.uploadcard}>
@@ -184,8 +188,6 @@ export default function NewPost({ navigation, route }) {
           </View>
         )}
       </View>
-
-
 
       <View>
         <Text style={{ paddingLeft: 5 }}>Tags:</Text>
@@ -240,18 +242,17 @@ export default function NewPost({ navigation, route }) {
         ></TextInput>
       </View>
 
-
-
-      <TouchableOpacity style={{ marginTop: 75, marginHorizontal: 80 }} onPress={() => uploadImage()} >
-        <Button
-          icon="cloud-upload-outline"
-          mode="contained"
-          style={{ backgroundColor: theme.colors.primary }}
-          disabled={isUploading}
-        >
-          {isUploading ?'Uploading...':'Upload'}
-        </Button>
-      </TouchableOpacity>
+      {isUploading
+        ? <View style={{ marginTop: 20 }}>
+          <ActivityIndicator size='large' />
+          <Text style={{ fontSize: 18, textAlign: 'center' }}>Uploading</Text>
+        </View>
+        : <TouchableOpacity style={{ marginTop: 75, marginHorizontal: 80 }} onPress={() => uploadImage()} >
+          <Button icon="cloud-upload-outline" mode="contained" style={{ backgroundColor: theme.colors.primary }}>
+            Upload
+          </Button>
+        </TouchableOpacity>
+      }
     </ScrollView>
   );
 }

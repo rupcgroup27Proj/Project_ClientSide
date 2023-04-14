@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const GroupChoice = () => {
 
   const { simulatorAPI } = useAPI();
-  const { currentUser, setCurrentUser} = useUser();
+  const { currentUser, setCurrentUser, logout } = useUser();
   const [groups, setGroups] = useState([]);
   const [activeAccordion, setActiveAccordion] = useState(null);
 
@@ -42,10 +42,25 @@ const GroupChoice = () => {
     setCurrentUser({ ...currentUser, groupId: groupId });
   }
 
+  const dateFormat = (sd, ed) => {
+    const sday = sd.getDate();
+    const smonth = sd.getMonth() + 1; //months are 0-based, so we add 1
+    const syear = sd.getFullYear();
+    const eday = ed.getDate();
+    const emonth = ed.getMonth() + 1; //months are 0-based, so we add 1
+    const eyear = ed.getFullYear();
+    return `${sday.toString().padStart(2, "0")}/${smonth.toString().padStart(2, "0")}/${syear} - ${eday.toString().padStart(2, "0")}/${emonth.toString().padStart(2, "0")}/${eyear}`;
+  }
+
 
   return (
     <ScrollView style={{ marginTop: 40 }}>
-      <Text style={{ fontSize: 20, fontWeight: 'bold', paddingBottom: 5, textAlign: 'center' }}>Which group would you like to enter?</Text>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 ,alignItems:'center'}}>
+        <Text style={{ fontSize: 18, fontWeight: 'bold', paddingBottom: 5, textAlign: 'center' }}>Which group would you like to enter?</Text>
+        <Button onPress={() => logout()}>Logout</Button>
+      </View>
+
       <Divider bold={true} />
       {groups.map((group, index) => (
         <View key={group.groupId}>
@@ -57,14 +72,8 @@ const GroupChoice = () => {
             left={(props) => <List.Icon {...props} icon="school" />}
           >
             <List.Item
-              title="Start Date"
-              description={group.startDate}
-              left={(props) => <List.Icon {...props} icon="calendar" />}
-            />
-            <Divider />
-            <List.Item
-              title="End Date"
-              description={group.endDate}
+              title="Dates"
+              description={dateFormat(new Date(group.startDate), new Date(group.endDate))}
               left={(props) => <List.Icon {...props} icon="calendar" />}
             />
             <Divider />

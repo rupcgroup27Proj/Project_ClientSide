@@ -258,14 +258,7 @@ export default function Comments({ route }) {
                     size={15}
                     color="black"
                   >
-                    {c.studentId == currentUser.id ? (
-                      <Text style={styles.userNameComment}>Me</Text>
-                    ) : (
-                      <Text style={styles.userNameComment}>
-                        {c.firstName}
-                        {` ${c.lastName}`}
-                      </Text>
-                    )}
+                    <Text style={styles.userNameComment}> {`${c.firstName} ${c.lastName}`} </Text>
                   </IoniconsIcon>
                 </View>
                 <View style={{ paddingVertical: 10, paddingLeft: 10 }}>

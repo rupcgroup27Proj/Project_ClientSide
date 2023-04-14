@@ -65,8 +65,19 @@ export default function AllDelegations({ delegation, navigation }) {
     setModalVisible(false);
   }
 
+  const dateFormat = (sd, ed) => {
+    const sday = sd.getDate();
+    const smonth = sd.getMonth() + 1; //months are 0-based, so we add 1
+    const syear = sd.getFullYear();
+    const eday = ed.getDate();
+    const emonth = ed.getMonth() + 1; //months are 0-based, so we add 1
+    const eyear = ed.getFullYear();
+    return `${sday.toString().padStart(2, "0")}/${smonth.toString().padStart(2, "0")}/${syear} - ${eday.toString().padStart(2, "0")}/${emonth.toString().padStart(2, "0")}/${eyear}`;
+  }
+
+
   return (
-    <ScrollView style={{ backgroundColor: '#33383E', marginTop: 40, height: '100%' }}>
+    <ScrollView style={{ backgroundColor: '#33383E', paddingTop: 40, height: '100%' }}>
 
       <View style={{ backgroundColor: '#33383E' }}>
         <View style={Style.viewTitle}>
@@ -219,12 +230,8 @@ export default function AllDelegations({ delegation, navigation }) {
           <View style={Style.section}>
             <Text style={Style.sectionTitle}>Dates</Text>
             <View style={Style.row}>
-              <Text style={Style.label}>Start Date:</Text>
-              <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.startDate}</Text>
-            </View>
-            <View style={Style.row}>
-              <Text style={Style.label}>End Date:</Text>
-              <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.endDate}</Text>
+              <Text style={Style.label}>Dates:</Text>
+              <Text style={{ color: '#EAEAEA' }}>{dateFormat(new Date(selectedDelegation.startDate), new Date(selectedDelegation.endDate))}</Text>
             </View>
           </View>
           <TouchableOpacity onPress={closeModal}>

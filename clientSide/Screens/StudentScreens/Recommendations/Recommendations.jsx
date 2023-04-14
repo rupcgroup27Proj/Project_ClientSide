@@ -1,5 +1,6 @@
-import React, { useEffect, useState, } from 'react';
+import React, { useCallback, useEffect, useState, } from 'react';
 import { Text } from 'react-native-paper';
+import { useFocusEffect } from "@react-navigation/native";
 import Recommandation from '../../../Components/Recommandations/Recommandation';
 import { ScrollView } from 'react-native-gesture-handler';
 import axios from 'axios';
@@ -32,7 +33,7 @@ const Recommendations = () => {
 
   const { currentUser } = useUser();
   const { simulatorAPI } = useAPI();
-  const RecommendationsAPI = `${simulatorAPI}/api/SmartRecommandations/studentId/${currentUser.id}`
+  const RecommendationsAPI = `${simulatorAPI}/api/Algorithms/studentId/${currentUser.id}`
   const [recArray, setRecArray] = useState([]);
   const [isLoading, setIsLoading] = useState(true)
 
@@ -84,19 +85,25 @@ const Recommendations = () => {
     GetRecommendations();
   }, [])
 
+  useFocusEffect(
+    useCallback(() => {
+      GetRecommendations();
+    }, [])
+  );
+
 
   return (
     <ScrollView>
       {
         isLoading ? <></>
-        :
-        <>
-          {
-            recArray.length == 0
-              ? <Text>No recommendations yet.</Text>
-              : <>{recArray.map((rcmnd, index) => <Recommandation page={rcmnd[0]} key={index} />)}</>
-          }
-        </>
+          :
+          <>
+            {
+              recArray.length == 0
+                ? <Text>No recommendations yet.</Text>
+                : <>{recArray.map((rcmnd, index) => <Recommandation page={rcmnd[0]} key={index} />)}</>
+            }
+          </>
       }
     </ScrollView>
   )

@@ -13,15 +13,15 @@ const NewQuestionnaire = ({ route }) => {
     const [selectedTags, setSelectedTags] = useState([])
     const [questions, setQuestions] = useState([{
         "correctOption": 0,
-        "options": [ {"value": "AAA",},{"value": "BBB",},{"value": "CCC", }, {"value": "DDD",}],
+        "options": [{ "value": "AAA", }, { "value": "BBB", }, { "value": "CCC", }, { "value": "DDD", }],
         "text": "Example question 1",
         "type": "closed",
-      },{
+    }, {
         "correctOption": 0,
-        "options": [ {"value": "AAA",},{"value": "BBB",},{"value": "CCC", }, {"value": "DDD",}],
+        "options": [{ "value": "AAA", }, { "value": "BBB", }, { "value": "CCC", }, { "value": "DDD", }],
         "text": "Example question 2",
         "type": "closed",
-      }
+    }
     ]);
     const theme = useTheme();
     const { currentUser } = useUser();
@@ -113,7 +113,7 @@ const NewQuestionnaire = ({ route }) => {
                     questions: questions
                 }
             }
-console.log(jsonQuestionnaire)
+            console.log(jsonQuestionnaire)
             axios.post(`${simulatorAPI}/api/Questionnaires/groupId/${currentUser.groupId}`, jsonQuestionnaire)
                 .then((res) => {
                     route.params.getAllQuestionnaires();
@@ -131,7 +131,7 @@ console.log(jsonQuestionnaire)
 
     return (
         <View>
-            <ScrollView style={{ padding: 10, height: '87%' }}>
+            <ScrollView style={{ padding: 10, height: '88%' }}>
                 <View style={{ flexDirection: 'row', flex: 10, marginBottom: 5 }}>
                     <TextInput
                         placeholder="Questionnaire Title"
@@ -140,12 +140,7 @@ console.log(jsonQuestionnaire)
                         mode="flat"
                         style={{ flex: 9, alignSelf: 'center', backgroundColor: 'white' }}
                     />
-                    <Button title="Post"
-                        mode='contained'
-                        onPress={() => postQuestionnaire()}
-                        style={{ flex: 1, alignSelf: 'center', marginLeft: 5 }}>
-                        Post
-                    </Button>
+
                 </View>
 
                 <Divider bold={true} />
@@ -175,7 +170,7 @@ console.log(jsonQuestionnaire)
                                     setSelectedTags(selectedTags.includes(tag) ? selectedTags.filter((t) => t.tagId !== tag.tagId) : [...selectedTags, tag])
                                 }
                                 style={{
-                                    backgroundColor: selectedTags.includes(tag) ? theme.colors.secondary : 'white',
+                                    backgroundColor: selectedTags.includes(tag) ? theme.colors.primary : theme.colors.backdrop,
                                     borderRadius: 16,
                                     borderWidth: 0.1,
                                     paddingHorizontal: 16,
@@ -245,13 +240,20 @@ console.log(jsonQuestionnaire)
                     ))}
                 </View>
 
+                <Button onPress={() => addQuestion('closed')} mode={'contained-tonal'} buttonColor={theme.colors.backdrop} style={{ marginHorizontal: 15, marginBottom:15, marginTop: -25}}>
+                    Add Question
+                </Button>
             </ScrollView>
 
             <Divider bold={true} />
 
             <View >
-                <Button onPress={() => addQuestion('closed')} mode={'contained'} style={{ marginTop: 20, marginHorizontal: 10 }}>
-                    Add Question
+                <Button title="Post"
+                    mode='contained'
+                    onPress={() => postQuestionnaire()}
+                    icon={'upload'}
+                    style={{ marginTop: 20, marginHorizontal: 10 }}>
+                    Post
                 </Button>
             </View>
         </View>

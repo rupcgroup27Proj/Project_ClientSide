@@ -30,9 +30,9 @@ const Logout = ({ navigation }) => {
     );
 
     return (
-        <View style={{height:'100%', backgroundColor:'#33383E'}}>
+        <View style={{height:'120%', marginTop:-20,backgroundColor:'#33383E'}}></View>
             
-        </View>
+       
     )
 }
 
