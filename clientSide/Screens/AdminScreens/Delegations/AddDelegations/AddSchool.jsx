@@ -6,7 +6,7 @@ import axios from "axios";
 import { useAPI } from "../../../../Components/Contexts/APIContext";
 
 export default function AddSchool() {
-  const [schoolName, setSchoolName] = useState("");                    //
+  const [schoolName, setSchoolName] = useState("pSchool");                    //
   const [groupId, setGroupId] = useState("");
   const { simulatorAPI } = useAPI();
   const [isPosting, setIsPosting] = useState(false)
@@ -26,12 +26,12 @@ export default function AddSchool() {
   const [guideEmailError, setGuideEmailError] = useState("");
   //Users states:
   const [formDataTeacher, setFormDataTeacher] = useState({                   //
-    password: "",
-    teacherId: 0,
-    firstName: "",
-    lastName: "",
-    phone: 0,
-    email: "",
+    password: "123",
+    teacherId: 123,
+    firstName: "p",
+    lastName: "teacher",
+    phone: 123123,
+    email: "pTeacher@gmail.com",
     pictureUrl: "",
     groupId: groupId,
     startDate: "2023-04-03T11:51:06.983Z",
@@ -39,18 +39,19 @@ export default function AddSchool() {
     type: "Teacher",
   });
   const [formDataGuide, setFormDataGuide] = useState({                         //
-    password: "",
-    guideId: 0,
-    firstName: "",
-    lastName: "",
-    phone: 0,
-    email: "",
+    password: "321",
+    guideId: 321,
+    firstName: "p",
+    lastName: "guide",
+    phone: 321321,
+    email: "pGuide@gmail.com",
     pictureUrl: "",
     groupId: groupId,
     startDate: "2023-04-03T11:51:06.983Z",
     endDate: "2023-04-03T11:51:06.983Z",
     type: "Guide",
   });
+
 
 
   const resetForm = () => {
@@ -191,46 +192,46 @@ export default function AddSchool() {
 
   //send to server
   const Submit = async () => {
-    // Check if all fields are filled
-    if (
-      !schoolName ||
-      !formDataTeacher.firstName ||
-      !formDataTeacher.lastName ||
-      !formDataTeacher.teacherId ||
-      !formDataTeacher.email ||
-      !formDataTeacher.phone ||
-      !formDataTeacher.password ||
-      !formDataGuide.firstName ||
-      !formDataGuide.lastName ||
-      !formDataGuide.guideId ||
-      !formDataGuide.email ||
-      !formDataGuide.phone ||
-      !formDataGuide.password
-    ) {
-      alert("Please fill in all the fields.");
-      return;
-    }
+    // // Check if all fields are filled
+    // if (
+    //   !schoolName ||
+    //   !formDataTeacher.firstName ||
+    //   !formDataTeacher.lastName ||
+    //   !formDataTeacher.teacherId ||
+    //   !formDataTeacher.email ||
+    //   !formDataTeacher.phone ||
+    //   !formDataTeacher.password ||
+    //   !formDataGuide.firstName ||
+    //   !formDataGuide.lastName ||
+    //   !formDataGuide.guideId ||
+    //   !formDataGuide.email ||
+    //   !formDataGuide.phone ||
+    //   !formDataGuide.password
+    // ) {
+    //   alert("Please fill in all the fields.");
+    //   return;
+    // }
 
-    // Check if all fields are filled
-    // Check if all fields are valid
-    if (
-      schoolNameError ||
-      teacherFirstNameError ||
-      teacherLastNameError ||
-      teacherIdError ||
-      teacherEmailError ||
-      teacherPhoneError ||
-      teacherPasswordError ||
-      guideFirstNameError ||
-      guideLastNameError ||
-      guideIdError ||
-      guideEmailError ||
-      guidePhoneError ||
-      guidePasswordError
-    ) {
-      console.log("Please correct the errors in the form.");
-      return;
-    }
+    // // Check if all fields are filled
+    // // Check if all fields are valid
+    // if (
+    //   schoolNameError ||
+    //   teacherFirstNameError ||
+    //   teacherLastNameError ||
+    //   teacherIdError ||
+    //   teacherEmailError ||
+    //   teacherPhoneError ||
+    //   teacherPasswordError ||
+    //   guideFirstNameError ||
+    //   guideLastNameError ||
+    //   guideIdError ||
+    //   guideEmailError ||
+    //   guidePhoneError ||
+    //   guidePasswordError
+    // ) {
+    //   console.log("Please correct the errors in the form.");
+    //   return;
+    // }
     let teacherSuc = 0;
     let guideSuc = 0;
     let newGroupid = 0
