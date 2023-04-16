@@ -1,4 +1,4 @@
-import { View, Text, Alert } from 'react-native'
+import { View, Alert } from 'react-native'
 import React from 'react'
 import { useUser } from '../../../Components/Contexts/UserContext'
 import { useFocusEffect } from '@react-navigation/native';

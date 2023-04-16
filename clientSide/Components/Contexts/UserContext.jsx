@@ -1,12 +1,13 @@
-//Formatted
 import { useContext, createContext, useState, useEffect } from "react";
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useAPI } from "./APIContext";
 
-const UserContext = createContext();
 
+//--------------| Used for login, logout, and stores the logged users data  |--------------//
+
+const UserContext = createContext();
 
 export function useUser() {
     return useContext(UserContext);
@@ -14,14 +15,16 @@ export function useUser() {
 
 export default function UserProvider({ children }) {
 
+    const { simulatorAPI } = useAPI();
     const [currentUser, setCurrentUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isDisabled, setIsDisabled] = useState(false);
-    const { simulatorAPI } = useAPI();
+
+
+    //--------------| Functions |--------------//
 
     //If the user logged once, the app will log him in automatically using asyncStorage (after checking he has not been deleted from the server).
     const getLoggedUser = async () => {
-        //await AsyncStorage.removeItem('currentUser');
         const currentUser = await AsyncStorage.getItem('currentUser');
         if (!currentUser) {
             setIsLoading(false);
@@ -42,13 +45,13 @@ export default function UserProvider({ children }) {
         try {
             const response = await axios.get(`${simulatorAPI}/api/Generic/id/${userId}/password/${password}/type/${userType}`, { timeout: 5000 });
             let loggedUser = response.data;
-            
+
             if (loggedUser.type == "Guide" || loggedUser.type == "Teacher")
                 loggedUser = { ...loggedUser, groupId: -1 };
 
             if (!response.data.email) {
                 Alert.alert('Error', 'Credentials incorrect.');
-                setIsDisabled((prevDisabled) => !prevDisabled)
+                setIsDisabled((prevDisabled) => !prevDisabled);
                 return;
             }
             if (loggedUser.isAdmin)
@@ -61,7 +64,7 @@ export default function UserProvider({ children }) {
             AsyncStorage.removeItem('currentUser');
         }
 
-        setIsDisabled((prevDisabled) => !prevDisabled)
+        setIsDisabled((prevDisabled) => !prevDisabled);
     }
 
     const logout = () => {
@@ -72,20 +75,20 @@ export default function UserProvider({ children }) {
 
     //==================| for the teacher to render all students |==================//
     const [students, setStudents] = useState([]);
+
     const fetchStudents = () => {
         axios.get(`${simulatorAPI}/api/Students/groupId/${currentUser.groupId}`)
-            .then(response => {
-                setStudents(response.data);
-            })
-            .catch(error => {
-                Alert.alert('Error', 'Encounterd an error while fetching students.');
-            });
+            .then(response => { setStudents(response.data); })
+            .catch(error => { Alert.alert('Error', 'Encounterd an error while fetching students.'); });
     }
     //==============================================================================//
+
 
     useEffect(() => {
         getLoggedUser();
     }, [])
+    //--------------| End of functions |--------------//
+
 
     const value = {
         setCurrentUser,

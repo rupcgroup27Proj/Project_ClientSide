@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Image, Linking } from 'react-native';
-import { Card, Text } from 'react-native-paper';
+import { Card, Text, useTheme } from 'react-native-paper';
 import { styles } from './Styles';
 
-
+//============| Creates a rcmnd card using the data from Wikipedia |============//
 const Recommandation = ({ page }) => {
 
     const uri = page.image;
+    const theme = useTheme();
 
 
     return (
@@ -18,7 +19,7 @@ const Recommandation = ({ page }) => {
                 <Image style={styles.image} source={{ uri: uri }} />
             </View>
             <Text style={styles.intro}>{page.intro}</Text>
-            <Text style={styles.intro}>Click here for more information</Text>
+            <Text style={{ paddingLeft: 10, paddingBottom: 10, color: theme.colors.primary, fontWeight: 'bold' }}>Click here for more information</Text>
         </Card>
     );
 };

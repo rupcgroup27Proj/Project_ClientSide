@@ -7,6 +7,7 @@ import { useAPI } from '../../../Components/Contexts/APIContext';
 
 
 const AllQuestionnaires = ({ navigation }) => {
+
   const { currentUser } = useUser();
   const [questionnaires, setQuestionnaires] = useState([]);
   const { simulatorAPI } = useAPI();
@@ -20,7 +21,7 @@ const AllQuestionnaires = ({ navigation }) => {
         setQuestionnaires(response.data);
       } catch (error) { console.log(error); }
     }
-    getAllQuestionnaires()
+    getAllQuestionnaires();
   }, [])
 
 

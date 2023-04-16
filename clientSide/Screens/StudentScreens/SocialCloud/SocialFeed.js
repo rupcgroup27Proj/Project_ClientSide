@@ -23,7 +23,6 @@ export default function SocialFeed({ post, navigation }) {
   const [postsLikes, setPostsLikes] = useState([]);
   const [isLoading, setIsLoading] = useState(true)
 
-
   useEffect(() => {
     getAllPosts();
     userLikes();
@@ -50,7 +49,7 @@ export default function SocialFeed({ post, navigation }) {
   //get user's likes
   const userLikes = async () => {
     await axios
-      .get(`${simulatorAPI}/api/PostsLikes/studentId/${currentUser.id}`)
+      .get(`${simulatorAPI}/api/PostsLikes/groupId/${currentUser.groupId}`)
       .then((res) => {
         setPostsLikes(res.data);
       })
@@ -68,11 +67,13 @@ export default function SocialFeed({ post, navigation }) {
 
   //remove like
   function RemoveLike(postId) {
-    setPostsLikes(prev => [...prev].filter(like => like.postId != postId && like.studentId != currentUser.id))
+    setPostsLikes(prev => prev.filter(like => !(like.studentId === currentUser.id && like.postId === postId)))
     axios
       .delete(
         `${simulatorAPI}/api/PostsLikes/studentId/${currentUser.id}/postId/${postId}`
       )
+      .then(() => console.log('deleted'))
+      .catch(() => console.log('error in delete'))
   }
 
   //add to favs
@@ -164,7 +165,7 @@ export default function SocialFeed({ post, navigation }) {
             {posts.map((post) => {
               const isStudent = currentUser.type === "Student";
               const isPostLiked = postsLikes.some(
-                (like) => like.postId === post.PostId
+                (like) => like.postId === post.PostId && currentUser.id == like.studentId
               );
               const isPostFavorited = favorite.some(
                 (fav) => fav.PostId === post.PostId
@@ -190,14 +191,11 @@ export default function SocialFeed({ post, navigation }) {
                       size={25}
                       color="black"
                     >
-                      {post.StudentId === currentUser.personalId ? (
-                        <Text style={styles.username}>Me</Text>
-                      ) : (
-                        <Text style={styles.username}>
-                          {post.FirstName}
-                          {` ${post.LastName}`}
-                        </Text>
-                      )}
+                      <Text style={styles.username}>
+                        {post.FirstName}
+                        {` ${post.LastName}`}
+                      </Text>
+
                     </IoniconsIcon>
 
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -289,7 +287,7 @@ export default function SocialFeed({ post, navigation }) {
                         <TouchableOpacity style={{ padding: 5 }} onPress={() => { isPostLiked ? RemoveLike(post.PostId) : AddLike(post.PostId); }}>
                           <HeartIcon filled={isPostLiked} />
                         </TouchableOpacity>
-                        <Text style={{ fontWeight: "bold", paddingVertical: 5 }}>{postsLikes.filter(like => like.postId == post.PostId).length} likes</Text>
+                        <Text style={{ fontWeight: "bold", paddingVertical: 5 }}>{((postsLikes.filter(p => p.postId == post.PostId)).length)} likes</Text>
                       </>
                     )}
 

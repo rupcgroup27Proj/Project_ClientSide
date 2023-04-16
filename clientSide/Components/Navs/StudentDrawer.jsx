@@ -4,22 +4,20 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { useTeacher } from "../Contexts/TeacherContext";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useTheme } from "react-native-paper";
-//Student screens
+//Student screens:
 import Home from "../../Screens/StudentScreens/Home/Home";
+import Profile from "../../Screens/SharedScreens/Profile/Profile";
 import SocialCloud from "../SubNavs/SocialFeedNav";
+import Favorites from "../../Screens/StudentScreens/Favorites/Favorites";
+import Questionnaires from "../SubNavs/QuestionnairesNav";
 import Recommandations from "../../Screens/StudentScreens/Recommendations/Recommendations";
 import MyMap from "../../Screens/StudentScreens/MyMap/MyMap";
 import DailySchedule from "../../Screens/SharedScreens/DailySchedule/DailySchedule";
 import Notifications from "../../Screens/StudentScreens/Notifications/Notifications";
 import Tasks from "../../Screens/StudentScreens/Tasks/Tasks";
 import PersonalDiary from "../../Screens/StudentScreens/PersonalDiary/PersonalDiary";
-import Profile from "../../Screens/SharedScreens/Profile/Profile";
 import GuideFeedback from "../../Screens/SharedScreens/GuideFeedback/GuideFeedback";
-import Questionnaires from "../SubNavs/QuestionnairesNav";
 import Logout from "../../Screens/SharedScreens/Logout/Logout";
-import Favorites from "../../Screens/StudentScreens/Favorites/Favorites";
-
-
 
 
 const StudentDrawer = () => {

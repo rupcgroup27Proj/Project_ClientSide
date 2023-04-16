@@ -18,8 +18,8 @@ const GroupChoice = () => {
   const getJourneys = () => {
     axios.get(`${simulatorAPI}/api/Journeys/GetUserJourneys/userId/${currentUser.personalId}/userType/${currentUser.type}`)
       .then((res) => {
-        console.log("Sucsses!" + res.data)
-        setGroups(res.data)
+        console.log("Sucsses!" + res.data);
+        setGroups(res.data);
       })
       .catch((err) => console.log("Error" + err));
   }
@@ -56,8 +56,8 @@ const GroupChoice = () => {
   return (
     <ScrollView style={{ marginTop: 40 }}>
 
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 ,alignItems:'center'}}>
-        <Text style={{ fontSize: 18, fontWeight: 'bold', paddingBottom: 5, textAlign: 'center' }}>Which group would you like to enter?</Text>
+      <View style={{ flexDirection: 'row',justifyContent:'space-between', marginHorizontal:10 ,alignItems:'center'}}>
+        <Text style={{ fontSize: 18, fontWeight: 'bold', paddingBottom: 5, textAlign: 'center' }}>Select a group:</Text>
         <Button onPress={() => logout()}>Logout</Button>
       </View>
 
@@ -116,7 +116,7 @@ const GroupChoice = () => {
             <List.Item
               style={{ backgroundColor: '#2196F3' }}
               description={'Enter'}
-              descriptionStyle={{ textAlign: 'center', paddingRight: 50, color: 'white', fontWeight: 'bold' }}
+              descriptionStyle={{ textAlign: 'center', paddingRight: 50, color: 'white', fontWeight: 'bold', height:40, paddingBottom:15}}
               onPress={() => { setGroup(group.groupId) }}
             >
             </List.Item>

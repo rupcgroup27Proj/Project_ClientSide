@@ -1,10 +1,11 @@
-import { Text, View } from 'react-native'
-import React from 'react'
+import { Text, View } from 'react-native';
+import React from 'react';
 import { Styles } from "./Styles"
 import { useTeacher } from '../../../Components/Contexts/TeacherContext';
 
 
 const Home = () => {
+  
   const { journeyStarted, startDate, remainingDays } = useTeacher();
 
   if (!journeyStarted && startDate === "1950-01-01T00:00:00")

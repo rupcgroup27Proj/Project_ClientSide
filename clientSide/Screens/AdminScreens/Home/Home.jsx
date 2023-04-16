@@ -1,5 +1,5 @@
-import { Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { styles } from "./styles";
 import { useAPI } from '../../../Components/Contexts/APIContext';
@@ -14,6 +14,7 @@ export default function Home() {
     const [future, setFuture] = useState(0);
     const { simulatorAPI } = useAPI();
     
+
     useEffect(() => {
         getAllDelegetions();
     }, []);
@@ -23,18 +24,18 @@ export default function Home() {
             .then((res) => {
                 res.data.forEach(journey => {
                     if (journey.startDate == "1950-01-01T00:00:00") {
-                        setPending(prev => prev + 1)
-                        return
+                        setPending(prev => prev + 1);
+                        return;
                     }
                     if (Date.parse(journey.endDate) < new Date()) {
-                        setPast(prev => prev + 1)
-                        return
+                        setPast(prev => prev + 1);
+                        return;
                     }
                     if (Date.parse(journey.startDate) > new Date()) {
-                        setFuture(prev => prev + 1)
-                        return
+                        setFuture(prev => prev + 1);
+                        return;
                     }
-                    setOnging(prev => prev + 1)
+                    setOnging(prev => prev + 1);
                 });
             })
             .catch((err) => console.log(err))
@@ -42,8 +43,6 @@ export default function Home() {
 
 
     return (
-
-
         <View style={styles.container}>
             <View style={styles.titleContainer}>
                 <Text style={styles.title}>Welcome, Admin!</Text>
@@ -67,6 +66,5 @@ export default function Home() {
                 </View>
             </View>
         </View>
-
     )
 }

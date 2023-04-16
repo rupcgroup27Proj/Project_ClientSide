@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, } from 'react';
-import { Text } from 'react-native-paper';
+import { ActivityIndicator, Text } from 'react-native-paper';
 import { useFocusEffect } from "@react-navigation/native";
 import Recommandation from '../../../Components/Recommandations/Recommandation';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -33,14 +33,15 @@ const Recommendations = () => {
 
   const { currentUser } = useUser();
   const { simulatorAPI } = useAPI();
-  const RecommendationsAPI = `${simulatorAPI}/api/Algorithms/studentId/${currentUser.id}`
+  const RecommendationsAPI = `${simulatorAPI}/api/Algorithms/studentId/${currentUser.id}`;
   const [recArray, setRecArray] = useState([]);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
+
 
   //For each tag, i wait for the axios request to be completed and that return the data of the page. i wait until all tags has finished, inserting them into
   //"array". if theres an error or something - i return null. than i filter the nulls and changing the state using SetRecArray.
   const GetRecommendations = async () => {
-    const tags = await axios.get(RecommendationsAPI)//change to studentid from asyncStorage
+    const tags = await axios.get(RecommendationsAPI);
     let array = await Promise.all(tags.data.map(async tag => {
       try {
         const page = await axios.get(endpoint, { params: { ...params, gsrsearch: tag } });
@@ -49,8 +50,7 @@ const Recommendations = () => {
       catch { return null }
     }).filter(promise => promise !== null)
     )
-    setRecArray(array);
-    setIsLoading(false);
+    setRecArray(array.filter(rec => rec != null));
   }
 
   const gatherPages = (pages) => {
@@ -77,17 +77,20 @@ const Recommendations = () => {
         newStr += char
       }
     }
-    return newStr.replace("  ", " ")
+    return newStr.replace("  ", " ");
   }
 
 
   useEffect(() => {
     GetRecommendations();
+    setIsLoading(false);
   }, [])
 
   useFocusEffect(
     useCallback(() => {
+      setIsLoading(true);
       GetRecommendations();
+      setIsLoading(false);
     }, [])
   );
 
@@ -95,12 +98,13 @@ const Recommendations = () => {
   return (
     <ScrollView>
       {
-        isLoading ? <></>
+        isLoading
+          ? <ActivityIndicator size="large" style={{ marginTop: 30 }} />
           :
           <>
             {
               recArray.length == 0
-                ? <Text>No recommendations yet.</Text>
+                ? <Text style={{ textAlign: 'center', fontSize: 18, color: '#2196F3', fontWeight: 'bold', paddingTop: 10 }}>No recommendations yet.</Text>
                 : <>{recArray.map((rcmnd, index) => <Recommandation page={rcmnd[0]} key={index} />)}</>
             }
           </>

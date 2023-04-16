@@ -16,7 +16,8 @@ const NewQuestionnaire = ({ route }) => {
         "options": [{ "value": "AAA", }, { "value": "BBB", }, { "value": "CCC", }, { "value": "DDD", }],
         "text": "Example question 1",
         "type": "closed",
-    }, {
+    }, 
+    {
         "correctOption": 0,
         "options": [{ "value": "AAA", }, { "value": "BBB", }, { "value": "CCC", }, { "value": "DDD", }],
         "text": "Example question 2",
@@ -118,6 +119,7 @@ const NewQuestionnaire = ({ route }) => {
                 .then((res) => {
                     route.params.getAllQuestionnaires();
                     Alert.alert('Success', 'Questionnaire has been uploaded successfully.');
+                    getTags();
                     setQuestions([]);
                     setTags([]);
                     setTitle('');
@@ -140,7 +142,6 @@ const NewQuestionnaire = ({ route }) => {
                         mode="flat"
                         style={{ flex: 9, alignSelf: 'center', backgroundColor: 'white' }}
                     />
-
                 </View>
 
                 <Divider bold={true} />
@@ -240,7 +241,7 @@ const NewQuestionnaire = ({ route }) => {
                     ))}
                 </View>
 
-                <Button onPress={() => addQuestion('closed')} mode={'contained-tonal'} buttonColor={theme.colors.backdrop} style={{ marginHorizontal: 15, marginBottom:15, marginTop: -25}}>
+                <Button onPress={() => addQuestion('closed')} mode={'contained-tonal'} buttonColor={theme.colors.backdrop} style={{ marginHorizontal: 15, marginBottom: 40, maginTop: 25 }}>
                     Add Question
                 </Button>
             </ScrollView>

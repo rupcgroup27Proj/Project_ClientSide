@@ -5,7 +5,9 @@ import { TextInput, Text, IconButton, Button, Divider } from "react-native-paper
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useState } from "react";
 
+
 const Home = () => {
+  
   const { journeyStarted, startDate, updateJourney, remainingDays } = useTeacher();
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);

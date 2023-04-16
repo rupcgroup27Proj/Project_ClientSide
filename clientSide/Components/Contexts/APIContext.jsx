@@ -1,20 +1,20 @@
 import { useContext, createContext } from "react";
 
-const APIContext = createContext();
 
+//--------------| Used for changing endpoint's pathes easily |--------------//
+
+const APIContext = createContext();
 
 export function useAPI() {
     return useContext(APIContext);
 }
 
 export default function APIProvider({ children }) {
-    //ruppinApi = https://proj.ruppin.ac.il/cgroup27/prod
-    //simulator= http://10.0.2.2:5283
-    const simulatorAPI = 'http://10.0.2.2:5283';
+    //Apis:  https://proj.ruppin.ac.il/cgroup27/prod  |  http://10.0.2.2:5283
+    const simulatorAPI = 'https://proj.ruppin.ac.il/cgroup27/prod';
 
-    const value = {
-        simulatorAPI
-    }
+    const value = { simulatorAPI }
+
 
     return (
         <APIContext.Provider value={value}>

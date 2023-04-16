@@ -1,20 +1,22 @@
-import { Text, View, StyleSheet, Modal, TouchableOpacity } from "react-native";
+import { Text, View, Modal, TouchableOpacity } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import axios from "axios";
-import { Divider, IconButton } from "react-native-paper";
+import { AllDell } from "./AllDellStyles";
+import { Divider } from "react-native-paper";
 import { useAPI } from "../../../../Components/Contexts/APIContext";
 import { useFocusEffect } from "@react-navigation/native";
 
 
-export default function AllDelegations({ delegation, navigation }) {
+export default function AllDelegations() {
+
+  const { simulatorAPI } = useAPI();
   const [pending, setPending] = useState([]);
   const [ongoing, setOnging] = useState([]);
   const [past, setPast] = useState([]);
   const [future, setFuture] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedDelegation, setSelectedDelegation] = useState({});
-  const { simulatorAPI } = useAPI();
 
 
   useEffect(() => {
@@ -70,7 +72,7 @@ export default function AllDelegations({ delegation, navigation }) {
     const smonth = sd.getMonth() + 1; //months are 0-based, so we add 1
     const syear = sd.getFullYear();
     const eday = ed.getDate();
-    const emonth = ed.getMonth() + 1; //months are 0-based, so we add 1
+    const emonth = ed.getMonth() + 1;
     const eyear = ed.getFullYear();
     return `${sday.toString().padStart(2, "0")}/${smonth.toString().padStart(2, "0")}/${syear} - ${eday.toString().padStart(2, "0")}/${emonth.toString().padStart(2, "0")}/${eyear}`;
   }
@@ -80,13 +82,13 @@ export default function AllDelegations({ delegation, navigation }) {
     <ScrollView style={{ backgroundColor: '#33383E', paddingTop: 40, height: '100%' }}>
 
       <View style={{ backgroundColor: '#33383E' }}>
-        <View style={Style.viewTitle}>
-          <Text style={Style.title}>Past Delegations</Text>
-          <Text style={Style.num}>{past.length}  </Text>
+        <View style={AllDell.viewTitle}>
+          <Text style={AllDell.title}>Past Delegations</Text>
+          <Text style={AllDell.num}>{past.length}  </Text>
         </View>
 
         {past.length == 0
-          ? <Text style={Style.text}>None</Text>
+          ? <Text style={AllDell.text}>None</Text>
           : past.map((delegation) => {
             return (
               <View style={{ flex: 5, flexDirection: 'row' }}>
@@ -96,7 +98,6 @@ export default function AllDelegations({ delegation, navigation }) {
                 </Text>
                 <Divider />
               </View>
-
             );
           })
         }
@@ -104,17 +105,17 @@ export default function AllDelegations({ delegation, navigation }) {
 
 
       <View>
-        <View style={Style.viewTitle}>
-          <Text style={Style.title}>Ongoing Delegations</Text>
-          <Text style={Style.num}>{ongoing.length}</Text>
+        <View style={AllDell.viewTitle}>
+          <Text style={AllDell.title}>Ongoing Delegations</Text>
+          <Text style={AllDell.num}>{ongoing.length}</Text>
         </View>
 
         {ongoing.length == 0
-          ? <Text style={Style.text}>None</Text>
+          ? <Text style={AllDell.text}>None</Text>
           : ongoing.map((delegation) => {
             return (
               <>
-                <Text key={Math.random() * 10000} style={Style.text}
+                <Text key={Math.random() * 10000} style={AllDell.text}
                   onPress={() => openModal(delegation)}>
                   {delegation.schoolName}
                 </Text>
@@ -127,16 +128,16 @@ export default function AllDelegations({ delegation, navigation }) {
 
 
       <View>
-        <View style={Style.viewTitle}>
-          <Text style={Style.title}>Future Delegations</Text>
-          <Text style={Style.num}>{future.length}</Text>
+        <View style={AllDell.viewTitle}>
+          <Text style={AllDell.title}>Future Delegations</Text>
+          <Text style={AllDell.num}>{future.length}</Text>
         </View>
         {future.length == 0
-          ? <Text style={Style.text}>None</Text>
+          ? <Text style={AllDell.text}>None</Text>
           : future.map((delegation) => {
             return (
               <>
-                <Text key={Math.random() * 10000} style={Style.text}
+                <Text key={Math.random() * 10000} style={AllDell.text}
                   onPress={() => openModal(delegation)}  >
                   {delegation.schoolName}
                 </Text>
@@ -148,17 +149,17 @@ export default function AllDelegations({ delegation, navigation }) {
       </View>
 
       <View>
-        <View style={Style.viewTitle}>
-          <Text style={Style.title}>Pending Delegations</Text>
-          <Text style={Style.num}>{pending.length}</Text>
+        <View style={AllDell.viewTitle}>
+          <Text style={AllDell.title}>Pending Delegations</Text>
+          <Text style={AllDell.num}>{pending.length}</Text>
         </View>
 
         {pending.length == 0
-          ? <Text style={Style.text}>None</Text>
+          ? <Text style={AllDell.text}>None</Text>
           : pending.map((delegation) => {
             return (
               <>
-                <Text key={Math.random() * 10000} style={Style.text}
+                <Text key={Math.random() * 10000} style={AllDell.text}
                   onPress={() => { openModal(delegation) }}>
                   {delegation.schoolName}
                 </Text>
@@ -176,66 +177,66 @@ export default function AllDelegations({ delegation, navigation }) {
         onRequestClose={closeModal}
       >
 
-        <View style={Style.modalView}>
-          <Text style={Style.modalTitle}>Delegation Details</Text>
-          <View style={Style.section}>
-            <Text style={Style.sectionTitle}>Delegation Information</Text>
-            <View style={Style.row}>
-              <Text style={Style.label}>Group ID:</Text>
+        <View style={AllDell.modalView}>
+          <Text style={AllDell.modalTitle}>Delegation Details</Text>
+          <View style={AllDell.section}>
+            <Text style={AllDell.sectionTitle}>Delegation Information</Text>
+            <View style={AllDell.row}>
+              <Text style={AllDell.label}>Group ID:</Text>
               <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.groupId}</Text>
             </View>
-            <View style={Style.row}>
-              <Text style={Style.label}>School Name:</Text>
+            <View style={AllDell.row}>
+              <Text style={AllDell.label}>School Name:</Text>
               <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.schoolName}</Text>
             </View>
           </View>
-          <View style={Style.section}>
-            <Text style={Style.sectionTitle}>Teacher Information</Text>
-            <View style={Style.row}>
-              <Text style={Style.label}>Name:</Text>
+          <View style={AllDell.section}>
+            <Text style={AllDell.sectionTitle}>Teacher Information</Text>
+            <View style={AllDell.row}>
+              <Text style={AllDell.label}>Name:</Text>
               <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.teacherFirstName}</Text>
             </View>
-            <View style={Style.row}>
-              <Text style={Style.label}>ID:</Text>
+            <View style={AllDell.row}>
+              <Text style={AllDell.label}>ID:</Text>
               <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.teacherId}</Text>
             </View>
-            <View style={Style.row}>
-              <Text style={Style.label}>Email:</Text>
+            <View style={AllDell.row}>
+              <Text style={AllDell.label}>Email:</Text>
               <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.teacherEmail}</Text>
             </View>
-            <View style={Style.row}>
-              <Text style={Style.label}>Phone:</Text>
+            <View style={AllDell.row}>
+              <Text style={AllDell.label}>Phone:</Text>
               <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.phoneTeacher}</Text>
             </View>
           </View>
-          <View style={Style.section}>
-            <Text style={Style.sectionTitle}>Guide Information</Text>
-            <View style={Style.row}>
-              <Text style={Style.label}>Guide Name:</Text>
+          <View style={AllDell.section}>
+            <Text style={AllDell.sectionTitle}>Guide Information</Text>
+            <View style={AllDell.row}>
+              <Text style={AllDell.label}>Guide Name:</Text>
               <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.guideFirstName}  </Text>
             </View>
-            <View style={Style.row}>
-              <Text style={Style.label}>Guide ID:</Text>
+            <View style={AllDell.row}>
+              <Text style={AllDell.label}>Guide ID:</Text>
               <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.guideId}</Text>
             </View>
-            <View style={Style.row}>
-              <Text style={Style.label}>Guide Email:</Text>
+            <View style={AllDell.row}>
+              <Text style={AllDell.label}>Guide Email:</Text>
               <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.guideEmail}</Text>
             </View>
-            <View style={Style.row}>
-              <Text style={Style.label}>Guide Phone:</Text>
+            <View style={AllDell.row}>
+              <Text style={AllDell.label}>Guide Phone:</Text>
               <Text style={{ color: '#EAEAEA' }}>{selectedDelegation.phoneGuide}</Text>
             </View>
           </View>
-          <View style={Style.section}>
-            <Text style={Style.sectionTitle}>Dates</Text>
-            <View style={Style.row}>
-              <Text style={Style.label}>Dates:</Text>
+          <View style={AllDell.section}>
+            <Text style={AllDell.sectionTitle}>Dates</Text>
+            <View style={AllDell.row}>
+              <Text style={AllDell.label}>Dates:</Text>
               <Text style={{ color: '#EAEAEA' }}>{dateFormat(new Date(selectedDelegation.startDate), new Date(selectedDelegation.endDate))}</Text>
             </View>
           </View>
           <TouchableOpacity onPress={closeModal}>
-            <Text style={Style.modalClose}>Close</Text>
+            <Text style={AllDell.modalClose}>Close</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -244,83 +245,4 @@ export default function AllDelegations({ delegation, navigation }) {
   );
 }
 
-const Style = StyleSheet.create({
-  viewTitle: {
-    borderWidth: 1,
-    flex: 15,
-    flexDirection: 'row',
-    backgroundColor: '#181B20',
-    paddingVertical: 15
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    paddingHorizontal: 10,
-    color: 'white',
-    flex: 13
-  },
-  text: {
-    color: '#EAEAEA',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    fontSize: 18,
-  },
-  num: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: '#00BFFF',
-    flex: 2,
-    margin: 'auto'
-  },
 
-  modalView: {
-    backgroundColor: "#33383E",
-    margin: 20,
-    padding: 35,
-    borderRadius: 20,
-    alignItems: 'flex-start',
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  modalText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  modalTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: 'white'
-  },
-  section: {
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: 'white'
-  },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 5,
-    paddingLeft: 5
-  },
-  label: {
-    fontWeight: "bold",
-    marginRight: 10,
-    color: '#EAEAEA'
-  },
-  modalClose: {
-    marginTop: 20,
-    fontWeight: "bold",
-    color: "#2196F3",
-  },
-})
