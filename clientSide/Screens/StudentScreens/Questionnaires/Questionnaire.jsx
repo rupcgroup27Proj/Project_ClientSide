@@ -26,7 +26,7 @@ const Questionnaire = ({ route }) => {
 
   useEffect(() => {
     (async function () {
-      setAnswers(new Array(questionnaire.Questions.length).fill(null))
+      setAnswers(new Array(questionnaire.Questions.length).fill(null));
       const completedQuestionnaires = await AsyncStorage.getItem('completedQuestionnaires');
       if (!completedQuestionnaires) {
         setIsLoading(false);
@@ -59,7 +59,7 @@ const Questionnaire = ({ route }) => {
       if (answer == correctAnswers[index])
         numerator++;
     });
-    return (Math.floor((numerator / denominator) * 100))
+    return (Math.floor((numerator / denominator) * 100));
   }
 
   const updateStudentSmartElementTags = async () => {
@@ -94,22 +94,22 @@ const Questionnaire = ({ route }) => {
       const options = {
         cQuestionnaireId: qId,
         cOptions: answers
-      }
+      };
       if (chosenOptions != null)
         AsyncStorage.setItem('chosenOptions', JSON.stringify([...(JSON.parse(chosenOptions)), options]));
       else
         AsyncStorage.setItem('chosenOptions', JSON.stringify([options]));
-      setIsCompleted(true)
+      setIsCompleted(true);
     })()
   }
 
   const determineBgColor = (questionnaireId, questionIndex, optionText) => {
     const questionnaire = completedOptions.find(q => q['cQuestionnaireId'] == questionnaireId);
     if (questionnaire != undefined && questionnaire.cOptions[questionIndex] == correctAnswers[questionIndex] && questionnaire.cOptions[questionIndex] == optionText)
-      return 'rgba(0, 255, 0, 0.8)'
+      return 'rgba(0, 255, 0, 0.8)';
     if (questionnaire != undefined && questionnaire.cOptions[questionIndex] == optionText)
-      return 'rgba(255, 0, 0, 0.8)'
-    return 'white'
+      return 'rgba(255, 0, 0, 0.8)';
+    return 'white';
   }
 
   const renderQuestion = (question, qindex) => {
@@ -130,7 +130,7 @@ const Questionnaire = ({ route }) => {
             />
           ))}
         </View>
-        <Divider bold={true}/>
+        <Divider bold={true} />
       </View>
     );
   }

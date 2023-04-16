@@ -4,6 +4,9 @@ import axios from "axios";
 import { useUser } from "./UserContext";
 import { useAPI } from "./APIContext";
 
+
+//--------------| Used for manipulating the current user's journey |--------------//
+
 const TeacherContext = createContext();
 
 export function useTeacher() {
@@ -11,30 +14,29 @@ export function useTeacher() {
 }
 
 export default function TeacherProvider({ children }) {
+
+    const { currentUser } = useUser();
+    const { simulatorAPI } = useAPI();
     const [journeyStarted, setJourneyStarted] = useState(false);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [remainingDays, setRemainingDays] = useState(null);
-    const { currentUser } = useUser();
-    const { simulatorAPI } = useAPI();
 
+
+    //--------------| Functions |--------------//
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`${simulatorAPI}/api/Journeys/GetJourneyDatesAndSchoolName/groupId/${currentUser.groupId}`);
                 setStartDate(response.data.startDate);
                 setEndDate(response.data.endDate);
-                if (response.data.startDate === "1950-01-01T00:00:00")
-                    setJourneyStarted(false);
-                else
-                    setJourneyStarted(true);
-
-            } catch (error) {
-                Alert.alert("Error", "Failed to fetch journey data from the server.");
+                (response.data.startDate === "1950-01-01T00:00:00") ? setJourneyStarted(false) : setJourneyStarted(true);
             }
+            catch (error) { Alert.alert("Error", "Failed to fetch journey data from the server."); }
         };
         fetchData();
     }, []);
+
 
     useEffect(() => {
         const today = new Date();
@@ -42,10 +44,11 @@ export default function TeacherProvider({ children }) {
             const remainingTime = new Date(startDate) - today;
             const remainingDays = Math.ceil(remainingTime / (1000 * 60 * 60 * 24));
             setRemainingDays(remainingDays);
-        } else {
-            setRemainingDays(0);
         }
+        else { setRemainingDays(0); }
+
     }, [startDate, endDate]);
+
 
     const updateJourney = async (newStartDate, newEndDate) => {
         try {
@@ -53,10 +56,12 @@ export default function TeacherProvider({ children }) {
             setStartDate(newStartDate.toISOString());
             setEndDate(newEndDate.toISOString());
             setJourneyStarted(true);
-        } catch (error) {
-            Alert.alert("Error", "Failed to update journey.");
         }
+        catch (error) { Alert.alert("Error", "Failed to update journey."); }
+
     };
+    //--------------| End of unctions |--------------//
+
 
     const value = {
         journeyStarted,
@@ -65,6 +70,7 @@ export default function TeacherProvider({ children }) {
         remainingDays,
         updateJourney,
     };
+
 
     return (
         <TeacherContext.Provider value={value}>

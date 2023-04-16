@@ -1,23 +1,31 @@
 import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  Text,
-} from "react-native";
+import { View, TextInput, ScrollView, Text, Alert } from "react-native";
 import { Styles } from "./Styles";
 import { Button, Divider } from "react-native-paper";
 import axios from "axios";
 import { useAPI } from "../../../../Components/Contexts/APIContext";
 
 export default function AddSchool() {
-  const [schoolName, setSchoolName] = useState("");
+  const [schoolName, setSchoolName] = useState("");                    //
   const [groupId, setGroupId] = useState("");
   const { simulatorAPI } = useAPI();
   const [isPosting, setIsPosting] = useState(false)
-
-  const [formDataTeacher, setFormDataTeacher] = useState({
+  //Form vlaidation errors states :
+  const [schoolNameError, setSchoolNameError] = useState("");
+  const [teacherFirstNameError, setTeacherFirstNameError] = useState("");
+  const [teacherLastNameError, setTeacherLastNameError] = useState("");
+  const [teacherIdError, setTeacherIdError] = useState("");
+  const [teacherEmailError, setTeacherEmailError] = useState("");
+  const [teacherPhoneError, setTeacherPhoneError] = useState("");
+  const [teacherPasswordError, setTeacherPasswordError] = useState("");
+  const [guidePasswordError, setGuidePasswordError] = useState("");
+  const [guideIdError, setGuideIdError] = useState("");
+  const [guideFirstNameError, setGuideFirstNameError] = useState("");
+  const [guideLastNameError, setGuideLastNameError] = useState("");
+  const [guidePhoneError, setGuidePhoneError] = useState("");
+  const [guideEmailError, setGuideEmailError] = useState("");
+  //Users states:
+  const [formDataTeacher, setFormDataTeacher] = useState({                   //
     password: "",
     teacherId: 0,
     firstName: "",
@@ -30,8 +38,7 @@ export default function AddSchool() {
     endDate: "2023-04-03T11:51:06.983Z",
     type: "Teacher",
   });
-
-  const [formDataGuide, setFormDataGuide] = useState({
+  const [formDataGuide, setFormDataGuide] = useState({                         //
     password: "",
     guideId: 0,
     firstName: "",
@@ -45,124 +52,66 @@ export default function AddSchool() {
     type: "Guide",
   });
 
-  const [schoolNameError, setSchoolNameError] = useState("");
-
-  const [teacherFirstNameError, setTeacherFirstNameError] = useState("");
-  const [teacherLastNameError, setTeacherLastNameError] = useState("");
-  const [teacherIdError, setTeacherIdError] = useState("");
-  const [teacherEmailError, setTeacherEmailError] = useState("");
-  const [teacherPhoneError, setTeacherPhoneError] = useState("");
-  const [teacherPasswordError, setTeacherPasswordError] = useState("");
-
-  const [guidePasswordError, setGuidePasswordError] = useState("");
-  const [guideIdError, setGuideIdError] = useState("");
-  const [guideFirstNameError, setGuideFirstNameError] = useState("");
-  const [guideLastNameError, setGuideLastNameError] = useState("");
-  const [guidePhoneError, setGuidePhoneError] = useState("");
-  const [guideEmailError, setGuideEmailError] = useState("");
-
 
   const resetForm = () => {
     setIsPosting(false);
     setSchoolName('');
-    setFormDataGuide({
-      password: "",
-      guideId: 0,
-      firstName: "",
-      lastName: "",
-      phone: 0,
-      email: "",
-      pictureUrl: "",
-      groupId: groupId,
-      startDate: "2023-04-03T11:51:06.983Z",
-      endDate: "2023-04-03T11:51:06.983Z",
-      type: "Guide",
-    });
-    setFormDataTeacher({
-      password: "",
-      teacherId: 0,
-      firstName: "",
-      lastName: "",
-      phone: 0,
-      email: "",
-      pictureUrl: "",
-      groupId: groupId,
-      startDate: "2023-04-03T11:51:06.983Z",
-      endDate: "2023-04-03T11:51:06.983Z",
-      type: "Teacher",
-    });
+    setFormDataGuide({ password: "", guideId: 0, firstName: "", lastName: "", phone: 0, email: "", pictureUrl: "", groupId: groupId, startDate: "2023-04-03T11:51:06.983Z", endDate: "2023-04-03T11:51:06.983Z", type: "Guide", });
+    setFormDataTeacher({ password: "", teacherId: 0, firstName: "", lastName: "", phone: 0, email: "", pictureUrl: "", groupId: groupId, startDate: "2023-04-03T11:51:06.983Z", endDate: "2023-04-03T11:51:06.983Z", type: "Teacher", });
   }
+
   const validateTeacherPassword = (password) => {
-    if (password.length < 6) {
-      setTeacherPasswordError("Password should be at least 6 characters long");
-    } else {
-      setTeacherPasswordError("");
-    }
+    (password.length < 6)
+      ? setTeacherPasswordError("Password should be at least 6 characters long")
+      : setTeacherPasswordError("");
   };
 
   const validateTeacherFirstName = (firstName) => {
-    if (!/^[a-zA-Z]+$/.test(firstName)) {
-      setTeacherFirstNameError("First name should only contain letters");
-    } else {
-      setTeacherFirstNameError("");
-    }
-  };
+    (!/^[a-zA-Z]+$/.test(firstName))
+      ? setTeacherFirstNameError("First name should only contain letters")
+      : setTeacherFirstNameError("");
+  }
 
   const validateTeacherLastName = (lastName) => {
-    if (!/^[a-zA-Z]+$/.test(lastName)) {
-      setTeacherLastNameError("Last name should only contain letters");
-    } else {
-      setTeacherLastNameError("");
-    }
-  };
+    (!/^[a-zA-Z]+$/.test(lastName))
+      ? setTeacherLastNameError("Last name should only contain letters")
+      : setTeacherLastNameError("");
+  }
 
   const validateTeacherId = (teacherId) => {
-    const idRegex = /^\d{9}$/;
-    if (!teacherId.match(idRegex)) {
-      setTeacherIdError("ID should contain exactly 9 numbers.");
-    } else {
-      setTeacherIdError("");
-    }
-  };
+    (!teacherId.match(/^\d{9}$/))
+      ? setTeacherIdError("ID should contain exactly 9 numbers.")
+      : setTeacherIdError("");
+  }
 
   const validateTeacherEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.match(emailRegex)) {
-      setTeacherEmailError("Please enter a valid email address.");
-    } else {
-      setTeacherEmailError("");
-    }
-  };
+    (!email.match(emailRegex))
+      ? setTeacherEmailError("Please enter a valid email address.")
+      : setTeacherEmailError("");
+  }
 
   const validateTeacherPhone = (phone) => {
     const phoneRegex = /^\d{10}$/;
-    if (!phone.match(phoneRegex)) {
-      setTeacherPhoneError("Phone number should contain exactly 10 numbers.");
-    } else {
-      setTeacherPhoneError("");
-    }
-  };
+    (!phone.match(phoneRegex))
+      ? setTeacherPhoneError("Phone number should contain exactly 10 numbers.")
+      : setTeacherPhoneError("");
+  }
 
   const handleTeacherInputChange = (field, value) => {
     setFormDataTeacher({ ...formDataTeacher, [field]: value });
     switch (field) {
-      case "password":
-        validateTeacherPassword(value);
+      case "password": validateTeacherPassword(value);
         break;
-      case "firstName":
-        validateTeacherFirstName(value);
+      case "firstName": validateTeacherFirstName(value);
         break;
-      case "lastName":
-        validateTeacherLastName(value);
+      case "lastName": validateTeacherLastName(value);
         break;
-      case "teacherId":
-        validateTeacherId(value);
+      case "teacherId": validateTeacherId(value);
         break;
-      case "email":
-        validateTeacherEmail(value);
+      case "email": validateTeacherEmail(value);
         break;
-      case "phone":
-        validateTeacherPhone(value);
+      case "phone": validateTeacherPhone(value);
         break;
       default:
         break;
@@ -223,23 +172,17 @@ export default function AddSchool() {
   const handleGuideInputChange = (field, value) => {
     setFormDataGuide({ ...formDataGuide, [field]: value });
     switch (field) {
-      case "password":
-        validateGuidePassword(value);
+      case "password": validateGuidePassword(value);
         break;
-      case "firstName":
-        validateGuideFirstName(value);
+      case "firstName": validateGuideFirstName(value);
         break;
-      case "lastName":
-        validateGuideLastName(value);
+      case "lastName": validateGuideLastName(value);
         break;
-      case "guideId":
-        validateGuideId(value);
+      case "guideId": validateGuideId(value);
         break;
-      case "email":
-        validateGuideEmail(value);
+      case "email": validateGuideEmail(value);
         break;
-      case "phone":
-        validateGuidePhone(value);
+      case "phone": validateGuidePhone(value);
         break;
       default:
         break;
@@ -247,7 +190,7 @@ export default function AddSchool() {
   };
 
   //send to server
-  function Submit() {
+  const Submit = async () => {
     // Check if all fields are filled
     if (
       !schoolName ||
@@ -268,6 +211,7 @@ export default function AddSchool() {
       return;
     }
 
+    // Check if all fields are filled
     // Check if all fields are valid
     if (
       schoolNameError ||
@@ -287,67 +231,66 @@ export default function AddSchool() {
       console.log("Please correct the errors in the form.");
       return;
     }
+    let teacherSuc = 0;
+    let guideSuc = 0;
+    let newGroupid = 0
+
 
     setIsPosting(true);
-    axios
-      .post(`${simulatorAPI}/api/Journeys/schoolName/${schoolName}`)
+    await axios.post(`${simulatorAPI}/api/Journeys/schoolName/${schoolName}`)
       .then((res) => {
-        axios.post(`${simulatorAPI}/api/Teachers`, {
-          ...formDataTeacher,
-          groupId: parseInt(res.data),
-        })
-          .then((res) => {
-            console.log("SCC in formDataTeacher ", res);
-          })
-          .catch((error) => {
-            console.log("ERR in formDataTeacher", error);
-            resetForm();
-            return;
-          });
-
-        axios
-          .post(`${simulatorAPI}/api/Guides`, {
-            ...formDataGuide,
-            groupId: parseInt(res.data)
-          })
-          .then((res) => {
-            console.log("SCC in formDataGuide ", res);
-          })
-          .catch((error) => {
-            console.log("ERR in formDataGuide", error)
-            resetForm();
-            return;
-          });
+        console.log("SCC in Journey ", res.data);
+        newGroupid = res.data;
       })
       .catch((err) => {
-        console.log("sendSchooll " + err);
+        Alert.alert('Error', `Couldn't open a new delegation`)
         resetForm();
         return;
       });
+
+    await axios.post(`${simulatorAPI}/api/Teachers`, { ...formDataTeacher, groupId: parseInt(newGroupid), })
+      .then((res) => {
+        console.log("SCC in formDataTeacher ", res.data);
+        teacherSuc = res.data;
+      })
+      .catch((error) => {
+        Alert.alert('Error', `Couldn't associate the teacher into the delegation`)
+        resetForm();
+        return;
+      });
+
+    await axios.post(`${simulatorAPI}/api/Guides`, { ...formDataGuide, groupId: parseInt(newGroupid) })
+      .then((res) => {
+        guideSuc = res.data;
+      })
+      .catch((error) => {
+        Alert.alert('Error', `Couldn't associate the guide into the delegation`)
+        resetForm();
+        return;
+      });
+
+    if (teacherSuc == 1 && guideSuc == 1)
+      Alert.alert('Success', `Teacher and guide already exist. They were associated to the delegation`)
+    else if (teacherSuc == 1 && guideSuc == 2)
+      Alert.alert('Success', `Teacher already exist. Created a new guide and associated them both to the delegation`)
+    else if (teacherSuc == 2 && guideSuc == 1)
+      Alert.alert('Success', `Guide already exist. Created a new teacher and associated them both to the delegation`)
+    else
+      Alert.alert('Success', `New techer and guide were created. They both were associated to the delegation`)
     resetForm();
   }
 
+
+
+
   return (
-    <ScrollView
-      style={{
-        backgroundColor: "#33383E",
-        marginTop: 40,
-        height: "100%",
-        padding: 20,
-      }}
-    >
-      <Text
-        style={{
-          fontSize: 24,
-          fontWeight: "bold",
-          marginBottom: 20,
-          color: "white",
-          alignSelf: "center",
-        }}
-      >
+    <ScrollView style={{ backgroundColor: "#33383E", height: "100%", paddingHorizontal: 20, paddingTop: 40 }} >
+      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20, color: "white", alignSelf: "center", }} >
         Add New Delegation
       </Text>
+
       <Divider></Divider>
+
       <View>
         <Text style={Styles.userTitle}>School Details</Text>
         <TextInput
@@ -358,10 +301,9 @@ export default function AddSchool() {
           cursorColor={"grey"}
           style={Styles.input}
         />
-        {schoolNameError ? (
-          <Text style={Styles.error}>{schoolNameError}</Text>
-        ) : null}
+        {schoolNameError ? (<Text style={Styles.error}>{schoolNameError}</Text>) : null}
       </View>
+
       <View>
         <Text style={Styles.userTitle}>Teacher Details</Text>
         <TextInput
@@ -374,9 +316,7 @@ export default function AddSchool() {
           cursorColor={"grey"}
           style={Styles.input}
         />
-        {teacherFirstNameError ? (
-          <Text style={Styles.error}>{teacherFirstNameError}</Text>
-        ) : null}
+        {teacherFirstNameError ? (<Text style={Styles.error}>{teacherFirstNameError}</Text>) : null}
         <TextInput
           value={formDataTeacher.lastName}
           placeholderTextColor={"grey"}
@@ -441,6 +381,7 @@ export default function AddSchool() {
           <Text style={Styles.error}>{teacherPasswordError}</Text>
         ) : null}
       </View>
+
       <View>
         <Text style={Styles.userTitle}>Guide Details</Text>
         <TextInput
@@ -514,9 +455,11 @@ export default function AddSchool() {
           <Text style={Styles.error}>{guidePasswordError}</Text>
         ) : null}
       </View>
-      <View>
+
+      <View style={{ marginBottom: 10 }}>
         <Button onPress={Submit} mode="contained" style={Styles.b} disabled={isPosting}>Confirm</Button>
       </View>
+
     </ScrollView>
   );
 }

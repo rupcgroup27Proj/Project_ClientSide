@@ -8,10 +8,11 @@ import { useAPI } from '../../../Components/Contexts/APIContext';
 
 
 const ImprtntNum = () => {
+    
     const [phonebook, setPhonebook] = useState([]);
-    const [newPhone, setNewPhone] = useState('');
-    const [newTitle, setNewTitle] = useState('');
-    const [newNotes, setNewNotes] = useState('');
+    const [newPhone, setNewPhone] = useState('009756841');
+    const [newTitle, setNewTitle] = useState('Hotel');
+    const [newNotes, setNewNotes] = useState('blah blah');
     const { simulatorAPI } = useAPI();
     const { currentUser } = useUser();
 

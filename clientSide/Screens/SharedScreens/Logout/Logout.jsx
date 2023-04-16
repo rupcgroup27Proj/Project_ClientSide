@@ -1,4 +1,4 @@
-import { View, Text, Alert } from 'react-native'
+import { View, Alert } from 'react-native'
 import React from 'react'
 import { useUser } from '../../../Components/Contexts/UserContext'
 import { useFocusEffect } from '@react-navigation/native';
@@ -30,9 +30,9 @@ const Logout = ({ navigation }) => {
     );
 
     return (
-        <View style={{height:'100%', backgroundColor:'#33383E'}}>
+        <View style={{height:'120%', marginTop:-20,backgroundColor:'#33383E'}}></View>
             
-        </View>
+       
     )
 }
 

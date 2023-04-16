@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { Styles } from "./Styles"
+import { Styles } from "./Styles";
 import React from "react";
 import { useUser } from "../../../Components/Contexts/UserContext";
 import { Avatar, Title, Subheading, Paragraph } from 'react-native-paper';

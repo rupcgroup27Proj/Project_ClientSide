@@ -3,9 +3,11 @@ import React from "react";
 import { Styles } from "./Styles";
 import { ScrollView } from "react-native-gesture-handler";
 
+
 export default function DetailsDelegation({ route }) {
   const { delegation } = route.params;
 
+  
   return (
     <ScrollView style={Styles.container}>
       <Text style={Styles.title}>Delegation Details</Text>

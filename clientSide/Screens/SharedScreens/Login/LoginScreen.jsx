@@ -1,10 +1,8 @@
-//Formatted
 import React, { useState } from 'react';
 import { View, ImageBackground } from 'react-native';
-import { ActivityIndicator, Button, TextInput, Title, Text } from 'react-native-paper';
-import { SelectList } from 'react-native-dropdown-select-list'
-import { useTheme } from './Styles'
-
+import { ActivityIndicator, Button, TextInput, Title } from 'react-native-paper';
+import { SelectList } from 'react-native-dropdown-select-list';
+import { useTheme } from './Styles';
 import { useUser } from '../../../Components/Contexts/UserContext';
 
 
@@ -20,7 +18,7 @@ const LoginScreen = () => {
     { key: '1', value: 'Student' },
     { key: '2', value: 'Teacher' },
     { key: '3', value: 'Guide' }
-  ]
+  ];
 
   const handleLogin = async () => {
     login(userId, password, userType)
