@@ -103,12 +103,14 @@ const Questionnaire = ({ route }) => {
     })()
   }
 
-  const determineBgColor = (questionnaireId, questionIndex, optionText) => {
+  const determineBgColor = (questionnaireId, questionIndex, optionText, qindex) => {
     const questionnaire = completedOptions.find(q => q['cQuestionnaireId'] == questionnaireId);
     if (questionnaire != undefined && questionnaire.cOptions[questionIndex] == correctAnswers[questionIndex] && questionnaire.cOptions[questionIndex] == optionText)
       return 'rgba(0, 255, 0, 0.8)';
     if (questionnaire != undefined && questionnaire.cOptions[questionIndex] == optionText)
       return 'rgba(255, 0, 0, 0.8)';
+    if (questionnaire != undefined && optionText == correctAnswers[qindex])
+      return 'rgba(0, 255, 0, 0.8)'
     return 'white';
   }
 
@@ -117,9 +119,10 @@ const Questionnaire = ({ route }) => {
       <View key={question.Text} style={styles.question}>
         <Title style={styles.questionTitle}>{question.Text}</Title>
         <View style={styles.radioGroup}>
+
           {question.Options.map((option, oindex) => (
             <RadioButton.Item
-              style={{ backgroundColor: isCompleted ? determineBgColor(questionnaire.Id, qindex, option.text) : '#0096FF', borderWidth: 0.2, marginVertical: 1, borderRadius: 8, opacity: !isCompleted ? 0.8 : 0.6 }}
+              style={{ backgroundColor: isCompleted ? determineBgColor(questionnaire.Id, qindex, option.text, qindex) : '#0096FF', borderWidth: 0.2, marginVertical: 1, borderRadius: 8, opacity: !isCompleted ? 0.8 : 0.6 }}
               disabled={isCompleted}
               key={option.choiceId}
               label={option.text}

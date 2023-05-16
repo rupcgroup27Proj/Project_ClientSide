@@ -60,7 +60,8 @@ export default function UserProvider({ children }) {
             AsyncStorage.setItem('currentUser', JSON.stringify(loggedUser));
             setCurrentUser(loggedUser);
         } catch (error) {
-            Alert.alert('Error', 'Encountered an error.');
+            console.log(error)
+            Alert.alert('Error', 'Encountered and error.');
             AsyncStorage.removeItem('currentUser');
         }
 
