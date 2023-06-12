@@ -16,6 +16,8 @@ import Notifications from '../../Screens/TeacherScreens/Notifications/Notificati
 import Tasks from '../../Screens/TeacherScreens/Tasks/Tasks';
 import GuideFeedback from '../../Screens/SharedScreens/GuideFeedback/GuideFeedback';
 import Logout from '../../Screens/SharedScreens/Logout/Logout';
+import NewTask from '../../Screens/TeacherScreens/Tasks/NewTask';
+import SpecificTask from '../../Screens/TeacherScreens/Tasks/SpecificTask';
 
 
 const TeacherDrawer = () => {
@@ -41,9 +43,16 @@ const TeacherDrawer = () => {
               <Drawer.Screen name="Notifications" component={Notifications} />
               <Drawer.Screen name="Tasks" component={Tasks} />
               <Drawer.Screen name="Guide Feedback" component={GuideFeedback} /> */}
+             <Drawer.Screen name="Tasks" component={Tasks} /> 
+             <Drawer.Screen name="NewTask" component={NewTask} /> 
+             <Drawer.Screen name="SpecificTask" component={SpecificTask} /> 
             </>
             : <>
               <Drawer.Screen name="Add new student" component={AddUsers} options={{ drawerIcon: () => (<Icon name="account-plus" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
+              <Drawer.Screen name="Tasks" component={Tasks} />
+              <Drawer.Screen name="NewTask" component={NewTask} /> 
+              <Drawer.Screen name="SpecificTask" component={SpecificTask} /> 
+
             </>
           }
         </>
