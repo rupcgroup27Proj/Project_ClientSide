@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Alert, Image, ScrollView, Dimensions, Text, Keyboard } from 'react-native';
+import { StyleSheet, View, Alert, Image, ScrollView, Dimensions, Text, Keyboard, TouchableOpacity} from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import * as Location from 'expo-location';
@@ -10,7 +10,6 @@ import { useTeacher } from '../../../Components/Contexts/TeacherContext';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { useAPI } from '../../../Components/Contexts/APIContext';
 import { useUser } from '../../../Components/Contexts/UserContext';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import Swiper from 'react-native-swiper';
 
 const MyMap = () => {
@@ -353,10 +352,11 @@ const MyMap = () => {
                                   latitudeDelta: 0.0922,
                                   longitudeDelta: 0.0421
                                 })}
-                                onPress={() => (comp.files[0].fileUrl == null ? console.log() : handleImagesView(comp))}>
+                                onPress={() => (comp.files[0].fileUrl == null ? console.log() : handleImagesView(comp))}
+                                 >
                                 <Image
                                   source={{ uri: comp.files[0].fileUrl == null ? dumim : `${simulatorAPI}/Images/${comp.files[0].fileUrl}` }}
-                                  style={{ height: '100%', width: '100%', borderTopRightRadius: 18, borderTopLeftRadius: 18 }}
+                                  style={{ height: '100%', width: '100%', borderTopRightRadius: 18, borderTopLeftRadius: 18}}
                                 />
                               </TouchableOpacity>
                             </View>
