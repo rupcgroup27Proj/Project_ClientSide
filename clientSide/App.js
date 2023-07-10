@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import UserProvider from './Components/Contexts/UserContext';
 import APIProvider from './Components/Contexts/APIContext';
+import TokenProvider from './Components/Contexts/TokenContext';
 import Main from './Main';
 import { useEffect } from 'react';
 
@@ -36,13 +37,15 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer>
         <APIProvider>
-          <UserProvider>
-            <PaperProvider theme={theme}>
+          <TokenProvider>
+           <UserProvider>
+              <PaperProvider theme={theme}>
 
-              <Main />
+                <Main />
 
-            </PaperProvider>
-          </UserProvider>
+              </PaperProvider>
+           </UserProvider>
+          </TokenProvider>
         </APIProvider>
       </NavigationContainer>
     </SafeAreaProvider>

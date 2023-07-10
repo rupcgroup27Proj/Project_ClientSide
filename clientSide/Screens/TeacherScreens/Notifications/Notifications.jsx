@@ -1,14 +1,21 @@
 import { Styles } from "./Styles"
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Button, Platform } from "react-native";
+import { useState, useEffect, useRef } from 'react';
+import { } from 'react-native';
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
 
 
-const Notifications = () => {
+
+
+
+const Ntf = () => {
   return (
     <View>
-      <Text>notifications</Text>
+      <Button title="fff" ></Button>
     </View>
   )
 }
 
-export default Notifications;
+export default Ntf;

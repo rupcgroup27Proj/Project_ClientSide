@@ -22,10 +22,9 @@ import Logout from "../../Screens/SharedScreens/Logout/Logout";
 
 const StudentDrawer = () => {
 
-  const { journeyStarted, remainingDays } = useTeacher();
+  const { journeyStarted, remainingDays, endDate } = useTeacher();
   const Drawer = createDrawerNavigator();
   const theme = useTheme();
-
 
   return (
     <Drawer.Navigator>
@@ -39,13 +38,19 @@ const StudentDrawer = () => {
               <Drawer.Screen name="Favorites" component={Favorites} options={{ drawerIcon: () => (<Icon name="bookmark-multiple" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
               <Drawer.Screen name="Questionnaires" component={Questionnaires} options={{ drawerIcon: () => (<Icon name="progress-question" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
               <Drawer.Screen name="Recommandations" component={Recommandations} options={{ drawerIcon: () => (<Icon name="wikipedia" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
-             <Drawer.Screen name="My Map" component={MyMap} />
+              <Drawer.Screen name="My Map" component={MyMap} options={{ drawerIcon: () => (<Icon name="map" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
+              {new Date().toISOString() > endDate ? (
+                <>
+                  <Drawer.Screen name="Guide Feedback" component={GuideFeedback} options={{ drawerIcon: () => (<Icon name="comment-quote-outline" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }}/>
+                </>
+               ) : (<></>)
+              }
+
               {/* <Drawer.Screen name="Personal Diary" component={PersonalDiary} />
-              
               <Drawer.Screen name="Daily Schedule" component={DailySchedule} />
               <Drawer.Screen name="Notifications" component={Notifications} />
               <Drawer.Screen name="Tasks" component={Tasks} />
-              <Drawer.Screen name="Guide Feedback" component={GuideFeedback} /> */}
+              */}
             </>
           ) : (
             <></>

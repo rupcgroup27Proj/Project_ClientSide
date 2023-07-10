@@ -8,14 +8,14 @@ import { useTheme } from "react-native-paper";
 import Home from '../../Screens/GuideScreens/Home/Home';
 import Profile from '../../Screens/SharedScreens/Profile/Profile';
 import Questionnaires from '../SubNavs/QuestionnairesNav';
-import GuideFeedback from '../../Screens/GuideScreens/GuideFeedback/GuideFeedback';
+import GuideFeedback from '../../Screens/SharedScreens/GuideFeedback/GuideFeedback';
 import DailySchedule from '../../Screens/GuideScreens/DailySchedule/DailySchedule';
 import Logout from '../../Screens/SharedScreens/Logout/Logout';
 
 
 const GuideDrawer = () => {
 
-  const { journeyStarted, remainingDays } = useTeacher();
+  const { journeyStarted, remainingDays, endDate } = useTeacher();
   const Drawer = createDrawerNavigator();
   const theme = useTheme();
 
@@ -26,10 +26,16 @@ const GuideDrawer = () => {
       {journeyStarted && (
         <>
           <Drawer.Screen name="Profile" component={Profile} options={{ drawerIcon: () => (<Icon name="account-circle" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
-          {remainingDays <= 0
-            ? <>
+          {remainingDays <= 0 ?
+            <>
               <Drawer.Screen name="All Questionnaires" component={Questionnaires} options={{ drawerIcon: () => (<Icon name="progress-question" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
-              {/* <Drawer.Screen name="Guide Feedback" component={GuideFeedback} /> */}
+              {new Date().toISOString() > endDate ? (
+                <>
+                  <Drawer.Screen name="Guide Feedback" component={GuideFeedback} options={{ drawerIcon: () => (<Icon name="comment-quote-outline" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }}/>
+                </>
+              ) : (<></>)
+              }
+
             </>
             : <>
             </>

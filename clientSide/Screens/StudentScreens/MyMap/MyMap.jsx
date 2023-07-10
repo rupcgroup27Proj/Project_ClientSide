@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Alert, Image, ScrollView, Dimensions, Text, Keyboard, TouchableOpacity} from 'react-native';
+import { StyleSheet, View, Alert, Image, ScrollView, Dimensions, Text, Keyboard, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import * as Location from 'expo-location';
@@ -121,7 +121,7 @@ const MyMap = () => {
   }
 
 
-  const handleDelete = (locationId) => {
+  const handleDelete = (comp) => {
     Alert.alert(
       'Title',
       `Are you sure you want to delete this location and all it's data?`,
@@ -130,7 +130,7 @@ const MyMap = () => {
         {
           text: 'OK',
           onPress: () => {
-            axios.delete(`${simulatorAPI}/api/Maps/locationId/${locationId}`)
+            axios.delete(`${simulatorAPI}/api/Maps/locationId/${comp.locationId}/filesUrl/${comp.files.map(file=>file.fileUrl)}`)
               .then((res) => { getStudentMap(); })
               .catch((err) => Alert.alert('Error', 'Could not delete the location.'));
           },
@@ -252,7 +252,7 @@ const MyMap = () => {
         {
           text: 'OK',
           onPress: () => {
-            axios.delete(`${simulatorAPI}/api/Maps/fileId/${file.fileId}`)
+            axios.delete(`${simulatorAPI}/api/Maps/fileId/${file.fileId}/fileUrl/${file.fileUrl}`)
               .then((res) => handleImagesView())
               .catch((err) => Alert.alert('Error', 'Could not delete the image.'));
           },
@@ -353,10 +353,10 @@ const MyMap = () => {
                                   longitudeDelta: 0.0421
                                 })}
                                 onPress={() => (comp.files[0].fileUrl == null ? console.log() : handleImagesView(comp))}
-                                 >
+                              >
                                 <Image
                                   source={{ uri: comp.files[0].fileUrl == null ? dumim : `${simulatorAPI}/Images/${comp.files[0].fileUrl}` }}
-                                  style={{ height: '100%', width: '100%', borderTopRightRadius: 18, borderTopLeftRadius: 18}}
+                                  style={{ height: '100%', width: '100%', borderTopRightRadius: 18, borderTopLeftRadius: 18 }}
                                 />
                               </TouchableOpacity>
                             </View>
@@ -365,7 +365,7 @@ const MyMap = () => {
                                 <Button mode='text' onPress={() => handleEdit(comp.locationId)}>Take photo</Button>
                               </View>
                               <View style={{ flex: 1 }}>
-                                <Button mode='text' textColor='grey' onPress={() => handleDelete(comp.locationId)}>Delete</Button>
+                                <Button mode='text' textColor='grey' onPress={() => handleDelete(comp)}>Delete</Button>
                               </View>
                             </View>
                           </View>

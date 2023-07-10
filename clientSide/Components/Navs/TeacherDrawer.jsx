@@ -12,7 +12,7 @@ import ImprtntNum from '../../Screens/TeacherScreens/ImportantNumbers/ImprtntNum
 import SocialCloud from '../SubNavs/SocialFeedNav';
 import AddUsers from '../../Screens/SharedScreens/Users/AddUsers/AddUsers';
 import DailySchedule from '../../Screens/SharedScreens/DailySchedule/DailySchedule';
-import Notifications from '../../Screens/TeacherScreens/Notifications/Notifications';
+import Ntf from '../../Screens/TeacherScreens/Notifications/Notifications';
 import Tasks from '../../Screens/TeacherScreens/Tasks/Tasks';
 import GuideFeedback from '../../Screens/SharedScreens/GuideFeedback/GuideFeedback';
 import Logout from '../../Screens/SharedScreens/Logout/Logout';
@@ -37,8 +37,9 @@ const TeacherDrawer = () => {
           {remainingDays <= 0
             ? <>
               <Drawer.Screen name="Social Cloud" component={SocialCloud} options={{ drawerIcon: () => (<Icon name="cloud" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
+              <Drawer.Screen name="Notifications" component={Ntf} options={{ drawerIcon: () => (<Icon name="bell-ring" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
               {/* <Drawer.Screen name="Daily Schedule" component={DailySchedule} />
-              <Drawer.Screen name="Notifications" component={Notifications} />
+              
               <Drawer.Screen name="Tasks" component={Tasks} />
               <Drawer.Screen name="Guide Feedback" component={GuideFeedback} /> */}
             </>
