@@ -1,6 +1,6 @@
-import { useContext, createContext } from "react";
+import { useContext, createContext, useEffect } from "react";
 import React, { useState } from "react";
-import { Platform } from "react-native";
+import { Alert, Platform } from "react-native";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 
@@ -40,22 +40,25 @@ async function registerForPushNotificationsAsync() {
 }
 
 async function sendPushNotification(expoPushToken, ntfText) {
-    const message = {
-        to: expoPushToken,
-        sound: "default",
-        title: "המסע לפולין",
-        body: ntfText,
-        data: { someData: "goes here" },
-    };
-    await fetch("https://exp.host/--/api/v2/push/send", {
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-            "Accept-encoding": "gzip, deflate",
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(message),
+    (expoPushToken.filter(token => token != '')).forEach(token => {
+        const message = {
+            to: token,
+            sound: "default",
+            title: "המסע לפולין",
+            body: ntfText,
+            data: { someData: "goes here" },
+        };
+        fetch("https://exp.host/--/api/v2/push/send", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Accept-encoding": "gzip, deflate",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(message),
+        });
     });
+    Alert.alert('Success', `Your message has been sent successfully.`)
 }
 
 

@@ -8,12 +8,14 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useUser } from '../../../../Components/Contexts/UserContext';
 import { useTeacher } from '../../../../Components/Contexts/TeacherContext';
 import { useAPI } from '../../../../Components/Contexts/APIContext';
+import { useToken } from '../../../../Components/Contexts/TokenContext';
 
 const AddUsers = () => {
   const [fileUri, setFileUri] = useState('');//Excel useState
 
   const { currentUser, fetchStudents } = useUser();
   const { startDate, endDate } = useTeacher();
+  const { registerForPushNotificationsAsync } = useToken();
 
   const [studentId, setStudentId] = useState('147')
   const [firstName, setFirstName] = useState('p');
@@ -27,7 +29,7 @@ const AddUsers = () => {
   const emailRegex = /^\S+@\S+\.\S{2,}$/;
 
   //Single student function
-  const handleAddStudent = () => {
+  const handleAddStudent = async () => {
     if (!firstName || !lastName || !phone || !email || !parentPhone || !studentId || !password) {
       alert('Please fill all fields');
       return;
@@ -51,7 +53,7 @@ const AddUsers = () => {
       endDate: endDate,
       type: "Student"
     };
-
+    
     axios.post(`${simulatorAPI}/api/Students`, newStudent)
       .then(response => {
         alert('Student added successfully');

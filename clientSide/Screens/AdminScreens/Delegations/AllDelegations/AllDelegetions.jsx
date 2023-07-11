@@ -92,7 +92,7 @@ export default function AllDelegations() {
           : past.map((delegation) => {
             return (
               <View style={{ flex: 5, flexDirection: 'row' }}>
-                <Text key={Math.random() * 10000} style={Style.text}
+                <Text key={Math.random() * 10000} style={AllDell.text}
                   onPress={() => openModal(delegation)} >
                   {delegation.schoolName}
                 </Text>

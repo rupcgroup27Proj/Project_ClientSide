@@ -3,7 +3,7 @@ import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useAPI } from "./APIContext";
-
+import { useToken } from "./TokenContext";
 
 //--------------| Used for login, logout, and stores the logged users data  |--------------//
 
@@ -15,6 +15,7 @@ export function useUser() {
 
 export default function UserProvider({ children }) {
 
+    const { registerForPushNotificationsAsync } = useToken()
     const { simulatorAPI } = useAPI();
     const [currentUser, setCurrentUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -22,6 +23,7 @@ export default function UserProvider({ children }) {
 
 
     //--------------| Functions |--------------//
+
 
     //If the user logged once, the app will log him in automatically using asyncStorage (after checking he has not been deleted from the server).
     const getLoggedUser = async () => {
@@ -46,6 +48,8 @@ export default function UserProvider({ children }) {
             const response = await axios.get(`${simulatorAPI}/api/Generic/id/${userId}/password/${password}/type/${userType}`, { timeout: 5000 });
             let loggedUser = response.data;
 
+            if (loggedUser.type == "Student" && loggedUser.token == "")
+                createToken(loggedUser.id);
             if (loggedUser.type == "Guide" || loggedUser.type == "Teacher")
                 loggedUser = { ...loggedUser, groupId: -1 };
 
@@ -89,6 +93,14 @@ export default function UserProvider({ children }) {
         getLoggedUser();
     }, [])
     //--------------| End of functions |--------------//
+
+
+    //Creates a token
+    const createToken = async (sdntId) => {
+        console.log('fetching token')
+        const t = await registerForPushNotificationsAsync();
+        axios.put(`${simulatorAPI}/api/Students/studentId/${sdntId}/token/${t}`);
+    }
 
 
     const value = {
