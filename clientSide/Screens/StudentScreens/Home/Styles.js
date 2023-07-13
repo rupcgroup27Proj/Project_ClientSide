@@ -1,27 +1,47 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 export const Styles = StyleSheet.create({
+    con: {
+        height: Dimensions.get('window').height,
+        display:'flex'
+    },
     title: {
-        fontSize: 20,
+        flex:0.5,
+        fontSize: 26,
         fontWeight: 'bold',
-        marginVertical: 20, 
+        marginTop: 10, 
         textAlign: 'center', 
         color: '#2196F3'
     },
     ibView:  {
+        flex:1.2,
+        paddingVertical:10,
         display:'flex',
         flexDirection:"row",
-        justifyContent:"space-evenly"
+        justifyContent:"space-evenly",
+        backgroundColor:'#2196F3',
+        borderWidth:0.5,
+        borderColor:'rgba(44, 199, 242, 0.9)'
+    },
+    postCon:{
+        flex:3,
+        borderBottomWidth:0.5,
+        borderColor:'rgba(44, 199, 242, 0.9)'
+    },
+    recView: {
+        flex:3,
+        margin:5,
+        marginTop:0
     },
     ibSubView: {
         alignItems:'center',
     },
     ibText: {
-        fontSize:18,
-        color:'#2196F3'
+        fontSize:16,
+        color:'white'
     },
     card: {
-        backgroundColor:'#2196F3',
+        backgroundColor:'rgba(33, 150, 243,.9)',
         padding:1,
         borderRadius:7,
         margin:2,
@@ -32,7 +52,7 @@ export const Styles = StyleSheet.create({
         marginTop:-18,
         color:'white',
         fontWeight:'bold',
-        fontSize:16,
+        fontSize:15,
     },
     simText: {
         fontSize: 18,
@@ -48,6 +68,11 @@ export const Styles = StyleSheet.create({
         textAlign: 'center', 
         color: 'white'
     },
-
-
+    recT:{
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    recI:{
+        fontSize: 15,
+    }
 })

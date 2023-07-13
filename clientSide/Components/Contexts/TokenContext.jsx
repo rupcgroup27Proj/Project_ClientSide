@@ -7,7 +7,6 @@ import * as Notifications from "expo-notifications";
 const TokenContext = createContext();
 
 async function registerForPushNotificationsAsync() {
-    console.log("in registerForPushNotificationsAsync ");
     let token;
     if (Device.isDevice) {
         const { status: existingStatus } =

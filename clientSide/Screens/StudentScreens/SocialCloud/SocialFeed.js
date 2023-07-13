@@ -162,7 +162,7 @@ export default function SocialFeed({ post, navigation }) {
               </View>
             )}
 
-            {posts.map((post) => {
+            {posts.map((post, index) => {
               const isStudent = currentUser.type === "Student";
               const isPostLiked = postsLikes.some(
                 (like) => like.postId === post.PostId && currentUser.id == like.studentId
@@ -172,7 +172,7 @@ export default function SocialFeed({ post, navigation }) {
               );
 
               return (
-                <Card style={styles.card}>
+                <Card style={styles.card} key={index}>
                   <View
                     key={post.PostId}
                     style={{
@@ -233,8 +233,8 @@ export default function SocialFeed({ post, navigation }) {
                         marginVertical: 2,
                       }}
                     >
-                      {post.Tags.map((t) => (
-                        <Chip
+                      {post.Tags.map((t, index) => (
+                        <Chip key={index}
                           textStyle={{ color: "white" }}
                           style={{
                             backgroundColor: theme.colors.backdrop,

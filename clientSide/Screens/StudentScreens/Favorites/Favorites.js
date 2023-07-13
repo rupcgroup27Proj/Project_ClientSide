@@ -46,9 +46,9 @@ export default function Favorites() {
         </View>
       )}
 
-      {favorite.map((fav) => {
+      {favorite.map((fav,index) => {
         return (
-          <Card style={styles.card}>
+          <Card style={styles.card} key={index}>
             <View
               key={fav.PostId}
               style={{
@@ -78,8 +78,8 @@ export default function Favorites() {
             <Divider bold={true} />
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} >
               <View style={{ flexDirection: "row", flexWrap: "wrap", marginVertical: 2, }}  >
-                {fav.Tags.map((f) => (
-                  <Chip
+                {fav.Tags.map((f,index) => (
+                  <Chip key={index}
                     textStyle={{ color: "white" }}
                     style={{
                       backgroundColor: theme.colors.backdrop,

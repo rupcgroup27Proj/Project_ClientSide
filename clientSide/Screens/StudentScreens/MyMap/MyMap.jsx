@@ -28,7 +28,7 @@ const MyMap = () => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [locName, setLocName] = useState('')
   const [canChooseLoc, setCanChooseLoc] = useState(false);
-  const [map, setMap] = useState();
+  const [map, setMap] = useState([]);
   //image uplaoding
   const [inEdit, setInEdit] = useState(false);
   const [image, setImage] = useState(null);
@@ -130,7 +130,7 @@ const MyMap = () => {
         {
           text: 'OK',
           onPress: () => {
-            axios.delete(`${simulatorAPI}/api/Maps/locationId/${comp.locationId}/filesUrl/${comp.files.map(file=>file.fileUrl)}`)
+            axios.delete(`${simulatorAPI}/api/Maps/locationId/${comp.locationId}/filesUrl/${comp.files.map(file => file.fileUrl)}`)
               .then((res) => { getStudentMap(); })
               .catch((err) => Alert.alert('Error', 'Could not delete the location.'));
           },

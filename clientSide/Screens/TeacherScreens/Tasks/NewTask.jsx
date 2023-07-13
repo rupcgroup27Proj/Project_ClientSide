@@ -41,8 +41,7 @@ export default function NewTask () {
   const pickDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: 'application/pdf', // Specify the type of documents to pick (e.g., PDF, DOC, DOCX)
-        copyToCacheDirectory: false, // Set it to true if you want to copy the picked document to the app's cache directory
+        type: 'application/pdf', 
       });
 
       if (result.type === 'success') {
@@ -55,7 +54,7 @@ export default function NewTask () {
 
 
 
-  function handleSubmit()  {
+  const handleSubmit = async () => {
     if (!text){
       Alert.alert("Validation Error", "Please select date.");
       return;
@@ -69,43 +68,67 @@ export default function NewTask () {
       return;
     }
 
-    const Task = {
-      groupId: currentUser.groupId,                
-      name: name,
-      description: description,
-      createdAt:"2023-04-10T20:37:23.145Z",
-      fileURL: pickedDocument.uri,
-      due: date
-    };
-     console.log(pickedDocument);
+    const formData = new FormData();
+    formData.append('file', {
+      uri: document.uri,
+      name: 'example.pdf', // Set the desired file name
+      type: 'application/pdf',
+    });
 
-    fetch(`${simulatorAPI}/api/Tasks`, {
-      method: "POST",
-      body: JSON.stringify(Task),
-      headers: new Headers({
-        "Content-type": "application/json; charset=UTF-8",
-        Accept: "application/json; charset=UTF-8",
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          Alert.alert("Success", "The task was added successfully!", [
-            {
-              text: "OK",
-            },
-          ]);
-        } else {
-          Alert.alert("Error", "task was failed.");
-        }
-      })
-      .then(
-        (res) => {
-          console.log("suc in post task to DB", res);
-        },
-        (error) => {
-          console.log("ERR in post task to DB", error);
-        }
-      );
+    const response = await fetch('YOUR_UPLOAD_API_ENDPOINT', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    if (response.ok) {
+      console.log('PDF file uploaded successfully');
+      // Perform any additional actions after successful upload
+    } else {
+      console.log('Failed to upload PDF file');
+      // Handle the error condition
+    }
+
+    // console.log(pickedDocument)
+    // const Task = {
+    //   groupId: currentUser.groupId,                
+    //   name: name,
+    //   description: description,
+    //   createdAt:"2023-04-10T20:37:23.145Z",
+    //   fileURL: pickedDocument.uri,
+    //   due: date
+    // };
+    //  console.log(pickedDocument);
+
+    // fetch(`${simulatorAPI}/api/Tasks`, {
+    //   method: "POST",
+    //   body: JSON.stringify(Task),
+    //   headers: new Headers({
+    //     "Content-type": "application/json; charset=UTF-8",
+    //     Accept: "application/json; charset=UTF-8",
+    //   }),
+    // })
+    //   .then((res) => {
+    //     if (res.ok) {
+    //       Alert.alert("Success", "The task was added successfully!", [
+    //         {
+    //           text: "OK",
+    //         },
+    //       ]);
+    //     } else {
+    //       Alert.alert("Error", "task was failed.");
+    //     }
+    //   })
+    //   .then(
+    //     (res) => {
+    //       console.log("suc in post task to DB", res);
+    //     },
+    //     (error) => {
+    //       console.log("ERR in post task to DB", error);
+    //     }
+    //   );
     
       setName("");
       setDescription("");

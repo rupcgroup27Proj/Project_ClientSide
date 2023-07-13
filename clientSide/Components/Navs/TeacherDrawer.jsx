@@ -39,7 +39,7 @@ const TeacherDrawer = () => {
           {remainingDays <= 0
             ? <>
               <Drawer.Screen name="Social Cloud" component={SocialCloud} options={{ drawerIcon: () => (<Icon name="cloud" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
-              <Drawer.Screen name="Notifications" component={Ntf} options={{ drawerIcon: () => (<Icon name="bell-ring" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
+              <Drawer.Screen name="Messages" component={Ntf} options={{ drawerIcon: () => (<Icon name="bell-ring" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
               {/* <Drawer.Screen name="Daily Schedule" component={DailySchedule} />
               
               <Drawer.Screen name="Tasks" component={Tasks} />
