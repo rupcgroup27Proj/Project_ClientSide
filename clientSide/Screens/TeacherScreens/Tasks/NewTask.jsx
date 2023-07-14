@@ -5,18 +5,19 @@ import { Styles } from "./Styles";
 import * as DocumentPicker from 'expo-document-picker';
 import { useUser } from '../../../Components/Contexts/UserContext';
 import { useAPI } from '../../../Components/Contexts/APIContext';
+import axios from 'axios';
 
 
-export default function NewTask () {
+export default function NewTask() {
   const { currentUser } = useUser();
   const { simulatorAPI } = useAPI();
 
-  const [name, setName] = useState(""); 
-  const [description, setDescription] = useState(""); 
-  const [date, setDate] = useState(new Date()); 
-  const [mode, setMode] = useState("date"); 
-  const [showDate, setShowDate] = useState(false); 
-  const [text, setText] = useState(""); 
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [showDate, setShowDate] = useState(false);
+  const [text, setText] = useState("");
   const [pickedDocument, setPickedDocument] = useState(null);
 
 
@@ -26,125 +27,99 @@ export default function NewTask () {
     setDate(currentDate);
 
 
-   let temp= new Date(currentDate);
-   let fDate= temp.getDate() + "/" + (temp.getMonth() +1) + "/" + temp.getFullYear();
-   setText(fDate);
+    let temp = new Date(currentDate);
+    let fDate = temp.getDate() + "/" + (temp.getMonth() + 1) + "/" + temp.getFullYear();
+    setText(fDate);
 
   }
 
   const showMode = (currentMode) => {
-  setShowDate(true);
-  setMode(currentMode);
+    setShowDate(true);
+    setMode(currentMode);
   }
 
 
-  const pickDocument = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: 'application/pdf', 
-      });
+  // const pickDocument = async () => {
+  //   try {
+  //     const result = await DocumentPicker.getDocumentAsync({
+  //       type: 'application/pdf', 
+  //     });
 
-      if (result.type === 'success') {
-        setPickedDocument(result);
+  //     if (result.type === 'success') {
+  //       setPickedDocument(result);
+  //     }
+  //   } catch (error) {
+  //     console.log('Error picking document:', error);
+  //   }
+  // };
+
+
+  const pickDocument = async () => {
+    let result = await DocumentPicker.getDocumentAsync({ type: "*/*", copyToCacheDirectory: true }).then(response => {
+      if (response.type == 'success') {
+        let { name, size, uri } = response;
+        let nameParts = name.split('.');
+        let fileType = nameParts[nameParts.length - 1];
+        var fileToUpload = {
+          name: name,
+          size: size,
+          uri: uri,
+          type: "application/" + fileType
+        };
+        console.log(fileToUpload)
+        setPickedDocument(fileToUpload)
       }
-    } catch (error) {
-      console.log('Error picking document:', error);
-    }
-  };
+    }).then(console.log(pickedDocument))
+  }
+
 
 
 
   const handleSubmit = async () => {
-    if (!text){
+    if (!text) {
       Alert.alert("Validation Error", "Please select date.");
       return;
     }
-    else if (!name){
+    else if (!name) {
       Alert.alert("Validation Error", "Please add task name.");
       return;
     }
-    else if (!description){
+    else if (!description) {
       Alert.alert("Validation Error", "Please add description.");
       return;
     }
 
+    const url = `${simulatorAPI}/api/Tasks`;
+    const fileUri = pickedDocument.uri;
     const formData = new FormData();
-    formData.append('file', {
-      uri: document.uri,
-      name: 'example.pdf', // Set the desired file name
-      type: 'application/pdf',
-    });
-
-    const response = await fetch('YOUR_UPLOAD_API_ENDPOINT', {
-      method: 'POST',
-      body: formData,
+    formData.append('groupId', currentUser.groupId);
+    formData.append('document', pickedDocument);
+    formData.append('name', name);
+    formData.append('description', description);
+    formData.append('date', date.toLocaleDateString());
+    const response = await axios.post(`${simulatorAPI}/api/Tasks`, formData, {
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'multipart/form-data',
       },
     });
+    console.log(response.data)
 
-    if (response.ok) {
-      console.log('PDF file uploaded successfully');
-      // Perform any additional actions after successful upload
-    } else {
-      console.log('Failed to upload PDF file');
-      // Handle the error condition
-    }
-
-    // console.log(pickedDocument)
-    // const Task = {
-    //   groupId: currentUser.groupId,                
-    //   name: name,
-    //   description: description,
-    //   createdAt:"2023-04-10T20:37:23.145Z",
-    //   fileURL: pickedDocument.uri,
-    //   due: date
-    // };
-    //  console.log(pickedDocument);
-
-    // fetch(`${simulatorAPI}/api/Tasks`, {
-    //   method: "POST",
-    //   body: JSON.stringify(Task),
-    //   headers: new Headers({
-    //     "Content-type": "application/json; charset=UTF-8",
-    //     Accept: "application/json; charset=UTF-8",
-    //   }),
-    // })
-    //   .then((res) => {
-    //     if (res.ok) {
-    //       Alert.alert("Success", "The task was added successfully!", [
-    //         {
-    //           text: "OK",
-    //         },
-    //       ]);
-    //     } else {
-    //       Alert.alert("Error", "task was failed.");
-    //     }
-    //   })
-    //   .then(
-    //     (res) => {
-    //       console.log("suc in post task to DB", res);
-    //     },
-    //     (error) => {
-    //       console.log("ERR in post task to DB", error);
-    //     }
-    //   );
-    
-      setName("");
-      setDescription("");
-      setPickedDocument("");
-      setText("");
-   };
+    setName("e");
+    setDescription("e");
+    setPickedDocument("");
+    setText("");
+  };
 
 
   return (
     <ScrollView style={{ backgroundColor: "gray", height: "100%", paddingHorizontal: 20, paddingTop: 40 }} >
-    <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20, color: "white", alignSelf: "center", }} >
-      New Assignment
-    </Text>
+      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20, color: "white", alignSelf: "center", }} >
+        New Assignment
+      </Text>
 
-    <View>
-        <Text style={{color: "white"}}>Assignment Name</Text>
+      <View>
+        <Text style={{ color: "white" }}>Assignment Name</Text>
         <TextInput
           value={name}
           onChangeText={(value) => setName(value)}
@@ -152,7 +127,7 @@ export default function NewTask () {
           style={Styles.input}
         />
 
-       <Text style={{color: "white"}}>Description</Text>
+        <Text style={{ color: "white" }}>Description</Text>
         <TextInput
           value={description}
           onChangeText={(value) => setDescription(value)}
@@ -163,9 +138,9 @@ export default function NewTask () {
         />
 
 
-      <Text style={{color: "white"}}>Due Date {text}</Text>
-      <Button title='Date Picker' onPress={() => {showMode("date")}}/>
-      {showDate && (
+        <Text style={{ color: "white" }}>Due Date {text}</Text>
+        <Button title='Date Picker' onPress={() => { showMode("date") }} />
+        {showDate && (
           <DateTimePicker
             testID='DateTimePicker'
             minimumDate={new Date()}
@@ -174,26 +149,27 @@ export default function NewTask () {
             is24Hour={true}
             display="default"
             onChange={handleEndDateChange}
-          />        
+          />
         )}
-       </View>    
-
-       <View>
-      <Text style={{ color: 'white' }}>Upload File</Text>
-      <Button title="Pick Document" onPress={pickDocument} />
-      {pickedDocument && (
-        <Text style={{color: "white"}}>
-          Picked Document: {pickedDocument.name} 
-        </Text>
-        
-      )}
       </View>
-    
-      <View style={{marginHorizontal:60}}>
-      <Text style={{color: "white"}}>done</Text>
-      <Button title='DONE' onPress={handleSubmit}/>
-      </View>
-  
-  </ScrollView>
 
-  )}
+      <View>
+        <Text style={{ color: 'white' }}>Upload File</Text>
+        <Button title="Pick Document" onPress={pickDocument} />
+        {pickedDocument && (
+          <Text style={{ color: "white" }}>
+            Picked Document: {pickedDocument.name}
+          </Text>
+
+        )}
+      </View>
+
+      <View style={{ marginHorizontal: 60 }}>
+        <Text style={{ color: "white" }}>done</Text>
+        <Button title='DONE' onPress={handleSubmit} />
+      </View>
+
+    </ScrollView>
+
+  )
+}

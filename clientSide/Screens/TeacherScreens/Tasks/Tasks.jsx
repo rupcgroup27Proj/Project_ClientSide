@@ -50,58 +50,10 @@ export default function Tasks({ submission, navigation }) {
       .catch((err) => console.log("getSubmissions " + err));
   };
 
-  const handleDownload = async () => {
+  const handleDownload = async (u) => {
+    Linking.openURL(`${simulatorAPI}/Images/${u}`);
+  }
 
-    //downloadFile();
-    // const fileUri = FileSystem.documentDirectory + 'small.mp4'; // Set the desired file name
-    // console.log(FileSystem.documentDirectory)
-    // try {
-    //   const downloadResumable = FileSystem.createDownloadResumable(
-    //     'http://techslides.com/demos/sample-videos/small.mp4', // Replace with your PDF URL
-    //     fileUri
-    //   );
-
-    //   const { uri } = await downloadResumable.downloadAsync();
-
-    //   console.log('File downloaded to:', uri);
-
-    Linking.openURL('http://techslides.com/demos/sample-videos/small.mp4');
-    // } catch (error) {
-    //   console.error('Error occurred during file download:', error);
-    // }
-    // const remoteUri = 'http://techslides.com/demos/sample-videos/small.mp4'
-
-    // const downloadResumable = FileSystem.createDownloadResumable(remoteUri, FileSystem.documentDirectory + 'small.mp4')
-    // const { uri } = await downloadResumable.downloadAsync();
-    // console.log('Finished downloading to ', uri);
-
-    // const { uri: localUri } = await FileSystem.downloadAsync(remoteUri, FileSystem.documentDirectory + 'name.png');
-    // const a = await FileSystem.getInfoAsync(remoteUri)
-    // console.log(a)
-    // console.log(FileSystem.documentDirectory)
-  };
-
-
-  // const downloadFile = () => {
-  //   const uri = "http://techslides.com/demos/sample-videos/small.mp4"
-  //   let fileUri = FileSystem.documentDirectory + "small.mp4";
-  //   FileSystem.downloadAsync(uri, fileUri)
-  //     .then(({ uri }) => {
-  //       saveFile(uri);
-  //     })
-  //     .catch(error => {
-  //       console.error(error);
-  //     })
-  // }
-
-  // const saveFile = async (fileUri) => {
-  //   const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
-  //   if (status === "granted") {
-  //     const asset = await MediaLibrary.createAssetAsync(fileUri)
-  //     await MediaLibrary.requestPermissionsAsync()
-  //     await MediaLibrary.createAlbumAsync("Download", asset, false)
-  //   }
-  // }
 
   return (
     <ScrollView style={{ backgroundColor: "white", height: "100%", paddingHorizontal: 20, paddingTop: 40, }} >
@@ -125,8 +77,7 @@ export default function Tasks({ submission, navigation }) {
           <Text style={{ marginBottom: 5 }}>Description: {details.description}</Text>
           <Text style={{ marginBottom: 5 }}>Due Date: {(details.due).split("T")[0]}</Text>
           <Text style={{ marginBottom: 5 }}>File Url: {details.fileURL}</Text>
-          {console.log(details.fileURL)}
-          <IconButton icon="file-pdf-box" iconColor={'#2196F3'} size={80} mode={'contained'} containerColor={'rgba(255, 255, 255, 0.9)'} onPress={() => { handleDownload() }} />
+          <IconButton icon="file-pdf-box" iconColor={'#2196F3'} size={80} mode={'contained'} containerColor={'rgba(255, 255, 255, 0.9)'} onPress={() => { handleDownload(details.fileURL) }} />
         </View>
       )}
 
