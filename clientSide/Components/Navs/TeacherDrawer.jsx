@@ -13,7 +13,7 @@ import SocialCloud from '../SubNavs/SocialFeedNav';
 import AddUsers from '../../Screens/SharedScreens/Users/AddUsers/AddUsers';
 import DailySchedule from '../../Screens/SharedScreens/DailySchedule/DailySchedule';
 import Ntf from '../../Screens/TeacherScreens/Notifications/Notifications';
-import Tasks from '../../Screens/TeacherScreens/Tasks/Tasks';
+import TeacherTasksNav from '../../Components/SubNavs/TeacherTasksNav';
 import GuideFeedback from '../../Screens/SharedScreens/GuideFeedback/GuideFeedback';
 import Logout from '../../Screens/SharedScreens/Logout/Logout';
 import NewTask from '../../Screens/TeacherScreens/Tasks/NewTask';
@@ -41,18 +41,18 @@ const TeacherDrawer = () => {
               <Drawer.Screen name="Social Cloud" component={SocialCloud} options={{ drawerIcon: () => (<Icon name="cloud" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
               <Drawer.Screen name="Messages" component={Ntf} options={{ drawerIcon: () => (<Icon name="bell-ring" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
               {/* <Drawer.Screen name="Daily Schedule" component={DailySchedule} />
-              
+             
               <Drawer.Screen name="Tasks" component={Tasks} />
               <Drawer.Screen name="Guide Feedback" component={GuideFeedback} /> */}
-             <Drawer.Screen name="Tasks" component={Tasks} /> 
-             <Drawer.Screen name="NewTask" component={NewTask} /> 
-             <Drawer.Screen name="SpecificTask" component={SpecificTask} /> 
+               <Drawer.Screen name="Tasks" component={TeacherTasksNav} options={{ drawerIcon: () => (<Icon name="clipboard-text" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }}/>
+              {/* <Drawer.Screen name="NewTask" component={NewTask} /> 
+             <Drawer.Screen name="SpecificTask" component={SpecificTask} />  */}
             </>
             : <>
               <Drawer.Screen name="Add new student" component={AddUsers} options={{ drawerIcon: () => (<Icon name="account-plus" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
               <Drawer.Screen name="Tasks" component={Tasks} />
-              <Drawer.Screen name="NewTask" component={NewTask} /> 
-              <Drawer.Screen name="SpecificTask" component={SpecificTask} /> 
+              <Drawer.Screen name="NewTask" component={NewTask} />
+              <Drawer.Screen name="SpecificTask" component={SpecificTask} />
 
             </>
           }

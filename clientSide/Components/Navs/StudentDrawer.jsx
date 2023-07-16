@@ -14,7 +14,9 @@ import Recommandations from "../../Screens/StudentScreens/Recommendations/Recomm
 import MyMap from "../../Screens/StudentScreens/MyMap/MyMap";
 import DailySchedule from "../../Screens/SharedScreens/DailySchedule/DailySchedule";
 import Notifications from "../../Screens/StudentScreens/Notifications/Notifications";
-import Tasks from "../../Screens/StudentScreens/Tasks/Tasks";
+import StudentTasksNav from "../../Components/SubNavs/StudentTasksNav";
+
+import Submission from "../../Screens/StudentScreens/Tasks/Submission"
 import PersonalDiary from "../../Screens/StudentScreens/PersonalDiary/PersonalDiary";
 import GuideFeedback from "../../Screens/SharedScreens/GuideFeedback/GuideFeedback";
 import Logout from "../../Screens/SharedScreens/Logout/Logout";
@@ -39,6 +41,8 @@ const StudentDrawer = () => {
               <Drawer.Screen name="Questionnaires" component={Questionnaires} options={{ drawerIcon: () => (<Icon name="progress-question" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
               <Drawer.Screen name="Recommandations" component={Recommandations} options={{ drawerIcon: () => (<Icon name="wikipedia" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
               <Drawer.Screen name="My Map" component={MyMap} options={{ drawerIcon: () => (<Icon name="map" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
+              <Drawer.Screen name="Tasks" component={StudentTasksNav} options={{ drawerIcon: () => (<Icon name="clipboard-text" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
+              {/* <Drawer.Screen name="Submission" component={Submission} /> */}
               {new Date().toISOString() > endDate ? (
                 <>
                   <Drawer.Screen name="Guide Feedback" component={GuideFeedback} options={{ drawerIcon: () => (<Icon name="comment-quote-outline" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
@@ -49,7 +53,7 @@ const StudentDrawer = () => {
               {/* <Drawer.Screen name="Personal Diary" component={PersonalDiary} />
               <Drawer.Screen name="Daily Schedule" component={DailySchedule} />
               <Drawer.Screen name="Notifications" component={Notifications} />
-              <Drawer.Screen name="Tasks" component={Tasks} />
+              
               */}
             </>
           ) : (

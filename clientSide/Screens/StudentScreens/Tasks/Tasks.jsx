@@ -3,6 +3,7 @@ import { View ,Text } from 'react-native';
 import { useUser } from '../../../Components/Contexts/UserContext';
 import { useAPI } from '../../../Components/Contexts/APIContext';
 import axios from 'axios';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 export default function Tasks ({d , navigation}) {

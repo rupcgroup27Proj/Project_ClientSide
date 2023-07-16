@@ -39,21 +39,6 @@ export default function NewTask() {
   }
 
 
-  // const pickDocument = async () => {
-  //   try {
-  //     const result = await DocumentPicker.getDocumentAsync({
-  //       type: 'application/pdf', 
-  //     });
-
-  //     if (result.type === 'success') {
-  //       setPickedDocument(result);
-  //     }
-  //   } catch (error) {
-  //     console.log('Error picking document:', error);
-  //   }
-  // };
-
-
   const pickDocument = async () => {
     let result = await DocumentPicker.getDocumentAsync({ type: "*/*", copyToCacheDirectory: true }).then(response => {
       if (response.type == 'success') {
@@ -97,13 +82,13 @@ export default function NewTask() {
     formData.append('name', name);
     formData.append('description', description);
     formData.append('date', date.toLocaleDateString());
+    console.log(formData)
     const response = await axios.post(`${simulatorAPI}/api/Tasks`, formData, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log(response.data)
 
     setName("e");
     setDescription("e");

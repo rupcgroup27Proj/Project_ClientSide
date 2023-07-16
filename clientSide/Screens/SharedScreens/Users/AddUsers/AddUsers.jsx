@@ -53,7 +53,7 @@ const AddUsers = () => {
       endDate: endDate,
       type: "Student"
     };
-    
+
     axios.post(`${simulatorAPI}/api/Students`, newStudent)
       .then(response => {
         alert('Student added successfully');
