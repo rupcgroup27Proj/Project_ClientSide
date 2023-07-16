@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TextInput, Button, Alert } from 'react-native';
+import { View, Text, ScrollView, Alert, Dimensions } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Styles } from "./Styles";
 import * as DocumentPicker from 'expo-document-picker';
 import { useUser } from '../../../Components/Contexts/UserContext';
 import { useAPI } from '../../../Components/Contexts/APIContext';
 import axios from 'axios';
-
+import { TextInput, Button, Divider } from 'react-native-paper';
 
 export default function NewTask() {
   const { currentUser } = useUser();
@@ -82,49 +82,47 @@ export default function NewTask() {
     formData.append('name', name);
     formData.append('description', description);
     formData.append('date', date.toLocaleDateString());
-    console.log(formData)
-    const response = await axios.post(`${simulatorAPI}/api/Tasks`, formData, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-
-    setName("e");
-    setDescription("e");
+    try {
+      await axios.post(`${simulatorAPI}/api/Tasks`, formData, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    } catch (error) { Alert.alert("Error", "Failed "); }
+    Alert.alert("Success", "Task has been uploaded successfully.");
+    setName("");
+    setDescription("");
     setPickedDocument("");
     setText("");
   };
 
 
   return (
-    <ScrollView style={{ backgroundColor: "gray", height: "100%", paddingHorizontal: 20, paddingTop: 40 }} >
-      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 20, color: "white", alignSelf: "center", }} >
-        New Assignment
-      </Text>
+    <ScrollView style={{ height: Dimensions.get('window').height, paddingHorizontal: 20 }} >
 
-      <View>
-        <Text style={{ color: "white" }}>Assignment Name</Text>
+      <View style={{ marginTop: 10 }}>
+        <Text style={{ fontSize: 16 }}>Assignment Name:</Text>
         <TextInput
           value={name}
           onChangeText={(value) => setName(value)}
           placeholder="Enter assignment name"
-          style={Styles.input}
+          style={{ backgroundColor: 'white' }}
         />
 
-        <Text style={{ color: "white" }}>Description</Text>
+        <Text style={{ fontSize: 16 }}>Description:</Text>
         <TextInput
           value={description}
           onChangeText={(value) => setDescription(value)}
           placeholder="Enter description"
-          style={Styles.input}
+          style={{ backgroundColor: 'white' }}
           multiline={true}
           numberOfLines={4}
         />
 
 
-        <Text style={{ color: "white" }}>Due Date {text}</Text>
-        <Button title='Date Picker' onPress={() => { showMode("date") }} />
+        <Text style={{ fontSize: 16 }}>Due Date {text}</Text>
+        <Button mode='elevated' onPress={() => { showMode("date") }}>Pick Date</Button>
         {showDate && (
           <DateTimePicker
             testID='DateTimePicker'
@@ -139,8 +137,8 @@ export default function NewTask() {
       </View>
 
       <View>
-        <Text style={{ color: 'white' }}>Upload File</Text>
-        <Button title="Pick Document" onPress={pickDocument} />
+        <Text style={{ fontSize: 16 }}>Upload File</Text>
+        <Button mode='elevated' onPress={pickDocument}>Pick Document</Button>
         {pickedDocument && (
           <Text style={{ color: "white" }}>
             Picked Document: {pickedDocument.name}
@@ -149,9 +147,8 @@ export default function NewTask() {
         )}
       </View>
 
-      <View style={{ marginHorizontal: 60 }}>
-        <Text style={{ color: "white" }}>done</Text>
-        <Button title='DONE' onPress={handleSubmit} />
+      <View style={{ marginHorizontal: 60, marginTop: 20 }}>
+        <Button mode='contained' onPress={handleSubmit}>Upload</Button>
       </View>
 
     </ScrollView>

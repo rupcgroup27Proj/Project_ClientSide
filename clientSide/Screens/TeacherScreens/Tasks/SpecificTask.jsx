@@ -1,34 +1,43 @@
-import React , { useState ,useEffect } from 'react';
-import { View ,Text , Button, TextInput, Alert} from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, TextInput, Alert, Linking, Dimensions } from 'react-native';
 import { useAPI } from '../../../Components/Contexts/APIContext';
 import axios from 'axios';
+import { Divider, Button, IconButton } from 'react-native-paper';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 
 export default function SpecificTask({ route }) {
   const { simulatorAPI } = useAPI();
-  const {submission} = route.params;
-
+  const { submission } = route.params;
+  const navigation = useNavigation();
   const [det, setDet] = useState([]);
-  const [grade, setGrade] = useState(""); 
+  const [grade, setGrade] = useState("");
 
 
   useEffect(() => {
-        getTask();
+    getTask();
   }, []);
-    
 
+  useFocusEffect(
+    useCallback(() => {
+      getTask();
+    }, [])
+  );
   const getTask = async () => {
-        await axios
-        .get(`${simulatorAPI}/api/Tasks/taskId/${submission.taskId}`)
-        .then((res) => {
-          setDet(res.data);
-         })
-        .catch((err) => console.log("getTask ", err));
+    await axios
+      .get(`${simulatorAPI}/api/Tasks/taskId/${submission.taskId}`)
+      .then((res) => {
+        setDet(res.data);
+      })
+      .catch((err) => console.log("getTask ", err));
   };
 
-   
-  function UpdateGrade()  {
 
+  function UpdateGrade() {
+    if (grade > 100 || grade < 0) {
+      Alert.alert('Failure', 'Grade must be between 0-100');
+      return;
+    }
     const Submission = {
       id: submission.id,
       firstName: submission.firstName,
@@ -41,69 +50,74 @@ export default function SpecificTask({ route }) {
       submissionId: submission.submissionId
     };
 
-     axios
-      .put(`${simulatorAPI}/api/Submissions/submissionId/${submission.submissionId}`, Submission)
+    axios.put(`${simulatorAPI}/api/Submissions/submissionId/${submission.submissionId}`, Submission)
       .then((res) => {
-          Alert.alert("Success", "The Grade Updated successfully!", [
-            {
-              text: "OK",
-              onPress: () => navigation.goBack()
-            },
-          ]);    
+        Alert.alert("Success", "Grade updated successfully!", [
+          {
+            text: "OK",
+            onPress: () => navigation.navigate("Teacher Tasks")
+          },
+        ]);
       })
-      .catch((err) =>  Alert.alert("Error", "Update Grade was failed."));
+      .catch((err) => Alert.alert("Error", "Update Grade was failed."));
 
-      
+
   };
 
 
 
   return (
-    <View style={{ backgroundColor: "white", height: "100%", paddingHorizontal: 10, paddingTop: 40}} >
-     
-    <View>
-       <Text style={{ marginBottom: 15 ,fontWeight: "bold", fontSize: 20,backgroundColor: "pink"}}>Student Name: {`${submission.firstName} ${submission.lastName}`}</Text>
-    </View>
-  
-    {det.map((d) => (
-        <View key={d.taskId} style={{ borderWidth: 2, borderColor: 'gray', padding: 10}}>
-        <Text style={{fontSize: 25,fontWeight: "bold", marginBottom: 10,color: "black"}}>Task: {d.name}</Text>
-          <Text style={{fontSize: 18, marginBottom: 5}}>Description: {d.description}</Text>
-          <Text style={{fontSize: 18, marginBottom: 5}}>Upload Date: {d.createdAt}</Text>
-          <Text style={{fontSize: 18, marginBottom: 5}}>Due Date: {d.due}</Text>
-          <Text style={{fontSize: 18, marginBottom: 5}}>File: {d.fileURL}</Text>
-        </View> 
-    ))}
-
-
-    <View style={{ borderWidth: 2, borderColor: 'gray', padding: 10 , marginTop:25}}>
-
-    <Text style={{fontSize: 18, marginBottom: 5}}>File: {submission.fileURL}</Text>
-    <Text style={{fontSize: 18,marginBottom: 5,backgroundColor: submission.submittedAt > det[0]?.due ? 'red' : 'green',}}>
-      submittedAt: {submission.submittedAt}</Text>
-
-    {submission.grade === 0 ? (
-    <View style={{ flexDirection: "row"}}>
-      <Text style={{ fontSize: 17}}>Grade: </Text>
-      <TextInput
-          value={grade}
-          onChangeText={(value) => setGrade(value)}
-          placeholder="Enter grade..."
-          style={{backgroundColor:"pink"}}
-        />
-      </View>
-    ):(
+    <View style={{ height: Dimensions.get('window').height, paddingHorizontal: 20 }} >
+      <Text style={{color: '#2196F3', fontWeight: 'bold' }} onPress={() => navigation.navigate('Teacher Tasks')}>{`<back`}</Text>
       <View>
-      <Text style={{ fontSize: 17}}>Grade: {submission.grade}</Text> 
+        <Text style={{ marginBottom: 10, fontWeight: "bold", fontSize: 20, color: '#2196F3', textAlign: 'center', marginTop: 5 }}>Student Name: {`${submission.firstName} ${submission.lastName}`}</Text>
       </View>
-    )}   
+
+      <Divider></Divider>
+
+
+
+      <View style={{ margin: 20, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
+        <Text style={{ fontSize: 24, color: '#2196F3' }}>Submission file:</Text>
+        <IconButton icon="file-pdf-box" style={{}} iconColor={'#2196F3'} size={50} mode={'contained'} containerColor={'rgba(255, 255, 255, 0.9)'} onPress={() => { Linking.openURL(`${simulatorAPI}/Images/${submission.fileURL}`); }} />
+      </View>
+
+      <Text style={{ fontSize: 18, marginBottom: 5, backgroundColor: submission.submittedAt > det[0]?.due ? 'red' : '#2196F3', }}>
+        Submitted at: {new Date(submission.submittedAt).toLocaleDateString()}</Text>
+
+      {submission.grade === 999 ? (
+        <>
+          <View style={{ flexDirection: "row", justifyContent: 'space-around' }}>
+            <Text style={{ fontSize: 20 }}>Grade: </Text>
+            <TextInput
+              value={grade}
+              onChangeText={(value) => setGrade(value)}
+              placeholder="Enter grade..."
+              style={{ backgroundColor: "white" }}
+            />
+          </View>
+        </>
+
+      ) : (
+        <>
+          <View>
+            <Text style={{ fontSize: 20, textAlign: 'center' }}>Grade: {submission.grade}</Text>
+          </View>
+
+          <TextInput
+            value={grade}
+            onChangeText={(value) => setGrade(value)}
+            placeholder="Update grade..."
+            style={{ backgroundColor: "white" }}
+          />
+
+        </>
+      )}
+
+      <View style={{ marginTop: 25, paddingHorizontal: 40 }}>
+        <Button disabled={grade == '' ? true : false} mode='contained' onPress={UpdateGrade}>Update Grade</Button>
+      </View>
 
     </View>
-       
-
-   <View style={{marginTop:25 ,paddingHorizontal: 40}}>
-         <Button title='Update Grade' onPress={UpdateGrade}/>     
-   </View>
-   
-  </View>
-  )};
+  )
+};

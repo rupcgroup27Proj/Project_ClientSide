@@ -11,7 +11,7 @@ import { Video } from "expo-av";
 import { useUser } from "../../../Components/Contexts/UserContext";
 import { useAPI } from "../../../Components/Contexts/APIContext";
 import { useFavorites } from "../../../Components/Contexts/FavoritesContext";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 export default function SocialFeed({ post, navigation }) {
   const { currentUser } = useUser();
@@ -19,6 +19,7 @@ export default function SocialFeed({ post, navigation }) {
   const { favorite, userFavorites } = useFavorites();
   const theme = useTheme();
 
+  
   const [posts, setPosts] = useState([]);
   const [postsLikes, setPostsLikes] = useState([]);
   const [isLoading, setIsLoading] = useState(true)

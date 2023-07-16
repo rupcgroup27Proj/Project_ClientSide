@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 export default function Submission({ route }) {
   const { currentUser } = useUser();
   const { simulatorAPI } = useAPI();
-  const { d, isRefresh } = route.params;
+  const { d, isRefresh, mySub } = route.params;
   const [det, setDet] = useState([]);
   const [pickedDocument, setPickedDocument] = useState(null);
   const navigation = useNavigation();
@@ -57,15 +57,14 @@ export default function Submission({ route }) {
     formData.append('submittedAt', new Date().toLocaleDateString());
 
     try {
-     
-      // await axios.post(`${simulatorAPI}/api/Submissions`, formData, {
-      //   headers: {
-      //     Accept: 'application/json',
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // });
+      await axios.post(`${simulatorAPI}/api/Submissions`, formData, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       setPickedDocument(null)
-      Alert.alert("Success","File has been submitted successfully.")
+      Alert.alert("Success", "File has been submitted successfully.")
       navigation.navigate("Student Tasks");
     } catch (error) {
       console.log('Error:', error);
@@ -96,15 +95,26 @@ export default function Submission({ route }) {
     ]);
   }
 
+  
   const handleDownload = async (u) => {
     Linking.openURL(`${simulatorAPI}/Images/${u}`);
   }
+
+  const handleMySub = async (ms) => {
+    await axios.get(`${simulatorAPI}/api/Submissions/studentId/${currentUser.id}/taskId/${ms}`)
+      .then((res) => {
+        Linking.openURL(`${simulatorAPI}/Images/${res.data}`);
+      })
+      .catch((err) => console.log("getTask ", err));
+  }
+
 
   return (
 
     <ScrollView>
       {!isRefresh ? (
         <>
+          <Text style={{ marginHorizontal: 10, color: '#2196F3', fontWeight: 'bold' }} onPress={() => navigation.navigate('Student Tasks')}>{`<back`}</Text>
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <Card mode='elevated' style={{ margin: 10, flex: 4, backgroundColor: 'white' }}>
               <Card.Title title={d.name} titleStyle={{ fontSize: 18, color: 'white', fontWeight: 'bold' }} style={{ backgroundColor: '#2196F3' }} />
@@ -128,7 +138,13 @@ export default function Submission({ route }) {
         </>
       ) : (
         <>
+          <Text style={{ marginHorizontal: 10, color: '#2196F3', fontWeight: 'bold' }} onPress={() => navigation.navigate('Student Tasks')}>{`<back`}</Text>
+          <View style={{ margin: 20, flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
+            <Text style={{ fontSize: 24, color: '#2196F3', fontWeight: 'bold' }}>Your submission:</Text>
+            <IconButton icon="file-pdf-box" style={{ flex: 1 }} iconColor={'#2196F3'} size={50} mode={'contained'} containerColor={'rgba(255, 255, 255, 0.9)'} onPress={() => { handleMySub(mySub) }} />
+          </View>
         </>
+
       )}
 
 

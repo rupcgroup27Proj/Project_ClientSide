@@ -33,6 +33,7 @@ const StudentDrawer = () => {
       <Drawer.Screen name="Home" component={Home} options={{ drawerIcon: () => (<Icon name="home" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
       {journeyStarted && (
         <>
+          <Drawer.Screen name="Tasks" component={StudentTasksNav} options={{ drawerIcon: () => (<Icon name="clipboard-text" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
           {/* <Drawer.Screen name="Profile" component={Profile} options={{ drawerIcon: () => (<Icon name="account-circle" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} /> */}
           {remainingDays <= 0 ? (
             <>
@@ -41,7 +42,6 @@ const StudentDrawer = () => {
               <Drawer.Screen name="Questionnaires" component={Questionnaires} options={{ drawerIcon: () => (<Icon name="progress-question" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
               <Drawer.Screen name="Recommandations" component={Recommandations} options={{ drawerIcon: () => (<Icon name="wikipedia" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
               <Drawer.Screen name="My Map" component={MyMap} options={{ drawerIcon: () => (<Icon name="map" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
-              <Drawer.Screen name="Tasks" component={StudentTasksNav} options={{ drawerIcon: () => (<Icon name="clipboard-text" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
               {/* <Drawer.Screen name="Submission" component={Submission} /> */}
               {new Date().toISOString() > endDate ? (
                 <>

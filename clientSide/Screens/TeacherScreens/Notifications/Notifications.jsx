@@ -52,7 +52,7 @@ const Nft = () => {
 
   return (
     <View>
-      <ScrollView style={{ height: '40%', borderBottomWidth: 1.2 }}>
+      <ScrollView style={{ height: '40%', borderBottomWidth: 1.2, paddingHorizontal: 15 }}>
         <List.Section>
           <List.Subheader style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'center', color: '#2196F3' }}>Who do you want to send a message to?</List.Subheader>
           <List.Item

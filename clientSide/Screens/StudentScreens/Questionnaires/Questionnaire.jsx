@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, ScrollView, View } from 'react-native';
+import { Alert, ScrollView, View, Text } from 'react-native';
 import { Button, Divider, RadioButton, Title } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useUser } from '../../../Components/Contexts/UserContext';
 import { styles } from './QuestionnaireStyles';
 import { useAPI } from '../../../Components/Contexts/APIContext';
+import { useNavigation } from '@react-navigation/native';
 
 
 const Questionnaire = ({ route }) => {
-
+  const navigation = useNavigation();
   const { questionnaire } = route.params;
   const { simulatorAPI } = useAPI();
   const getCorrectAnswers = () => {
@@ -146,6 +147,7 @@ const Questionnaire = ({ route }) => {
         <></>
         :
         (<ScrollView>
+          <Text style={{ backgroundColor:'white', marginHorizontal: 10, color: '#2196F3', fontWeight: 'bold' }} onPress={() => navigation.navigate('AllQuestionnaires')}>{`<back`}</Text>
           <View style={styles.container}>
             <Title style={styles.title}>{questionnaire.Title}</Title>
             <Title style={styles.description}>{questionnaire.Description}</Title>

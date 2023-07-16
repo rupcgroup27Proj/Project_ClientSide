@@ -35,7 +35,7 @@ const Questionnaire = ({ route }) => {
 
     return (
         <ScrollView>
-            <Text style={{ backgroundColor: 'white', color: theme.colors.primary, fontWeight: 'bold' }} onPress={() => navigation.navigate('AllQuestionnaires')}>{`<--back`}</Text>
+            <Text style={{ backgroundColor: 'white', color: theme.colors.primary, fontWeight: 'bold' }} onPress={() => navigation.navigate('AllQuestionnaires')}>{`<back`}</Text>
             <View style={styles.container}>
                 <Title style={styles.title}>{questionnaire.Title}</Title>
                 <Title style={styles.description}>{questionnaire.Description}</Title>

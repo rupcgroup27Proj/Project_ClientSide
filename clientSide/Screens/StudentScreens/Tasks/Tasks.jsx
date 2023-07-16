@@ -14,10 +14,11 @@ export default function Tasks() {
   const [data, setData] = useState([]);
   const [due, setDue] = useState([]);
   const [submitted, setSubmitted] = useState([]);
-  const [expandedDue, setExpandedDue] = React.useState(true);
-  const [expandedSubmitted, setExpandedSubmitted] = React.useState(true);
-  const [det, setDet] = useState([]);
+  const [expandedDue, setExpandedDue] = React.useState(false);
+  const [expandedSubmitted, setExpandedSubmitted] = React.useState(false);
+  const [allSub, setAllSub] = useState([]);
   const navigation = useNavigation();
+
   const handlePressDue = () => setExpandedDue(!expandedDue);
   const handlePressSubmitted = () => setExpandedSubmitted(!expandedSubmitted);
 
@@ -45,6 +46,7 @@ export default function Tasks() {
       .catch((err) => console.log("getAllTasks " + err));
   };
 
+
   const getSubmission = async () => {
     await axios.get(`${simulatorAPI}/api/Submissions/studentId/${currentUser.id}`)
       .then((res) => {
@@ -54,9 +56,18 @@ export default function Tasks() {
         else {
           setSubmitted(data.filter(obj => res.data.includes(obj.taskId)));
           setDue(data.filter(obj => !res.data.includes(obj.taskId)));
+          setAllSub(res.data);
         }
       })
       .catch((err) => console.log("getTask ", err));
+  }
+
+
+  const getGrade = async (taskId) => {
+    const res = await axios.get(`${simulatorAPI}/api/Submissions/spec/studentId/${currentUser.id}/taskId/${taskId}`)
+      .then((res) => {
+        return res.data != 999 ? `Grade:${res.data}` : `Grade: Pending`
+      })
   }
 
 
@@ -76,7 +87,7 @@ export default function Tasks() {
                 <>
                   <Divider></Divider>
                   <List.Item key={index} title={d.name} description={new Date(d.due).toLocaleDateString("en-GB")} right={props => <List.Icon {...props} icon="file-upload-outline" />}
-                    onPress={() => { navigation.navigate("Submission", { d: d, isRefresh: false }); }}
+                    onPress={() => { navigation.navigate("Submission", { d: d, isRefresh: false, mySub: 0 }); }}
                   />
                 </>
               ))}
@@ -96,8 +107,8 @@ export default function Tasks() {
               {submitted.map((d, index) => (
                 <>
                   <Divider></Divider>
-                  <List.Item key={index} title={d.name} description={d.grade ? `Grade:${d.grade}` : `Grade: Pending`} right={props => <List.Icon {...props} icon="file-refresh-outline" />}
-                    onPress={() => { navigation.navigate("Submission", { d: d, isRefresh: true }); }} />
+                  <List.Item key={index} title={d.name} description='pending' right={props => <List.Icon {...props} icon="file-refresh-outline" />}
+                    onPress={() => { navigation.navigate("Submission", { d: d, isRefresh: true, mySub: d.taskId }); }} />
                 </>
               ))}
             </>

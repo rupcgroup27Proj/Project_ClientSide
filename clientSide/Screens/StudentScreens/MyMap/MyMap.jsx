@@ -412,12 +412,12 @@ const MyMap = () => {
                 <AntDesign name="picture" size={120} color="#FFFFFF" style={styles.placeholderIcon} />
               )}
 
-              <TextInput
+              {/* <TextInput
                 placeholder="Enter description"
                 value={description}
                 onChangeText={(text) => setDescription(text)}
                 style={styles.input}
-              />
+              /> */}
 
               <View style={styles.buttonContainer}>
                 <Button

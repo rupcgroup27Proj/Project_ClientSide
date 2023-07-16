@@ -21,8 +21,10 @@ import {
 } from "react-native-paper";
 import { useUser } from "../../../Components/Contexts/UserContext";
 import { useAPI } from "../../../Components/Contexts/APIContext";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Comments({ route }) {
+  const navigation = useNavigation();
   const { currentUser } = useUser();
   const { simulatorAPI } = useAPI();
   const theme = useTheme();
@@ -129,6 +131,7 @@ export default function Comments({ route }) {
 
   return (
     <ScrollView>
+      <Text style={{ marginHorizontal: 10, color: '#2196F3', fontWeight: 'bold' }} onPress={() => navigation.navigate('Social Feed')}>{`<back`}</Text>
       <Card style={styles.card}>
         <View
           key={post.PostId}
