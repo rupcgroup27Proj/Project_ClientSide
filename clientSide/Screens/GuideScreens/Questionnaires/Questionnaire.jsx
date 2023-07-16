@@ -1,14 +1,16 @@
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 import { Divider, RadioButton, Title, useTheme } from 'react-native-paper';
 
 import { styles } from './QuestionnaireStyles';
+import { useNavigation } from '@react-navigation/native';
 
 
 const Questionnaire = ({ route }) => {
 
     const { questionnaire } = route.params;
     const theme = useTheme();
+    const navigation = useNavigation();
 
     const renderQuestion = (question, qindex) => {
         return (
@@ -33,6 +35,7 @@ const Questionnaire = ({ route }) => {
 
     return (
         <ScrollView>
+            <Text style={{ backgroundColor: 'white', color: theme.colors.primary, fontWeight: 'bold' }} onPress={() => navigation.navigate('AllQuestionnaires')}>{`<--back`}</Text>
             <View style={styles.container}>
                 <Title style={styles.title}>{questionnaire.Title}</Title>
                 <Title style={styles.description}>{questionnaire.Description}</Title>

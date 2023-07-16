@@ -11,7 +11,7 @@ export default function TeacherTasksNav() {
 
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Tasks" component={Tasks} options={{ headerShown: false }} />
+            <Stack.Screen name="Teacher Tasks" component={Tasks} options={{ headerShown: false }} />
             <Stack.Screen name="NewTask" component={NewTask} options={{ headerShown: false }} />
             <Stack.Screen name="SpecificTask" component={SpecificTask} options={{ headerShown: false }} />
         </Stack.Navigator>

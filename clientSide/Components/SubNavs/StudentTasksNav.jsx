@@ -10,7 +10,7 @@ export default function StudentTasksNav() {
 
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Tasks" component={Tasks} options={{ headerShown: false }} />
+            <Stack.Screen name="Student Tasks" component={Tasks} options={{ headerShown: false }} />
             <Stack.Screen name="Submission" component={Submission} options={{ headerShown: false }} />
         </Stack.Navigator>
     )

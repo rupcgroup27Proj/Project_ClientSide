@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, Alert } from 'react-native';
-import { Card, IconButton } from "react-native-paper";
+import { View, Text, Alert, Linking } from 'react-native';
+import { Card, Divider, IconButton, Button } from "react-native-paper";
 import * as DocumentPicker from 'expo-document-picker';
 import { useUser } from '../../../Components/Contexts/UserContext';
 import { useAPI } from '../../../Components/Contexts/APIContext';
 import axios from 'axios';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function Submission({ route }) {
   const { currentUser } = useUser();
   const { simulatorAPI } = useAPI();
-  const { d } = route.params;
+  const { d, isRefresh } = route.params;
   const [det, setDet] = useState([]);
   const [pickedDocument, setPickedDocument] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     getData();
@@ -46,7 +49,6 @@ export default function Submission({ route }) {
 
   const AddSubmission = async () => {
 
-
     const formData = new FormData();
     formData.append('id', currentUser.personalId);
     formData.append('document', pickedDocument);
@@ -55,16 +57,19 @@ export default function Submission({ route }) {
     formData.append('submittedAt', new Date().toLocaleDateString());
 
     try {
-      await axios.post(`${simulatorAPI}/api/Submissions`, formData, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+     
+      // await axios.post(`${simulatorAPI}/api/Submissions`, formData, {
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // });
+      setPickedDocument(null)
+      Alert.alert("Success","File has been submitted successfully.")
+      navigation.navigate("Student Tasks");
     } catch (error) {
       console.log('Error:', error);
     }
-
   }
 
   const RemoveSubmission = async () => {
@@ -91,53 +96,88 @@ export default function Submission({ route }) {
     ]);
   }
 
+  const handleDownload = async (u) => {
+    Linking.openURL(`${simulatorAPI}/Images/${u}`);
+  }
 
   return (
 
-
-    <View style={{ backgroundColor: "white", height: "100%", paddingHorizontal: 10, paddingTop: 40 }} >
-      {det[0] == [] ? (<>
-        {det.map((d) => (
-          <View style={{ borderWidth: 2, borderColor: 'gray', padding: 10 }}>
-            <Text style={{ fontSize: 25, fontWeight: "bold", marginBottom: 10, color: "black" }}>Task: {d.name}</Text>
-            <Text style={{ fontSize: 18, marginBottom: 5 }}>Description: {d.description}</Text>
-            <Text style={{ fontSize: 18, marginBottom: 5 }}>Upload Date: {d.createdAt}</Text>
-            <Text style={{ fontSize: 18, marginBottom: 5 }}>Due Date: {d.due}</Text>
-            <Text style={{ fontSize: 18, marginBottom: 5 }}>File: {d.fileURL}</Text>
-          </View>
-        ))}
-
-
-        <View style={{ borderWidth: 2, borderColor: 'gray', padding: 10, marginTop: 25 }}>
-          <Text style={{ fontSize: 18, marginBottom: 5 }}>submittedAt: {det[0].submittedAt}</Text>
-          <View>
-            {det[0].grade === 0 ? (
-              <Text style={{ fontSize: 18, marginBottom: 5, fontSize: 17 }}>Grade: No grade yet </Text>
-            ) : (
-              <Text style={{ fontSize: 18, marginBottom: 5, fontWeight: "bold", fontSize: 17 }}>Grade: {det[0].grade} </Text>
-            )}
+    <ScrollView>
+      {!isRefresh ? (
+        <>
+          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            <Card mode='elevated' style={{ margin: 10, flex: 4, backgroundColor: 'white' }}>
+              <Card.Title title={d.name} titleStyle={{ fontSize: 18, color: 'white', fontWeight: 'bold' }} style={{ backgroundColor: '#2196F3' }} />
+              <Card.Content>
+                <Text variant="titleLarge">{d.description}</Text>
+                <Text variant="bodyMedium">Due to: {new Date(d.due).toLocaleDateString("en-GB")}</Text>
+              </Card.Content>
+            </Card>
+            <View style={{ marginVertical: 10, alignItems: 'center' }}>
+              <Text style={{ fontSize: 16 }}>Task file:</Text>
+              <IconButton icon="file-pdf-box" style={{ flex: 1 }} iconColor={'#2196F3'} size={60} mode={'contained'} containerColor={'rgba(255, 255, 255, 0.9)'} onPress={() => { handleDownload(d.fileURL) }} />
+            </View>
           </View>
 
-        </View>
-
-        <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-around" }}>
-
-          <Button title='Remove Submission' onPress={() => { RemoveSubmission() }} />
-        </View>
-      </>) :
-        (<>
-
-          <View style={{ flexDirection: "row" }}>
-            <Text style={{ fontSize: 18, marginTop: 10 }}>Upload your solution:</Text>
-            {pickedDocument ? (
-              <Text>{pickedDocument.name}</Text>
-            ) : (
-              <IconButton icon="upload" size={40} onPress={pickDocument} ></IconButton>
-            )}
+          <Divider bold={true}></Divider>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', margin: 15 }}>
+            <Button icon={'file-pdf-box'} disabled={pickedDocument} mode='contained' onPress={() => { pickDocument() }} style={{}}>Upload submission file</Button>
+            <Button icon={'upload'} disabled={!pickedDocument} mode='contained' onPress={() => { AddSubmission() }} style={{}}>Submit file</Button>
           </View>
-          <Button title='Add Submission' onPress={() => { AddSubmission() }} />
-        </>)}
-    </View>
+          {pickedDocument ? (<Text style={{ textAlign: 'center', fontSize: 20, color: '#2196F3' }}>File chosen: {pickedDocument.name}</Text>) : (<Text></Text>)}
+        </>
+      ) : (
+        <>
+        </>
+      )}
+
+
+
+      {/* <View style={{ backgroundColor: "white", height: "100%", paddingHorizontal: 10, paddingTop: 40 }} >
+        {det[0] == [] ? (<>
+          {det.map((d) => (
+            <View style={{ borderWidth: 2, borderColor: 'gray', padding: 10 }}>
+              <Text style={{ fontSize: 25, fontWeight: "bold", marginBottom: 10, color: "black" }}>Task: {d.name}</Text>
+              <Text style={{ fontSize: 18, marginBottom: 5 }}>Description: {d.description}</Text>
+              <Text style={{ fontSize: 18, marginBottom: 5 }}>Upload Date: {d.createdAt}</Text>
+              <Text style={{ fontSize: 18, marginBottom: 5 }}>Due Date: {d.due}</Text>
+              <Text style={{ fontSize: 18, marginBottom: 5 }}>File: {d.fileURL}</Text>
+            </View>
+          ))}
+
+
+          <View style={{ borderWidth: 2, borderColor: 'gray', padding: 10, marginTop: 25 }}>
+            <Text style={{ fontSize: 18, marginBottom: 5 }}>submittedAt: {det[0].submittedAt}</Text>
+            <View>
+              {det[0].grade === 0 ? (
+                <Text style={{ fontSize: 18, marginBottom: 5, fontSize: 17 }}>Grade: No grade yet </Text>
+              ) : (
+                <Text style={{ fontSize: 18, marginBottom: 5, fontWeight: "bold", fontSize: 17 }}>Grade: {det[0].grade} </Text>
+              )}
+            </View>
+
+          </View>
+
+          <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-around" }}>
+
+            <Button title='Remove Submission' onPress={() => { RemoveSubmission() }} />
+          </View>
+        </>) :
+          (<>
+
+            <View style={{ flexDirection: "row" }}>
+              <Text style={{ fontSize: 18, marginTop: 10 }}>Upload your solution:</Text>
+              {pickedDocument ? (
+                <Text>{pickedDocument.name}</Text>
+              ) : (
+                <IconButton icon="upload" size={40} onPress={pickDocument} ></IconButton>
+              )}
+            </View>
+            <Button title='Add Submission' onPress={() => { AddSubmission() }} />
+          </>)}
+      </View> */}
+
+    </ScrollView>
   )
 };
 
