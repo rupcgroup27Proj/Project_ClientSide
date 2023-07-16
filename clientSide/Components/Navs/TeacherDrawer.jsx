@@ -32,7 +32,7 @@ const TeacherDrawer = () => {
       <Drawer.Screen name="Home" component={Home} options={{ drawerIcon: () => (<Icon name="home" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
       {journeyStarted && (
         <>
-          <Drawer.Screen name="Profile" component={Profile} options={{ drawerIcon: () => (<Icon name="account-circle" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
+          {/* <Drawer.Screen name="Profile" component={Profile} options={{ drawerIcon: () => (<Icon name="account-circle" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} /> */}
           <Drawer.Screen name="All students" component={AllUsers} options={{ drawerIcon: () => (<Icon name="account-multiple" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
           <Drawer.Screen name="Important numbers" component={ImprtntNum} options={{ drawerIcon: () => (<Icon name="phone-log" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
 
@@ -44,7 +44,7 @@ const TeacherDrawer = () => {
              
               <Drawer.Screen name="Tasks" component={Tasks} />
               <Drawer.Screen name="Guide Feedback" component={GuideFeedback} /> */}
-               <Drawer.Screen name="Tasks" component={TeacherTasksNav} options={{ drawerIcon: () => (<Icon name="clipboard-text" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }}/>
+              <Drawer.Screen name="Tasks" component={TeacherTasksNav} options={{ drawerIcon: () => (<Icon name="clipboard-text" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
               {/* <Drawer.Screen name="NewTask" component={NewTask} /> 
              <Drawer.Screen name="SpecificTask" component={SpecificTask} />  */}
             </>
