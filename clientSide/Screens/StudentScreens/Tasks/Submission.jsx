@@ -30,7 +30,7 @@ export default function Submission({ route }) {
   };
 
   const pickDocument = async () => {
-    let result = await DocumentPicker.getDocumentAsync({ type: "*/*", copyToCacheDirectory: true }).then(response => {
+    let result = await DocumentPicker.getDocumentAsync({ type: "application/pdf", copyToCacheDirectory: true }).then(response => {
       if (response.type == 'success') {
         let { name, size, uri } = response;
         let nameParts = name.split('.');
@@ -130,9 +130,9 @@ export default function Submission({ route }) {
           </View>
 
           <Divider bold={true}></Divider>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', margin: 15 }}>
-            <Button icon={'file-pdf-box'} disabled={pickedDocument} mode='contained' onPress={() => { pickDocument() }} style={{}}>Upload submission file</Button>
-            <Button icon={'upload'} disabled={!pickedDocument} mode='contained' onPress={() => { AddSubmission() }} style={{}}>Submit file</Button>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 15 }}>
+            <Button icon={'file-pdf-box'} disabled={pickedDocument} mode='contained' onPress={() => { pickDocument() }} style={{flex:3,margin:1}}>Upload submission file</Button>
+            <Button icon={'upload'} disabled={!pickedDocument} mode='contained' onPress={() => { AddSubmission() }} style={{flex:2}}>Submit file</Button>
           </View>
           {pickedDocument ? (<Text style={{ textAlign: 'center', fontSize: 20, color: '#2196F3' }}>File chosen: {pickedDocument.name}</Text>) : (<Text></Text>)}
         </>

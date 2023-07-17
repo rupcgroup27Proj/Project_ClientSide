@@ -20,6 +20,7 @@ export const Styles = StyleSheet.create({
         display:'flex',
         flexDirection:"row",
         justifyContent:"space-evenly",
+        alignItems:'center',
         backgroundColor:'#2196F3',
         borderWidth:0.5,
         borderColor:'rgba(44, 199, 242, 0.9)'
@@ -48,6 +49,7 @@ export const Styles = StyleSheet.create({
         margin:2,
         padding:2,
         width:200,
+        height:225
     },
     cardTitle:{
         marginTop:-18,

@@ -17,7 +17,7 @@ const Home = () => {
   if (!journeyStarted && startDate === "1950-01-01T00:00:00")
     return (
       <ImageBackground source={require('../../../assets/Images/Homeback.png')} style={{ height: Dimensions.get('window').height }} >
-        <Text style={{ fontSize: 16, marginHorizontal: 10, marginVertical: 20 }}>Wait for the teacher to update the delegation's dates.</Text>
+        <Text style={{ fontSize: 16, marginHorizontal: 10, marginVertical: 20, textAlign:'center', color:'#2196F3'}}>Wait for the teacher to update the delegation's dates.</Text>
       </ImageBackground>
     )
 

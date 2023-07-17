@@ -194,7 +194,7 @@ const Home = () => {
                     </View>
 
                   ) : (
-                    <>
+                    <View style={{alignItems:'center', flexDirection:'row'}}>
                       {posts.map((post, index) => (
                         <Card key={index} style={Styles.card} onPress={() => navigation.navigate('Social Cloud')}>
                           <Card.Content>
@@ -203,7 +203,7 @@ const Home = () => {
                           <Card.Cover source={{ uri: post.FileUrl }} />
                         </Card>
                       ))}
-                    </>
+                    </View>
                   )}
 
                 </ScrollView>

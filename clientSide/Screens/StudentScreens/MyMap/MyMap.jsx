@@ -459,13 +459,13 @@ const MyMap = () => {
               <Swiper style={styles.swiperContainer}>
                 {mComp !== 0 && mComp.files.map(file => (
                   <>
-                    <IconButton icon='delete' size={40} style={{ position: 'absolute', zIndex: 1 }} onPress={() => handleDeleteImage(file)}></IconButton>
+                    <IconButton icon='delete' size={40} style={{ position: 'absolute', zIndex: 1}} onPress={() => handleDeleteImage(file)}></IconButton>
                     <View style={styles.slideContainer} key={file.fileId}>
                       <Image source={{ uri: `${simulatorAPI}/Images/${file.fileUrl}` }} style={styles.imagea} />
                       <ScrollView style={styles.description}>
-                        <TextInput editable={false} multiline={true} style={{ backgroundColor: 'white', margin: 10, width: '100%' }}>
+                        {/* <TextInput editable={false} multiline={true} style={{ backgroundColor: 'white', margin: 10, width: '100%' }}>
                           {file.description}
-                        </TextInput>
+                        </TextInput> */}
                       </ScrollView>
                     </View>
                   </>
@@ -621,6 +621,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '99%',
     resizeMode: 'contain',
+    zIndex:0
   },
   description: {
     flex: 1,

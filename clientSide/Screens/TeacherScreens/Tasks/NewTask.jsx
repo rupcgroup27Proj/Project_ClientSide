@@ -40,7 +40,7 @@ export default function NewTask() {
 
 
   const pickDocument = async () => {
-    let result = await DocumentPicker.getDocumentAsync({ type: "*/*", copyToCacheDirectory: true }).then(response => {
+    let result = await DocumentPicker.getDocumentAsync({ type: "application/pdf", copyToCacheDirectory: true }).then(response => {
       if (response.type == 'success') {
         let { name, size, uri } = response;
         let nameParts = name.split('.');
@@ -82,6 +82,7 @@ export default function NewTask() {
     formData.append('name', name);
     formData.append('description', description);
     formData.append('date', date.toLocaleDateString());
+    console.log(formData)
     try {
       await axios.post(`${simulatorAPI}/api/Tasks`, formData, {
         headers: {
@@ -89,7 +90,7 @@ export default function NewTask() {
           'Content-Type': 'multipart/form-data',
         },
       });
-    } catch (error) { Alert.alert("Error", "Failed "); }
+    } catch (error) {  console.log(error) }
     Alert.alert("Success", "Task has been uploaded successfully.");
     setName("");
     setDescription("");

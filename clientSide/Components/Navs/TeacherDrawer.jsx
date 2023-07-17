@@ -52,8 +52,8 @@ const TeacherDrawer = () => {
             </>
             : <>
               <Drawer.Screen name="Add new student" component={AddUsers} options={{ drawerIcon: () => (<Icon name="account-plus" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
-              <Drawer.Screen name="Tasks" component={TeacherTasksNav} options={{ drawerIcon: () => (<Icon name="clipboard-text" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
-              <Drawer.Screen name="New Task" component={NewTask} options={{ drawerIcon: () => (<Icon name="clipboard-text-clock-outline" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
+              {/* <Drawer.Screen name="Tasks" component={TeacherTasksNav} options={{ drawerIcon: () => (<Icon name="clipboard-text" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
+              <Drawer.Screen name="New Task" component={NewTask} options={{ drawerIcon: () => (<Icon name="clipboard-text-clock-outline" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} /> */}
 
             </>
           }
