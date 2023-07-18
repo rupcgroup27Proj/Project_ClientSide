@@ -29,12 +29,8 @@ const GuideDrawer = () => {
           {remainingDays <= 0 ?
             <>
               <Drawer.Screen name="All Questionnaires" component={Questionnaires} options={{ drawerIcon: () => (<Icon name="progress-question" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
-              {new Date().toISOString() > endDate ? (
-                <>
-                  <Drawer.Screen name="Guide Feedback" component={GuideFeedback} options={{ drawerIcon: () => (<Icon name="comment-quote-outline" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
-                </>
-              ) : (<></>)
-              }
+
+              <Drawer.Screen name="Guide Feedback" component={GuideFeedback} options={{ drawerIcon: () => (<Icon name="comment-quote-outline" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
 
             </>
             : <>

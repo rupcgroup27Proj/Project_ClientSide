@@ -43,12 +43,9 @@ const StudentDrawer = () => {
               <Drawer.Screen name="Recommandations" component={Recommandations} options={{ drawerIcon: () => (<Icon name="wikipedia" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
               <Drawer.Screen name="My Map" component={MyMap} options={{ drawerIcon: () => (<Icon name="map" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
               {/* <Drawer.Screen name="Submission" component={Submission} /> */}
-              {new Date().toISOString() > endDate ? (
-                <>
-                  <Drawer.Screen name="Guide Feedback" component={GuideFeedback} options={{ drawerIcon: () => (<Icon name="comment-quote-outline" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
-                </>
-              ) : (<></>)
-              }
+
+              <Drawer.Screen name="Guide Feedback" component={GuideFeedback} options={{ drawerIcon: () => (<Icon name="comment-quote-outline" size={20} color={theme.colors.primary} />), drawerLabelStyle: { marginLeft: -25 } }} />
+
 
               {/* <Drawer.Screen name="Personal Diary" component={PersonalDiary} />
               <Drawer.Screen name="Daily Schedule" component={DailySchedule} />
