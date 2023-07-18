@@ -170,7 +170,7 @@ const MyMap = () => {
     });
 
     if (!result.canceled) {
-      setImage(result.uri);
+      setImage(result.assets[0].uri);
     }
   };
 
@@ -188,8 +188,8 @@ const MyMap = () => {
       quality: 1,
     });
 
-    if (!result.cancelled) {
-      setImage(result.uri);
+    if (!result.canceled) {
+      setImage(result.assets[0].uri)
     }
   };
 
@@ -459,7 +459,7 @@ const MyMap = () => {
               <Swiper style={styles.swiperContainer}>
                 {mComp !== 0 && mComp.files.map(file => (
                   <>
-                    <IconButton icon='delete' size={40} style={{ position: 'absolute', zIndex: 1}} onPress={() => handleDeleteImage(file)}></IconButton>
+                    <IconButton icon='delete' size={40} style={{ position: 'absolute', zIndex: 1 }} onPress={() => handleDeleteImage(file)}></IconButton>
                     <View style={styles.slideContainer} key={file.fileId}>
                       <Image source={{ uri: `${simulatorAPI}/Images/${file.fileUrl}` }} style={styles.imagea} />
                       <ScrollView style={styles.description}>
@@ -621,7 +621,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '99%',
     resizeMode: 'contain',
-    zIndex:0
+    zIndex: 0
   },
   description: {
     flex: 1,

@@ -90,7 +90,7 @@ export default function NewTask() {
           'Content-Type': 'multipart/form-data',
         },
       });
-    } catch (error) {  console.log(error) }
+    } catch (error) { console.log(error) }
     Alert.alert("Success", "Task has been uploaded successfully.");
     setName("");
     setDescription("");
@@ -149,7 +149,7 @@ export default function NewTask() {
       </View>
 
       <View style={{ marginHorizontal: 60, marginTop: 20 }}>
-        <Button mode='contained' onPress={handleSubmit}>Upload</Button>
+        <Button mode='contained' disables={!pickedDocument || !name || !description} onPress={handleSubmit}>Upload</Button>
       </View>
 
     </ScrollView>

@@ -160,7 +160,7 @@ const AddUsers = () => {
       <Button mode="contained" icon='account-plus' onPress={handleAddStudent} style={Styles.button}>Add Student</Button>
 
 
-      <Divider bold={true} />
+      {/* <Divider bold={true} />
 
 
       <Text style={Styles.title}>Add students using Excel</Text>
@@ -171,7 +171,7 @@ const AddUsers = () => {
           : (<Button mode='contained' icon='account-multiple-plus' onPress={pickDocument} style={Styles.button}>Pick an Excel file</Button>)
         }
         {fileUri && <Button mode='contained' icon='account-multiple-plus' onPress={uploadFile} style={Styles.button}>Upload file</Button>}
-      </>
+      </> */}
 
     </ScrollView>
   );
