@@ -6,7 +6,7 @@ import axios from "axios";
 import { useAPI } from "../../../../Components/Contexts/APIContext";
 
 export default function AddSchool() {
-  const [schoolName, setSchoolName] = useState("Ttest");                    //
+  const [schoolName, setSchoolName] = useState("Final Presentation");                    //
   const [groupId, setGroupId] = useState("");
   const { simulatorAPI } = useAPI();
   const [isPosting, setIsPosting] = useState(false)
@@ -26,8 +26,8 @@ export default function AddSchool() {
   const [guideEmailError, setGuideEmailError] = useState("");
   //Users states:
   const [formDataTeacher, setFormDataTeacher] = useState({                   //
-    password: "741",
-    teacherId: 741,
+    password: "2222",
+    teacherId: 2222,
     firstName: "Eli",
     lastName: "Luzon",
     phone: 189189,
@@ -39,8 +39,8 @@ export default function AddSchool() {
     type: "Teacher",
   });
   const [formDataGuide, setFormDataGuide] = useState({                         //
-    password: "852",
-    guideId: 852,
+    password: "1111",
+    guideId: 1111,
     firstName: "Maya",
     lastName: "Levi",
     phone: 1569951,

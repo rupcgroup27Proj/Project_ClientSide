@@ -17,12 +17,12 @@ const AddUsers = () => {
   const { startDate, endDate } = useTeacher();
   const { registerForPushNotificationsAsync } = useToken();
 
-  const [studentId, setStudentId] = useState('888')
-  const [firstName, setFirstName] = useState('p');
-  const [lastName, setLastName] = useState('student');
-  const [password, setPassword] = useState('888');
+  const [studentId, setStudentId] = useState('8888')
+  const [firstName, setFirstName] = useState('Arava');
+  const [lastName, setLastName] = useState('Tsoury');
+  const [password, setPassword] = useState('8888');
   const [phone, setPhone] = useState('1471471477');
-  const [email, setEmail] = useState('pStudent@gmail.com');
+  const [email, setEmail] = useState('araTz@gmail.com');
   const [parentPhone, setParentPhone] = useState('1114447777');
   const { simulatorAPI } = useAPI();
 

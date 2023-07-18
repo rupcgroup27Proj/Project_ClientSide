@@ -12,8 +12,8 @@ export default function NewTask() {
   const { currentUser } = useUser();
   const { simulatorAPI } = useAPI();
 
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState("Presentation Task");
+  const [description, setDescription] = useState("Final presentation");
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [showDate, setShowDate] = useState(false);
@@ -90,7 +90,7 @@ export default function NewTask() {
           'Content-Type': 'multipart/form-data',
         },
       });
-    } catch (error) {  console.log(error) }
+    } catch (error) { console.log(error) }
     Alert.alert("Success", "Task has been uploaded successfully.");
     setName("");
     setDescription("");
