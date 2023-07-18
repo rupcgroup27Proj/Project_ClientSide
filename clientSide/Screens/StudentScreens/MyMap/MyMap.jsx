@@ -67,7 +67,9 @@ const MyMap = () => {
   //Get the student's map
   const getStudentMap = () => {
     axios.get(`${simulatorAPI}/api/Maps/studentId/${currentUser.id}`)
-      .then((res) => { setMap(res.data) })
+      .then((res) => { 
+        setMap(res.data)
+       })
       .catch((err) => Alert.alert('Error', 'Could not get your map.'));
   }
 
@@ -459,9 +461,11 @@ const MyMap = () => {
               <Swiper style={styles.swiperContainer}>
                 {mComp !== 0 && mComp.files.map(file => (
                   <>
+                 
                     <IconButton icon='delete' size={40} style={{ position: 'absolute', zIndex: 1 }} onPress={() => handleDeleteImage(file)}></IconButton>
-                    <View style={styles.slideContainer} key={file.fileId}>
-                      <Image source={{ uri: `${simulatorAPI}/Images/${file.fileUrl}` }} style={styles.imagea} />
+                    <View style={styles.slideContainer} key={file.fileId}> 
+                    {console.log(file.fileUrl)}
+                      <Image source={{ uri: `https://proj.ruppin.ac.il/cgroup27/prod/Images/${file.fileUrl}` }} style={styles.imagea} />
                       <ScrollView style={styles.description}>
                         {/* <TextInput editable={false} multiline={true} style={{ backgroundColor: 'white', margin: 10, width: '100%' }}>
                           {file.description}

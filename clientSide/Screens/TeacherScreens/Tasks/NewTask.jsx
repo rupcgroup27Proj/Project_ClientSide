@@ -149,7 +149,7 @@ export default function NewTask() {
       </View>
 
       <View style={{ marginHorizontal: 60, marginTop: 20 }}>
-        <Button mode='contained' onPress={handleSubmit}>Upload</Button>
+        <Button mode='contained' disabled={!pickedDocument || !name || !description} onPress={handleSubmit}>Upload</Button>
       </View>
 
     </ScrollView>

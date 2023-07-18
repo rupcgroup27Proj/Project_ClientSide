@@ -28,7 +28,7 @@ const GuideFeedback = () => {
       catch (error) { Alert.alert("Error", "Failed to fetch Feedbacks."); }
     };
     fetchFB();
-  },[])
+  }, [])
 
   const Submit = async () => {
     const feedback = {
@@ -53,15 +53,12 @@ const GuideFeedback = () => {
 
   return (
     currentUser.type == "Student" ? (
-      (Math.ceil((new Date() - new Date(endDate.toString())) / (1000 * 60 * 60 * 24))) >= 3 ?
-        (<View>
-          <Text style={Styles.texts}>Anything you want to say to the Guide?</Text>
-          <TextInput multiline numberOfLines={16} value={fbText} onChangeText={(text) => setFbText(text)} style={[Styles.box, { backgroundColor: 'white' }]}></TextInput>
-          <Button onPress={Submit} mode="contained" style={Styles.subBut} disabled={fbText == ''} >Send Feedback</Button>
-        </View>
-        ) : (
-          <Text style={Styles.texts}>Cannot send feedbacks anymore.</Text>
-        )
+      <View>
+        <Text style={Styles.texts}>Anything you want to say to the Guide?</Text>
+        <TextInput multiline numberOfLines={16} value={fbText} onChangeText={(text) => setFbText(text)} style={[Styles.box, { backgroundColor: 'white' }]}></TextInput>
+        <Button onPress={Submit} mode="contained" style={Styles.subBut} disabled={fbText == ''} >Send Feedback</Button>
+      </View>
+
     ) :
       (
         <ScrollView>
